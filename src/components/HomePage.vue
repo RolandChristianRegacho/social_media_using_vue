@@ -6,9 +6,15 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
     name: "HomePage",
-    mounted() {
+    async mounted() {
+        const result = await axios.get(`http://localhost:3000/user?email=${this.user.username}&password=${this.user.password}`)
+
+        if (result.status == 200) {
+            console.log("test")
+        }
     }
 }
 </script>
