@@ -14,6 +14,7 @@
                 <input type="text" v-model="user.first_name" placeholder="First Name">
                 <input type="text" v-model="user.middle_name" placeholder="Middle Name">
                 <input type="text" v-model="user.last_name" placeholder="Last Name">
+                <input type="date" v-model="user.birthday">
                 <button @click="signup()">Sign up</button>
             </form>
             <br>
@@ -33,7 +34,8 @@ export default {
                 password: "",
                 first_name: "",
                 middle_name: "",
-                last_name: ""
+                last_name: "",
+                birthday: ""
             }
         }
     },
@@ -51,7 +53,8 @@ export default {
                 "password": this.user.password,
                 "first_name": this.user.first_name,
                 "middle_name": this.user.middle_name,
-                "last_name": this.user.last_name
+                "last_name": this.user.last_name,
+                "birthday": this.user.birthday
             }
 
             const result = await axios.post(`http://localhost:3000/user`, data)

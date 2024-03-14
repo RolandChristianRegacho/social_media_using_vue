@@ -7,27 +7,45 @@
     </div>
 </template>
 <script>
+import axios from "axios"
 export default {
     name: "HomePostArea",
     data() {
         return {
             message: {
                 text: "",
-                id: ""
+                user_id: "",
+                date: ""
             }
         }
     },
     methods: {
-        postMessage() {
+        async postMessage() {
             let user = getCookie("user")
-            this.message.id = JSON.parse(user)[0].id
 
-            console.log(this.message.text)
-            console.log(this.message.id)
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                this.message.id = JSON.parse(user)[0].id
+            }
+
+            let data = {
+                "user_id": this.message.id,
+                "post": this.message.text,
+                "date": new Date()
+            }
             document.getElementById("post_text").value = ""
+
+            const result = await axios.post("http://localhost:3000/posts", data)
+
+            if(result.status == 201) {
+                location.reload()
+            }
         }
     }
 }
+
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -43,6 +61,7 @@ function getCookie(cname) {
     }
     return "";
 }
+
 </script>
 
 <style scoped>
