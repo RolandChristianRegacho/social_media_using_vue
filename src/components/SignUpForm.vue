@@ -11,10 +11,13 @@
             <form @submit.prevent="submit">
                 <input type="text" v-model="user.username" placeholder="Username">
                 <input type="password" v-model="user.password" placeholder="Password">
-                <button @click="login()">Login</button>
+                <input type="text" v-model="user.first_name" placeholder="First Name">
+                <input type="text" v-model="user.middle_name" placeholder="Middle Name">
+                <input type="text" v-model="user.last_name" placeholder="Last Name">
+                <button @click="signup()">Sign up</button>
             </form>
             <br>
-            <router-link to="/signup">Don't have an account?</router-link>
+            <router-link to="/login">Have an account?</router-link>
         </div>
     </div>
 </template>
@@ -27,7 +30,10 @@ export default {
         return {
             user: {
                 username: "",
-                password: ""
+                password: "",
+                first_name: "",
+                middle_name: "",
+                last_name: ""
             }
         }
     },
@@ -39,22 +45,22 @@ export default {
         }
     },
     methods: {
-        async login() {
-            const result = await axios.get(`http://localhost:3000/user?email=${this.user.username}&password=${this.user.password}`)
+        async signup() {
+            let data = {
+                "email": this.user.username,
+                "password": this.user.password,
+                "first_name": this.user.first_name,
+                "middle_name": this.user.middle_name,
+                "last_name": this.user.last_name
+            }
 
-            if (result.status == 200) {
-                setCookie("user", JSON.stringify(result.data), 5)
-                this.$router.push({ name: "HomePage" });
+            const result = await axios.post(`http://localhost:3000/user`, data)
+
+            if (result.status == 201) {
+                this.$router.push({ name: "LoginPage" });
             }
         }
     }
-}
-
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 function getCookie(cname) {
     let name = cname + "=";

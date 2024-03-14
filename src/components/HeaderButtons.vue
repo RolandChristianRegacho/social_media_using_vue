@@ -26,10 +26,12 @@ export default {
     },
     mounted() {
         let user = getCookie("user")
-        this.name = JSON.parse(user)[0].first_name
 
-        if (!user) {
+        if (user == "") {
             this.$router.push({ name: "LoginPage" });
+        }
+        else {
+            this.name = JSON.parse(user)[0].first_name
         }
     }
 }

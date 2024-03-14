@@ -10,7 +10,7 @@ import axios from "axios"
 export default {
     name: "HomePage",
     async mounted() {
-        const result = await axios.get(`http://localhost:3000/user?email=${this.user.username}&password=${this.user.password}`)
+        const result = await axios.get(`http://localhost:3000/user`)
 
         if (result.status == 200) {
             console.log("test")
