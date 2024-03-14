@@ -40,7 +40,9 @@ export default {
             const result = await axios.post("http://localhost:3000/posts", data)
 
             if(result.status == 201) {
-                location.reload()
+                //location.reload()
+                //this.$forceUpdate();
+                this.emitter.emit("onPost");
             }
         }
     }

@@ -13,11 +13,13 @@
             </div>
             <div class="user_post_left" >
                 <button class="post_button persist_button">Show Replies</button>
-                <input class="post_input" type="text" placeholder="Reply" />
-                <button class="post_button">Reply</button>
+                <form @submit.prevent="submit">
+                    <input class="post_input" type="text" v-model="replies.reply" placeholder="Reply" />
+                    <button class="post_button" @click="postReply(item.id)">Reply</button>
+                </form>
             </div>
             <div class="user_post_right" >
-                <button class="post_button_right">Delete</button>
+                <button class="post_button_right" @click="testFunction">Delete</button>
                 <button class="post_button_right">Edit</button>
             </div>
         </div>
@@ -31,7 +33,13 @@ export default {
     data() {
         return {
             posts: [],
-            users: []
+            users: [],
+            replies: {
+                post_id: "",
+                reply_user_id: "",
+                reply: ""
+            },
+            //componentKey: 0
         }
     },
     async mounted() {
@@ -60,6 +68,13 @@ export default {
                 this.users = result_users.data
             }
         }
+
+        this.emitter.on("onPost", () => {
+            getPosts()
+            .then(result => {
+                this.posts = result
+            })
+        })
     },
     methods: {
         checkData(id) {
@@ -74,6 +89,38 @@ export default {
             const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
             return `${month[d.getMonth()]} ${d.getDate()} ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`
+        },
+        async postReply(post_id) {
+            let user = getCookie("user")
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                this.replies.reply_user_id = JSON.parse(user)[0].id
+            }
+
+            let data = {
+                "post_id": post_id,
+                "user_id": this.replies.reply_user_id,
+                "reply": this.replies.reply
+            }
+
+            const result = await axios.post("http://localhost:3000/post_replies", data)
+
+            if(result.status == 201) {
+                this.replies.reply = ""
+            }
+        }
+    }
+}
+
+async function getPosts() {
+    const result_posts = await axios.get(`http://localhost:3000/posts?_sort=-date`)
+
+    if (result_posts.status == 200) {
+        if(result_posts.data != "") {
+            return result_posts.data
         }
     }
 }
