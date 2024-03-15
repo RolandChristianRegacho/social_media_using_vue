@@ -25,6 +25,7 @@
 
 <script>
 import axios from "axios"
+import swal from 'sweetalert';
 export default {
     name: "LoginForm",
     data() {
@@ -60,7 +61,10 @@ export default {
             const result = await axios.post(`http://localhost:3000/user`, data)
 
             if (result.status == 201) {
-                this.$router.push({ name: "LoginPage" });
+                swal("Sign up Successful!", "You may now log in", "success")
+                .then(() => {
+                    this.$router.push({ name: "LoginPage" });
+                });
             }
         }
     }

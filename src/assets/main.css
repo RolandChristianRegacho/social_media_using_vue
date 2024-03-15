@@ -87,9 +87,11 @@ button:hover {
 
 .post_container {
   float: left;
-  width: 40%;
-  overflow: hidden !important;
+  width: 100%;
   padding-bottom: 5px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none; 
 }
 
 .user_post {

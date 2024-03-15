@@ -19,7 +19,7 @@
                 </form>
             </div>
             <div class="user_post_right" >
-                <button class="post_button_right" @click="testFunction">Delete</button>
+                <button class="post_button_right" @click="deletePost(item.id)">Delete</button>
                 <button class="post_button_right">Edit</button>
             </div>
         </div>
@@ -28,6 +28,7 @@
 
 <script>
 import axios from "axios"
+import swal from 'sweetalert';
 export default {
     name: "HomePage",
     data() {
@@ -111,6 +112,25 @@ export default {
             if(result.status == 201) {
                 this.replies.reply = ""
             }
+        },
+        async deletePost(id) {
+            console.log(id)
+            swal({
+                title: "Are you sure to delete this post?",
+                text: "Once deleted, you will not be able to recover this post!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Your post has been deleted!", {
+                    icon: "success",
+                    });
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+            });
         }
     }
 }

@@ -21,6 +21,7 @@
 
 <script>
 import axios from "axios"
+import swal from 'sweetalert';
 export default {
     name: "LoginForm",
     data() {
@@ -44,7 +45,13 @@ export default {
 
             if (result.status == 200) {
                 setCookie("user", JSON.stringify(result.data), 5)
-                this.$router.push({ name: "HomePage" });
+                swal({
+                    icon: "success",
+                    title: "Login succcess!"
+                })
+                    setTimeout(() => {
+                        this.$router.push({ name: "HomePage" });
+                    }, 2000)
             }
         }
     }

@@ -40,8 +40,6 @@ export default {
             const result = await axios.post("http://localhost:3000/posts", data)
 
             if(result.status == 201) {
-                //location.reload()
-                //this.$forceUpdate();
                 this.emitter.emit("onPost");
             }
         }
@@ -68,9 +66,10 @@ function getCookie(cname) {
 
 <style scoped>
 .post_form {
-    width: 40%;
+    float: left;
+    width: 96%;
+    margin-left: 2%;
     height: 200px;
-    margin: auto;
     margin-top: 10px;
     color: rgba(235, 235, 235, 0.64);
     border-radius: 5px;
