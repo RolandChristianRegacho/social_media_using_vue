@@ -8,6 +8,8 @@
 </template>
 <script>
 import axios from "axios"
+import $ from "jquery"
+
 export default {
     name: "HomePostArea",
     data() {
@@ -21,26 +23,30 @@ export default {
     },
     methods: {
         async postMessage() {
-            let user = getCookie("user")
+            try {
+                let user = getCookie("user")
 
-            if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                if (user == "") {
+                    this.$router.push({ name: "LoginPage" });
+                }
+                else {
+                    this.message.id = JSON.parse(user).id
+                }
+
+                let data = {
+                    "user_id": this.message.id,
+                    "content": this.message.text
+                }
+                $("#post_text").val("")
+
+                const result = await axios.post(`http://localhost:81/social_media_api/api/home/post.php`, data)
+
+                if(result.status == 200) {
+                    this.emitter.emit("onPost");
+                }
             }
-            else {
-                this.message.id = JSON.parse(user)[0].id
-            }
-
-            let data = {
-                "user_id": this.message.id,
-                "post": this.message.text,
-                "date": new Date()
-            }
-            document.getElementById("post_text").value = ""
-
-            const result = await axios.post("http://localhost:3000/posts", data)
-
-            if(result.status == 201) {
-                this.emitter.emit("onPost");
+            catch(e) {
+                console.log(e)
             }
         }
     }

@@ -1,26 +1,39 @@
 <template>
     <br>
     <div class="post_container">
-        <div v-for="item in posts" class="user_post" :key="item.id">
+        <div v-for="item in posts" class="user_post" :key="item.posts">
             <div class="user_post_sender">
-                {{ checkData(item.user_id) }}
+                {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div class="user_post_content">
-                {{ item.post }}
+                {{ item.posts.content }}
             </div>
             <div class="user_post_time" >
-                {{ displayDate(item.date) }}
+                {{ item.posts.date_time }}
             </div>
             <div class="user_post_left" >
-                <button class="post_button persist_button">Show Replies</button>
+                <button class="post_button persist_button" @click="showReply(item.posts.id)" :id="'rp-btn-' + item.posts.id">Show Replies</button>
                 <form @submit.prevent="submit">
-                    <input class="post_input" type="text" v-model="replies.reply" placeholder="Reply" />
-                    <button class="post_button" @click="postReply(item.id)">Reply</button>
+                    <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
+                    <button class="post_button" @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
             <div class="user_post_right" >
-                <button class="post_button_right" @click="deletePost(item.id)">Delete</button>
+                <button class="post_button_right" @click="deletePost(item.posts.id)">Delete</button>
                 <button class="post_button_right">Edit</button>
+            </div>
+            <div class="user_reply" :id="'reply-' + item.posts.id">
+                <div v-for="replies, id in item.reply" class="user_reply_content" :key="id">
+                    <div class="user_reply_pic">
+                        <img :src="getReply(replies.sender, 'picture')" />
+                    </div>
+                    <div class="user_reply_sender">
+                        {{ getReply(replies.sender, "sender") }}
+                    </div>
+                    <div class="user_reply_message">
+                        {{ getReply(replies.reply, "content") }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -29,44 +42,31 @@
 <script>
 import axios from "axios"
 import swal from 'sweetalert';
+import $ from "jquery";
 export default {
     name: "HomePage",
     data() {
         return {
             posts: [],
-            users: [],
             replies: {
                 post_id: "",
                 reply_user_id: "",
                 reply: ""
             },
-            //componentKey: 0
         }
     },
     async mounted() {
         let user = getCookie("user")
-        //let user_id = ""
 
         if (user == "") {
             logout()
         }
-        else {
-            //user_id = JSON.parse(user)[0].id
-        }
-        //const result = await axios.get(`http://localhost:3000/posts?user_id=${user_id}`)
-        const result_posts = await axios.get(`http://localhost:3000/posts?_sort=-date`)
+
+        const result_posts = await axios.get(`http://localhost:81/social_media_api/api/home/post.php?id=${JSON.parse(user).id}`)
 
         if (result_posts.status == 200) {
             if(result_posts.data != "") {
                 this.posts = result_posts.data
-            }
-        }
-
-        const result_users = await axios.get(`http://localhost:3000/user`)
-
-        if (result_users.status == 200) {
-            if(result_users.data != "") {
-                this.users = result_users.data
             }
         }
 
@@ -78,18 +78,30 @@ export default {
         })
     },
     methods: {
-        checkData(id) {
-            for(let items in this.users) {
-                if(id == this.users[items].id) {
-                    return this.users[items].first_name
-                }
+        showReply(id) {
+            if($("#rp-btn-" + id).text() == "Show Replies") {
+                $("#reply-" + id).slideDown(500)
+                $("#rp-btn-" + id).text("Hide Replies")
+            }
+            else {
+                $("#reply-" + id).slideUp(500)
+                $("#rp-btn-" + id).text("Show Replies")
             }
         },
-        displayDate(date) {
-            const d = new Date(date)
-            const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        getReply(data, type) {
+            if(data == undefined) {
+                return ""
+            }
 
-            return `${month[d.getMonth()]} ${d.getDate()} ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`
+            if(type == "sender") {
+                return data.first_name + " " + data.last_name
+            }
+            if(type == "content") {
+                return data.content
+            }
+            if(type == "picture") {
+                return data.profile_picture
+            }
         },
         async postReply(post_id) {
             let user = getCookie("user")
@@ -98,7 +110,8 @@ export default {
                 this.$router.push({ name: "LoginPage" });
             }
             else {
-                this.replies.reply_user_id = JSON.parse(user)[0].id
+                this.replies.reply_user_id = JSON.parse(user).id
+                this.replies.reply = $("#rp-frm-" + post_id).val()
             }
 
             let data = {
@@ -136,7 +149,13 @@ export default {
 }
 
 async function getPosts() {
-    const result_posts = await axios.get(`http://localhost:3000/posts?_sort=-date`)
+    let user = getCookie("user")
+
+    if (user == "") {
+        logout()
+    }
+
+    const result_posts = await axios.get(`http://localhost:81/social_media_api/api/home/post.php?id=${JSON.parse(user).id}`)
 
     if (result_posts.status == 200) {
         if(result_posts.data != "") {

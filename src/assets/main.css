@@ -187,6 +187,53 @@ button:hover {
 	  border-radius: 10px 10px 10px 10px;
 }
 
+.user_reply {
+  float: left;
+  width: 100%;
+  height: auto;
+  color: rgba(250, 250, 250, 1);
+  padding: 10px;
+  display: none;
+}
+
+.user_reply_content {
+    float: left;
+    width: 100%;
+    height: 8vh;
+    color: rgba(250, 250, 250, 1);
+    padding: 10px;
+}
+
+.user_reply_pic {
+    float: left;
+    width: 20%;
+    max-width: 80px;
+    height: 100%;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+}
+
+.user_reply_pic img {
+    width: 100%;
+    height: 100%;
+}
+
+.user_reply_sender {
+    float:left;
+    width: 75%;
+    height: 50%;
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+.user_reply_message {
+    float:left;
+    width: 75%;
+    height: 50%;
+    padding-left: 10px;
+    border-bottom: 2px solid white;
+}
+
 @media only screen and (orientation: portrait) {
   .user_post .post_button {
     display: none;

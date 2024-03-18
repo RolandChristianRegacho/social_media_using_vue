@@ -2,7 +2,7 @@
 import HeaderButtons from '../components/HeaderButtons.vue'
 import HomeInfoArea from '../components/HomeInfoArea.vue'
 import HomePostArea from '../components/HomePostArea.vue'
-import HomeOthersArea from '../components/HomeOthersArea.vue'
+//import HomeOthersArea from '../components/HomeOthersArea.vue'
 import HomePage from '../components/HomePage.vue'
 </script>
 

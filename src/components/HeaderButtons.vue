@@ -31,7 +31,7 @@ export default {
             this.$router.push({ name: "LoginPage" });
         }
         else {
-            this.name = JSON.parse(user)[0].first_name
+            this.name = JSON.parse(user).first_name
         }
     }
 }

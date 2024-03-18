@@ -28,7 +28,7 @@
                 }
                 else {
                     this.user = JSON.parse(user)
-                    return `${this.user[0].first_name}  ${this.user[0].middle_name}  ${this.user[0].last_name}`
+                    return `${this.user.first_name}  ${this.user.middle_name}  ${this.user.last_name}`
                 }
             }
         }

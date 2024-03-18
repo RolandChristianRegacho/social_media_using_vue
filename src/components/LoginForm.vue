@@ -41,10 +41,15 @@ export default {
     },
     methods: {
         async login() {
-            const result = await axios.get(`http://localhost:3000/user?email=${this.user.username}&password=${this.user.password}`)
+            let data = {
+                username: this.user.username,
+                password: this.user.password
+            }
+
+            const result = await axios.post(`http://localhost:81/social_media_api/api/login/auth.php`, data)
 
             if (result.status == 200) {
-                setCookie("user", JSON.stringify(result.data), 5)
+                setCookie("user", JSON.stringify(result.data.data), 5)
                 swal({
                     icon: "success",
                     title: "Login succcess!"
