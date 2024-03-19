@@ -16,7 +16,7 @@ app.mount('#app')
 app.config.globalProperties.ENVIRONMENT = false
 
 if (app.config.globalProperties.ENVIRONMENT) {
-  app.config.globalProperties.BASE_URL = 'http://localhost:81/social_media_api/api'
+  app.config.globalProperties.BASE_URL = 'http://localhost:81/social_media_api'
 } else {
-  app.config.globalProperties.BASE_URL = 'http://localhost/social_media_api/api'
+  app.config.globalProperties.BASE_URL = 'http://localhost/social_media_api'
 }
