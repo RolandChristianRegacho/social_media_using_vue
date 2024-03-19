@@ -1,16 +1,16 @@
 <template>
-    <div class="login_form">
+    <div class="signup_form">
         <br>
         <h1>
-            Welcome to login page!
+            Welcome to Signup page!
         </h1>
         <br>
         <br>
         <br>
         <div>
             <form @submit.prevent="submit">
-                <input type="text" v-model="user.username" placeholder="Username">
-                <input type="password" v-model="user.password" placeholder="Password">
+                <input type="email" v-model="user.username" placeholder="Username">
+                <input type="password" v-model="user.password" placeholder="Password" minlength="10">
                 <input type="text" v-model="user.first_name" placeholder="First Name">
                 <input type="text" v-model="user.middle_name" placeholder="Middle Name">
                 <input type="text" v-model="user.last_name" placeholder="Last Name">
@@ -58,13 +58,13 @@ export default {
                 "birthday": this.user.birthday
             }
 
-            const result = await axios.post(`http://localhost:3000/user`, data)
+            const result = await axios.post(`${this.BASE_URL}/login/signup.php`, data)
 
-            if (result.status == 201) {
+            if (result.status == 200) {
                 swal("Sign up Successful!", "You may now log in", "success")
-                .then(() => {
-                    this.$router.push({ name: "LoginPage" });
-                });
+                    .then(() => {
+                        this.$router.push({ name: "LoginPage" });
+                    });
             }
         }
     }
@@ -88,15 +88,16 @@ function getCookie(cname) {
 
 <style scoped>
 @media (prefers-color-scheme: dark) {
-    .login_form {
+    .signup_form {
         width: 500px;
-        height: 400px;
+        height: 700px;
         margin: auto;
         background: rgb(200, 200, 200) !important;
         color: rgb(52, 73, 94);
     }
 }
+
 a {
-    color: white;
+    color: rgb(52, 73, 94);
 }
 </style>

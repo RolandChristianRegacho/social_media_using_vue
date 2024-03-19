@@ -8,17 +8,18 @@
             <div class="user_post_content">
                 {{ item.posts.content }}
             </div>
-            <div class="user_post_time" >
+            <div class="user_post_time">
                 {{ item.posts.date_time }}
             </div>
-            <div class="user_post_left" >
-                <button class="post_button persist_button" @click="showReply(item.posts.id)" :id="'rp-btn-' + item.posts.id">Show Replies</button>
+            <div class="user_post_left">
+                <button class="post_button persist_button" @click="showReply(item.posts.id)"
+                    :id="'rp-btn-' + item.posts.id">Show Replies</button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
                     <button class="post_button" @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
-            <div class="user_post_right" >
+            <div class="user_post_right">
                 <button class="post_button_right" @click="deletePost(item.posts.id)">Delete</button>
                 <button class="post_button_right">Edit</button>
             </div>
@@ -62,24 +63,21 @@ export default {
             logout()
         }
 
-        const result_posts = await axios.get(`http://localhost:81/social_media_api/api/home/post.php?id=${JSON.parse(user).id}`)
-
-        if (result_posts.status == 200) {
-            if(result_posts.data != "") {
-                this.posts = result_posts.data
-            }
-        }
-
-        this.emitter.on("onPost", () => {
-            getPosts()
+        getPosts(this.BASE_URL)
             .then(result => {
                 this.posts = result
             })
+
+        this.emitter.on("onPost", () => {
+            getPosts(this.BASE_URL)
+                .then(result => {
+                    this.posts = result
+                })
         })
     },
     methods: {
         showReply(id) {
-            if($("#rp-btn-" + id).text() == "Show Replies") {
+            if ($("#rp-btn-" + id).text() == "Show Replies") {
                 $("#reply-" + id).slideDown(500)
                 $("#rp-btn-" + id).text("Hide Replies")
             }
@@ -89,17 +87,17 @@ export default {
             }
         },
         getReply(data, type) {
-            if(data == undefined) {
+            if (data == undefined) {
                 return ""
             }
 
-            if(type == "sender") {
+            if (type == "sender") {
                 return data.first_name + " " + data.last_name
             }
-            if(type == "content") {
+            if (type == "content") {
                 return data.content
             }
-            if(type == "picture") {
+            if (type == "picture") {
                 return data.profile_picture
             }
         },
@@ -122,7 +120,7 @@ export default {
 
             const result = await axios.post("http://localhost:3000/post_replies", data)
 
-            if(result.status == 201) {
+            if (result.status == 201) {
                 this.replies.reply = ""
             }
         },
@@ -135,30 +133,30 @@ export default {
                 buttons: true,
                 dangerMode: true,
             })
-            .then((willDelete) => {
-                if (willDelete) {
-                    swal("Poof! Your post has been deleted!", {
-                    icon: "success",
-                    });
-                } else {
-                    swal("Your imaginary file is safe!");
-                }
-            });
+                .then((willDelete) => {
+                    if (willDelete) {
+                        swal("Poof! Your post has been deleted!", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
         }
     }
 }
 
-async function getPosts() {
+async function getPosts(BASE_URL) {
     let user = getCookie("user")
 
     if (user == "") {
         logout()
     }
 
-    const result_posts = await axios.get(`http://localhost:81/social_media_api/api/home/post.php?id=${JSON.parse(user).id}`)
+    const result_posts = await axios.get(`${BASE_URL}/home/post.php?id=${JSON.parse(user).id}`)
 
     if (result_posts.status == 200) {
-        if(result_posts.data != "") {
+        if (result_posts.data != "") {
             return result_posts.data
         }
     }

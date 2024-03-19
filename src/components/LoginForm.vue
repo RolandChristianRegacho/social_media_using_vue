@@ -46,7 +46,7 @@ export default {
                 password: this.user.password
             }
 
-            const result = await axios.post(`http://localhost:81/social_media_api/api/login/auth.php`, data)
+            const result = await axios.post(`${this.BASE_URL}/login/auth.php`, data)
 
             if (result.status == 200) {
                 setCookie("user", JSON.stringify(result.data.data), 5)
@@ -54,9 +54,9 @@ export default {
                     icon: "success",
                     title: "Login succcess!"
                 })
-                    setTimeout(() => {
-                        this.$router.push({ name: "HomePage" });
-                    }, 2000)
+                setTimeout(() => {
+                    this.$router.push({ name: "HomePage" });
+                }, 2000)
             }
         }
     }
@@ -95,7 +95,8 @@ function getCookie(cname) {
         color: rgb(52, 73, 94);
     }
 }
+
 a {
-    color: white;
+    color: rgb(52, 73, 94);
 }
 </style>

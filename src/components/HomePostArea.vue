@@ -9,7 +9,6 @@
 <script>
 import axios from "axios"
 import $ from "jquery"
-
 export default {
     name: "HomePostArea",
     data() {
@@ -39,13 +38,13 @@ export default {
                 }
                 $("#post_text").val("")
 
-                const result = await axios.post(`http://localhost:81/social_media_api/api/home/post.php`, data)
+                const result = await axios.post(`${this.BASE_URL}/home/post.php`, data)
 
-                if(result.status == 200) {
+                if (result.status == 200) {
                     this.emitter.emit("onPost");
                 }
             }
-            catch(e) {
+            catch (e) {
                 console.log(e)
             }
         }
