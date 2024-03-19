@@ -11,7 +11,9 @@
             <form @submit.prevent="submit">
                 <input type="text" v-model="user.username" placeholder="Username">
                 <input type="password" v-model="user.password" placeholder="Password">
-                <button @click="login()">Login</button>
+                <button @click="login()">Login
+                    <CaLogin class="icon" />
+                </button>
             </form>
             <br>
             <router-link to="/signup">Don't have an account?</router-link>
@@ -22,8 +24,13 @@
 <script>
 import axios from "axios"
 import swal from 'sweetalert';
+import { CaLogin } from "@kalimahapps/vue-icons";
+
 export default {
     name: "LoginForm",
+    components: {
+        CaLogin
+    },
     data() {
         return {
             user: {
@@ -94,6 +101,12 @@ function getCookie(cname) {
         background: rgb(200, 200, 200) !important;
         color: rgb(52, 73, 94);
     }
+}
+
+.icon {
+    color: white;
+    font-size: 2em;
+    vertical-align: middle;
 }
 
 a {

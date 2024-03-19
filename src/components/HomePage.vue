@@ -12,16 +12,26 @@
                 {{ item.posts.date_time }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button" @click="showReply(item.posts.id)"
-                    :id="'rp-btn-' + item.posts.id">Show Replies</button>
+                <button class="post_button persist_button" @click="showReply(item.posts.id)" data-status="inactive"
+                    :id="'rp-btn-' + item.posts.id">
+                    <BxShow class="icon_show" />
+                    <BxHide class="icon_hide" />
+                    <p>Show Replies</p>
+                </button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
                     <button class="post_button" @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
             <div class="user_post_right">
-                <button class="post_button_right" @click="deletePost(item.posts.id)">Delete</button>
-                <button class="post_button_right">Edit</button>
+                <button class="post_button_right" @click="deletePost(item.posts.id)">
+                    <AnTwotoneDelete class="icon" />
+                    <p>Delete</p>
+                </button>
+                <button class="post_button_right">
+                    <AnOutlinedEdit class="icon" />
+                    <p>Edit</p>
+                </button>
             </div>
             <div class="user_reply" :id="'reply-' + item.posts.id">
                 <div v-for="replies, id in item.reply" class="user_reply_content" :key="id">
@@ -44,6 +54,11 @@
 import axios from "axios"
 import swal from 'sweetalert';
 import $ from "jquery";
+import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
+import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
+import { BxShow } from "@kalimahapps/vue-icons";
+import { BxHide } from "@kalimahapps/vue-icons";
+
 export default {
     name: "HomePage",
     data() {
@@ -55,6 +70,12 @@ export default {
                 reply: ""
             },
         }
+    },
+    components: {
+        AnOutlinedEdit,
+        AnTwotoneDelete,
+        BxShow,
+        BxHide
     },
     async mounted() {
         let user = getCookie("user")
@@ -77,13 +98,33 @@ export default {
     },
     methods: {
         showReply(id) {
-            if ($("#rp-btn-" + id).text() == "Show Replies") {
-                $("#reply-" + id).slideDown(500)
-                $("#rp-btn-" + id).text("Hide Replies")
+            const portrait = window.matchMedia("(orientation: portrait)").matches;
+
+            if (portrait) {
+                if ($("#rp-btn-" + id).attr("data-status") == "inactive") {
+                    $(".icon_show").show()
+                    $(".icon_hide").hide()
+                    $("#rp-btn-" + id).attr("data-status", "active")
+                    $("#reply-" + id).slideDown(500)
+                }
+                else {
+                    $(".icon_show").hide()
+                    $(".icon_hide").show()
+                    $("#rp-btn-" + id).attr("data-status", "inactive")
+                    $("#reply-" + id).slideUp(500)
+                }
             }
             else {
-                $("#reply-" + id).slideUp(500)
-                $("#rp-btn-" + id).text("Show Replies")
+                if ($("#rp-btn-" + id).text() == "Show Replies") {
+                    $("#reply-" + id).slideDown(500)
+                    $("#rp-btn-" + id).text("Hide Replies")
+                    $("#rp-btn-" + id).attr("data-status", "active")
+                }
+                else {
+                    $("#reply-" + id).slideUp(500)
+                    $("#rp-btn-" + id).text("Show Replies")
+                    $("#rp-btn-" + id).attr("data-status", "inactive")
+                }
             }
         },
         getReply(data, type) {
@@ -144,8 +185,6 @@ export default {
                         swal("Poof! Your post has been deleted!", {
                             icon: "success",
                         });
-                    } else {
-                        swal("Your imaginary file is safe!");
                     }
                 });
         }
@@ -189,3 +228,40 @@ function getCookie(cname) {
     return "";
 }
 </script>
+
+<style scoped>
+.icon {
+    color: white;
+    font-size: 2em;
+    vertical-align: middle;
+    display: none;
+}
+
+.icon_show {
+    color: white;
+    font-size: 2em;
+    vertical-align: middle;
+    display: none;
+}
+
+.icon_hide {
+    color: white;
+    font-size: 2em;
+    vertical-align: middle;
+    display: none;
+}
+
+@media only screen and (orientation: portrait) {
+    .icon {
+        display: block;
+    }
+
+    button p {
+        display: none;
+    }
+
+    .icon_hide {
+        display: block;
+    }
+}
+</style>

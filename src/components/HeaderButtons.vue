@@ -2,18 +2,25 @@
     <div>
         <button @click="goHome" class="header_icon"></button>
         <router-link to="/">Social Crowd</router-link>
-        <a @click="logout" href="#">Logout</a>
-        <a class="a_name">{{ name }}</a>
+        <a>{{ name }}</a>
+        <a @click="logout" href="#" class="a_name">
+            <CaLogout class="icon" />
+        </a>
     </div>
 </template>
 
 <script>
+import { CaLogout } from "@kalimahapps/vue-icons";
+
 export default {
     name: "HeaderButton",
     data() {
         return {
             name: ""
         }
+    },
+    components: {
+        CaLogout
     },
     methods: {
         logout() {
@@ -85,5 +92,11 @@ a:hover {
     height: 58px;
     font-size: 20px;
     float: left;
+}
+
+.icon {
+    color: white;
+    font-size: 2em;
+    vertical-align: middle;
 }
 </style>
