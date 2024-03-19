@@ -113,15 +113,21 @@ export default {
             }
 
             let data = {
-                "post_id": post_id,
-                "user_id": this.replies.reply_user_id,
-                "reply": this.replies.reply
+                "reply": {
+                    "post_id": post_id,
+                    "content": this.replies.reply
+                },
+                "user_id": this.replies.reply_user_id
             }
 
-            const result = await axios.post("http://localhost:3000/post_replies", data)
+            const result = await axios.post(`${this.BASE_URL}/home/post.php`, data)
 
-            if (result.status == 201) {
+            if (result.status == 200) {
                 this.replies.reply = ""
+                getPosts(this.BASE_URL)
+                    .then(result => {
+                        this.posts = result
+                    })
             }
         },
         async deletePost(id) {
