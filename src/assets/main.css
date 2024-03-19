@@ -243,8 +243,4 @@ button:hover {
   .persist_button {
     display: block !important;
   }
-
-  .user_post .post_input {
-    display: none;
-  }
 }
