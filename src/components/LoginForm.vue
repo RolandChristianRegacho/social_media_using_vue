@@ -93,14 +93,12 @@ function getCookie(cname) {
 </script>
 
 <style scoped>
-@media (prefers-color-scheme: dark) {
-    .login_form {
-        width: 500px;
-        height: 400px;
-        margin: auto;
-        background: rgb(200, 200, 200) !important;
-        color: rgb(52, 73, 94);
-    }
+.login_form {
+    width: 500px;
+    height: 400px;
+    margin: auto;
+    background: rgb(200, 200, 200) !important;
+    color: rgb(52, 73, 94);
 }
 
 .icon {

@@ -131,7 +131,7 @@ input[type="search"] {
 
 input[type="search"]:focus {
     font-size: 1.2em;
-    transition-duration: 1s;
+    transition-duration: 0.5s;
 }
 
 .hiddenEnter {
