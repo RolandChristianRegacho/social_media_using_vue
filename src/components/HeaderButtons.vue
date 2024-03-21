@@ -10,8 +10,9 @@
         <button @click="logout" class="header_button">
             <AnOutlinedLogout class="icon" />
         </button>
-        <button class="header_button">
-            <AnOutlinedNotification class="icon" />
+        <button @click="showNotifications" class="header_button notification" data-status="hidden">
+            <AnOutlinedNotification class="icon" style="font-size: 2em; text-align: left;" />
+            <p></p>
         </button>
         <button class="header_button">
             <AnOutlinedSetting class="icon" />
@@ -23,7 +24,8 @@
     <div class="search_div">
         <div class='search_result_div' v-for="item in search_result" :key="item.id">
             <div class='search_result_name'>
-                <button @click='viewUser(item.id);'>{{ item.first_name }} {{ item.middle_name }} {{ item.last_name }}</button>
+                <button @click='viewUser(item.id);'>{{ item.first_name }} {{ item.middle_name }} {{ item.last_name
+                    }}</button>
             </div>
             <div class='search_result_prompt'>
                 <button>Add Friend?</button>
@@ -36,6 +38,17 @@
     </div>
     <div class="search_div_not_found">
         <h1>Not Found</h1>
+    </div>
+    <div class="notifications_div">
+        <div class='notifications_result_div' v-for="items in notifications" :key="items.id">
+            <div class='notifications_content'>
+                <button @click='viewUser(items.id);'>{{ items.first_name }} sent you a friend request</button>
+            </div>
+            <div class='notifications_action'>
+                <button @click="sendFriendRequest(items.id);" class='search_result_action_accept'>Add</button>
+                <button class='search_result_action_reject'>Reject</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -56,7 +69,8 @@ export default {
             search: {
                 name: ""
             },
-            search_result: []
+            search_result: [],
+            notifications: []
         }
     },
     components: {
@@ -123,9 +137,13 @@ export default {
                     title: "Friend Request Sent!"
                 })
             }
+        },
+        showNotifications() {
+            $(".notifications_div").attr("data-status", "clicked")
+            $(".notifications_div").show()
         }
     },
-    mounted() {
+    async mounted() {
         let user = getCookie("user")
 
         if (user == "") {
@@ -133,6 +151,20 @@ export default {
         }
         else {
             this.name = JSON.parse(user).first_name
+        }
+
+        const result = await axios.get(`${this.BASE_URL}/home/notifications.php?user_id=${JSON.parse(user).id}`)
+
+        if (result.status == 200) {
+            if (result.data.type == "found") {
+                this.notifications = result.data.data
+                if (result.data.data.length > 9) {
+                    $(".notification p").text(" 9+")
+                }
+                else {
+                    $(".notification p").text(`${result.data.data.length}`)
+                }
+            }
         }
     }
 }
@@ -188,6 +220,29 @@ a:hover {
     background: rgba(78, 111, 118, 1);
 }
 
+.notification {
+    width: 75px;
+}
+
+.notification p {
+    margin: 0;
+    float: right;
+    background: rgba(200, 50, 50, 1);
+    animation-name: animateNotification;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes animateNotification {
+    0% {
+        background: inherit;
+    }
+
+    100% {
+        background: rgba(200, 50, 50, 1);
+    }
+}
+
 .header_icon {
     background: url("@/assets/favicon.png");
     background-size: 100% 100%;
@@ -201,6 +256,12 @@ a:hover {
 .icon {
     color: white;
     font-size: 2em;
+    vertical-align: middle;
+}
+
+.notification-icon {
+    color: red !important;
+    font-size: 1.5em !important;
     vertical-align: middle;
 }
 
@@ -239,6 +300,17 @@ input[type="search"]:focus {
     top: 60px;
     left: 180px;
     width: 308px;
+    height: 400px;
+    background: rgba(38, 71, 78, 1);
+    display: none;
+}
+
+.notifications_div {
+    position: fixed;
+    z-index: 100 !important;
+    top: 60px;
+    right: 0px;
+    width: 268px;
     height: 400px;
     background: rgba(38, 71, 78, 1);
     display: none;
