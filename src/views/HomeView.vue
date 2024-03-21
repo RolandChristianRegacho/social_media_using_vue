@@ -4,13 +4,20 @@ import HomeInfoArea from '../components/HomeInfoArea.vue'
 import HomePostArea from '../components/HomePostArea.vue'
 //import HomeOthersArea from '../components/HomeOthersArea.vue'
 import HomePage from '../components/HomePage.vue'
+import $ from "jquery"
+
+function hideSearch() {
+  $(".search_div").hide()
+  $(".search_div_not_found").hide()
+  $("#search_txt").val("")
+}
 </script>
 
 <template>
-  <nav>
+  <nav @click="hideSearch()">
     <HeaderButtons />
   </nav>
-  <main>
+  <main @click="hideSearch()">
     <HomeInfoArea />
     <div class="center_form">
       <HomePostArea />
@@ -22,11 +29,17 @@ import HomePage from '../components/HomePage.vue'
 
 <style scoped>
   .center_form {
-    float: left;
+    display: inline-block;
     width: 40%;
     height: 100%;
   overflow-y: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none; 
   }
+
+main {
+  float: left;
+  text-align: center;
+  margin-top: 60px;
+}
 </style>

@@ -1,5 +1,4 @@
 <template>
-    <br>
     <div class="post_container">
         <div v-for="item in posts" class="user_post" :key="item.posts">
             <div class="user_post_sender">

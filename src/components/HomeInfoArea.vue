@@ -62,6 +62,8 @@
         width: 30%;
         height: 100vh !important;
         max-width: 350px;
+        position: fixed;
+        z-index: -1;
     }
     
     .profile-picture {

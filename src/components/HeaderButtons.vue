@@ -2,20 +2,51 @@
     <div>
         <button @click="goHome" class="header_icon"></button>
         <router-link to="/">Social Crowd</router-link>
-        <a>{{ name }}</a>
+        <!--<a>{{ name }}</a>-->
         <form @submit.prevent="submit">
-            <input type="search" v-model="this.search.name" placeholder="Search a friend" />
+            <input type="search" id="search_txt" v-model="this.search.name" placeholder="Search a friend" />
             <button @click="searchPeople()" class="hiddenEnter">Search</button>
         </form>
-        <a @click="logout" href="#" class="a_name">
-            <CaLogout class="icon" />
-        </a>
+        <button @click="logout" class="header_button">
+            <AnOutlinedLogout class="icon" />
+        </button>
+        <button class="header_button">
+            <AnOutlinedNotification class="icon" />
+        </button>
+        <button class="header_button">
+            <AnOutlinedSetting class="icon" />
+        </button>
+        <button class="header_button">
+            <AnOutlinedUser class="icon" />
+        </button>
+    </div>
+    <div class="search_div">
+        <div class='search_result_div' v-for="item in search_result" :key="item.id">
+            <div class='search_result_name'>
+                <button @click='viewUser(item.id);'>{{ item.first_name }} {{ item.middle_name }} {{ item.last_name }}</button>
+            </div>
+            <div class='search_result_prompt'>
+                <button>Add Friend?</button>
+            </div>
+            <div class='search_result_action'>
+                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Add</button>
+                <button class='search_result_action_reject'>Reject</button>
+            </div>
+        </div>
+    </div>
+    <div class="search_div_not_found">
+        <h1>Not Found</h1>
     </div>
 </template>
 
 <script>
-import { CaLogout } from "@kalimahapps/vue-icons";
+import { AnOutlinedLogout } from "@kalimahapps/vue-icons";
+import { AnOutlinedUser } from "@kalimahapps/vue-icons";
+import { AnOutlinedSetting } from "@kalimahapps/vue-icons";
+import { AnOutlinedNotification } from "@kalimahapps/vue-icons";
 import axios from "axios";
+import $ from "jquery";
+import swal from 'sweetalert';
 
 export default {
     name: "HeaderButton",
@@ -24,11 +55,15 @@ export default {
             name: "",
             search: {
                 name: ""
-            }
+            },
+            search_result: []
         }
     },
     components: {
-        CaLogout
+        AnOutlinedLogout,
+        AnOutlinedUser,
+        AnOutlinedSetting,
+        AnOutlinedNotification
     },
     methods: {
         logout() {
@@ -39,15 +74,54 @@ export default {
             this.$router.push({ name: "HomePage" })
         },
         async searchPeople() {
-            const result = await axios.get(`${this.BASE_URL}/home/users.php?search=${this.search.name}`)
+            let user = getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+
+            const result = await axios.get(`${this.BASE_URL}/home/users.php?search=${this.search.name}&user_id=${user_id}`)
 
             if (result.status == 200) {
                 if (result.data.type == "found") {
-                    console.log(result.data)
+                    this.search_result = result.data.data
+                    $(".search_div").show()
                 }
                 else {
-                    console.log("not found")
+                    $(".search_div_not_found").show()
                 }
+            }
+        },
+        viewUser(id) {
+            console.log(id)
+        },
+        async sendFriendRequest(id) {
+            let user = getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+            let data = {
+                "sender": user_id,
+                "receiver": id,
+                "content": "Friend Request"
+            }
+
+            const result = await axios.post(`${this.BASE_URL}/home/notifications.php`, data)
+
+            if (result.status == 200) {
+                swal({
+                    icon: "success",
+                    title: "Friend Request Sent!"
+                })
             }
         }
     },
@@ -95,13 +169,23 @@ a:hover {
     color: white;
 }
 
-.a_name {
+.header_button {
     float: right;
-    margin-right: 0;
+    height: 50px;
+    width: 50px;
+    margin-top: 5px;
+    margin-right: 10px;
+    background: rgba(58, 91, 98, 1);
+    color: rgba(250, 250, 250, 1);
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 100%;
 }
 
-.a_name:hover {
-    background: fixed;
+.header_button:hover {
+    background: rgba(78, 111, 118, 1);
 }
 
 .header_icon {
@@ -135,6 +219,28 @@ input[type="search"]:focus {
 }
 
 .hiddenEnter {
+    display: none;
+}
+
+.search_div {
+    position: fixed;
+    z-index: 100 !important;
+    top: 60px;
+    left: 180px;
+    width: 308px;
+    height: 400px;
+    background: rgba(38, 71, 78, 1);
+    display: none;
+}
+
+.search_div_not_found {
+    position: fixed;
+    z-index: 100 !important;
+    top: 60px;
+    left: 180px;
+    width: 308px;
+    height: 400px;
+    background: rgba(38, 71, 78, 1);
     display: none;
 }
 </style>

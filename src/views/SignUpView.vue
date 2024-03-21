@@ -11,5 +11,6 @@ import SignUpForm from '../components/SignUpForm.vue'
 <style scoped>
 main {
     margin-top: 100px;
+    text-align: center;
 }
 </style>
