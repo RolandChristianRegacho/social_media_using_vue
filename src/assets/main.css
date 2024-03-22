@@ -346,6 +346,10 @@ button:hover {
   cursor: pointer;
 }
 
+.my-actions button {
+  width: auto;
+}
+
 @media only screen and (orientation: portrait) {
   .user_post .post_button {
     display: none;

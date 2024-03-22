@@ -40,8 +40,8 @@
         <h1>Not Found</h1>
     </div>
     <div class="notifications_div">
-        <div class='notifications_result_div' v-for="items in notifications" :key="items.id">
-            <div class='notifications_content'>
+        <div class="notifications_result_div" v-for="items in notifications" :key="items.id">
+            <div class="notifications_content" data-attr=items.status>
                 <button @click='viewUser(items.id);'>{{ items.first_name }} sent you a friend request</button>
             </div>
             <div class='notifications_action'>
@@ -138,7 +138,48 @@ export default {
                 })
             }
         },
-        showNotifications() {
+        async showNotifications() {
+            let user = getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+
+            let data = {
+                "user_id": user_id
+            }
+
+            const result = await axios.put(`${this.BASE_URL}/home/notifications.php`, data)
+
+            if (result.status == 200) {
+                const result = await axios.get(`${this.BASE_URL}/home/notifications.php?user_id=${JSON.parse(user).id}`)
+
+                if (result.status == 200) {
+                    if (result.data.type == "found") {
+                        this.notifications = result.data.data
+                        if (result.data.unread_count > 9) {
+                            $(".notification p").text(" 9+")
+                        }
+                        else if(result.data.unread_count > 0 && result.data.unread_count < 10) {
+                            $(".notification p").text(`${result.data.unread_count}`)
+                        }
+                        else {
+                            $(".notification p").text("")
+                        }
+                    }
+                }
+            }
+            else {
+                this.$swal({
+                    icon: result.data.type,
+                    title: "Server Error!",
+                    text: "There was a problem fetching your notifications",
+                })
+            }
             $(".notifications_div").attr("data-status", "clicked")
             $(".notifications_div").show()
         }
@@ -158,11 +199,14 @@ export default {
         if (result.status == 200) {
             if (result.data.type == "found") {
                 this.notifications = result.data.data
-                if (result.data.data.length > 9) {
+                if (result.data.unread_count > 9) {
                     $(".notification p").text(" 9+")
                 }
+                else if(result.data.unread_count > 0 && result.data.unread_count < 10) {
+                    $(".notification p").text(`${result.data.unread_count}`)
+                }
                 else {
-                    $(".notification p").text(`${result.data.data.length}`)
+                    $(".notification p").text("")
                 }
             }
         }

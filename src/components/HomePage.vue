@@ -171,21 +171,24 @@ export default {
             }
         },
         async deletePost(id) {
-            console.log(id)
-            swal({
-                title: "Are you sure to delete this post?",
-                text: "Once deleted, you will not be able to recover this post!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
+            this.$swal({
+                title: 'Are you sure you want to delete this post?',
+                showDenyButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: 'No',
+                customClass: {
+                    actions: 'my-actions',
+                    confirmButton: 'order-1',
+                    denyButton: 'order-2',
+                }
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    console.log(id)
+                    swal("Poof! Your post has been deleted!", {
+                        icon: "success",
+                    });
+                }
             })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Poof! Your post has been deleted!", {
-                            icon: "success",
-                        });
-                    }
-                });
         }
     }
 }

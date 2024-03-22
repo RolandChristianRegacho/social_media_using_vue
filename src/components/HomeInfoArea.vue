@@ -59,9 +59,8 @@
 <style scoped>
     .home_info_area {
         float: left;
-        width: 30%;
+        width: 250px;
         height: 100vh !important;
-        max-width: 350px;
         position: fixed;
         z-index: -1;
     }

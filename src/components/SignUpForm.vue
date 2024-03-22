@@ -93,6 +93,7 @@ function getCookie(cname) {
     margin: auto;
     background: rgb(200, 200, 200) !important;
     color: rgb(52, 73, 94);
+    border-radius: 5px;
 }
 
 a {

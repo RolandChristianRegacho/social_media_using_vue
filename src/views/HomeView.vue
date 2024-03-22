@@ -38,7 +38,7 @@ function hideSearch() {
 <style scoped>
 .center_form {
   display: inline-block;
-  width: 40%;
+  width: 50%;
   height: 100%;
   overflow-y: scroll;
   -ms-overflow-style: none;

@@ -23,7 +23,6 @@
 
 <script>
 import axios from "axios"
-import swal from 'sweetalert';
 import { CaLogin } from "@kalimahapps/vue-icons";
 
 export default {
@@ -56,14 +55,25 @@ export default {
             const result = await axios.post(`${this.BASE_URL}/login/auth.php`, data)
 
             if (result.status == 200) {
-                setCookie("user", JSON.stringify(result.data.data), 5)
-                swal({
-                    icon: "success",
-                    title: "Login succcess!"
-                })
-                setTimeout(() => {
-                    this.$router.push({ name: "HomePage" });
-                }, 2000)
+                if(result.data.type == "success") {
+                    setCookie("user", JSON.stringify(result.data.data), 5)
+                    this.$swal({
+                        icon: result.data.type,
+                        title: "Login Success!",
+                    })
+                    this.$swal.showLoading()
+                    setTimeout(() => {
+                        this.$router.push({ name: "HomePage" });
+                        this.$swal.close()
+                    }, 2000)
+                }
+                else {
+                    this.$swal({
+                        icon: result.data.type,
+                        title: "Login Failed!",
+                        text: result.data.message,
+                    })
+                }
             }
         }
     }
@@ -99,6 +109,7 @@ function getCookie(cname) {
     margin: auto;
     background: rgb(200, 200, 200) !important;
     color: rgb(52, 73, 94);
+    border-radius: 5px;
 }
 
 .icon {
