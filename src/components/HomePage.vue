@@ -11,11 +11,21 @@
                 {{ item.posts.date_time }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button" @click="showReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-' + item.posts.id">
-                    <BxShow class="icon_show" />
-                    <BxHide class="icon_hide" />
-                    <p>Show Replies</p>
+                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)" data-status="active"
+                    :id="'rp-btn-shw-' + item.posts.id">
+                    <BxShow />
+                </button>
+                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)" data-status="inactive"
+                    :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
+                    <BxHide />
+                </button>
+                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)" data-status="active"
+                    :id="'rp-btn-shw-wrd-' + item.posts.id">
+                    Show Replies
+                </button>
+                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)" data-status="inactive"
+                    :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
+                    Hide Replies
                 </button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
@@ -100,6 +110,16 @@ export default {
             const portrait = window.matchMedia("(orientation: portrait)").matches;
 
             if (portrait) {
+                if ($("#rp-btn-shw-" + id).attr("data-status") == "active") {
+                    $("#rp-btn-shw-" + id).hide()
+                    $("#rp-btn-hdn-" + id).show()
+                    $("#rp-btn-shw-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-hdn-" + id).attr("data-status", "active")
+                    $("#reply-" + id).slideDown(500)
+                    $("#rp-btn-shw-wrd-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-hdn-wrd-" + id).attr("data-status", "active")
+                }
+                /*
                 if ($("#rp-btn-" + id).attr("data-status") == "inactive") {
                     $(".icon_show").show()
                     $(".icon_hide").hide()
@@ -112,8 +132,20 @@ export default {
                     $("#rp-btn-" + id).attr("data-status", "inactive")
                     $("#reply-" + id).slideUp(500)
                 }
+                */
             }
             else {
+                if ($("#rp-btn-shw-wrd-" + id).attr("data-status") == "active") {
+                    $("#rp-btn-shw-wrd-" + id).hide()
+                    $("#rp-btn-hdn-wrd-" + id).show()
+                    $("#rp-btn-shw-wrd-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-hdn-wrd-" + id).attr("data-status", "active")
+                    $("#reply-" + id).slideDown(500)
+                    $("#rp-btn-shw-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-hdn-" + id).attr("data-status", "active")
+                }
+
+                /*
                 if ($("#rp-btn-" + id).text() == "Show Replies") {
                     $("#reply-" + id).slideDown(500)
                     $("#rp-btn-" + id).text("Hide Replies")
@@ -123,6 +155,33 @@ export default {
                     $("#reply-" + id).slideUp(500)
                     $("#rp-btn-" + id).text("Show Replies")
                     $("#rp-btn-" + id).attr("data-status", "inactive")
+                }
+                */
+            }
+        },
+        hideReply(id) {
+            const portrait = window.matchMedia("(orientation: portrait)").matches;
+
+            if (portrait) {
+                if ($("#rp-btn-hdn-" + id).attr("data-status") == "active") {
+                    $("#rp-btn-hdn-" + id).hide()
+                    $("#rp-btn-shw-" + id).show()
+                    $("#rp-btn-hdn-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-shw-" + id).attr("data-status", "active")
+                    $("#reply-" + id).slideUp(500)
+                    $("#rp-btn-hdn-wrd-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-shw-wrd-" + id).attr("data-status", "active")
+                }
+            }
+            else {
+                if ($("#rp-btn-hdn-wrd-" + id).attr("data-status") == "active") {
+                    $("#rp-btn-hdn-wrd-" + id).hide()
+                    $("#rp-btn-shw-wrd-" + id).show()
+                    $("#rp-btn-hdn-wrd-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-shw-wrd-" + id).attr("data-status", "active")
+                    $("#reply-" + id).slideUp(500)
+                    $("#rp-btn-hdn-" + id).attr("data-status", "inactive")
+                    $("#rp-btn-shw-" + id).attr("data-status", "active")
                 }
             }
         },
@@ -253,8 +312,16 @@ function getCookie(cname) {
     display: none;
 }
 
+button p {
+    display: block;
+}
+
 @media only screen and (orientation: portrait) {
     .icon {
+        display: block;
+    }
+
+    .icon_show {
         display: block;
     }
 
