@@ -119,20 +119,6 @@ export default {
                     $("#rp-btn-shw-wrd-" + id).attr("data-status", "inactive")
                     $("#rp-btn-hdn-wrd-" + id).attr("data-status", "active")
                 }
-                /*
-                if ($("#rp-btn-" + id).attr("data-status") == "inactive") {
-                    $(".icon_show").show()
-                    $(".icon_hide").hide()
-                    $("#rp-btn-" + id).attr("data-status", "active")
-                    $("#reply-" + id).slideDown(500)
-                }
-                else {
-                    $(".icon_show").hide()
-                    $(".icon_hide").show()
-                    $("#rp-btn-" + id).attr("data-status", "inactive")
-                    $("#reply-" + id).slideUp(500)
-                }
-                */
             }
             else {
                 if ($("#rp-btn-shw-wrd-" + id).attr("data-status") == "active") {
@@ -144,19 +130,6 @@ export default {
                     $("#rp-btn-shw-" + id).attr("data-status", "inactive")
                     $("#rp-btn-hdn-" + id).attr("data-status", "active")
                 }
-
-                /*
-                if ($("#rp-btn-" + id).text() == "Show Replies") {
-                    $("#reply-" + id).slideDown(500)
-                    $("#rp-btn-" + id).text("Hide Replies")
-                    $("#rp-btn-" + id).attr("data-status", "active")
-                }
-                else {
-                    $("#reply-" + id).slideUp(500)
-                    $("#rp-btn-" + id).text("Show Replies")
-                    $("#rp-btn-" + id).attr("data-status", "inactive")
-                }
-                */
             }
         },
         hideReply(id) {
