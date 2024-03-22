@@ -59,10 +59,11 @@
 <style scoped>
     .home_info_area {
         float: left;
-        width: 250px;
+        width: 25%;
         height: 100vh !important;
         position: fixed;
         z-index: -1;
+        max-width: 250px;
     }
     
     .profile-picture {

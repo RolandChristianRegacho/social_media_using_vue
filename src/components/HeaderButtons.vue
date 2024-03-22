@@ -45,7 +45,7 @@
                 <button @click='viewUser(items.id);'>{{ items.first_name }} sent you a friend request</button>
             </div>
             <div class='notifications_action'>
-                <button @click="sendFriendRequest(items.id);" class='search_result_action_accept'>Add</button>
+                <button @click="sendFriendRequest(items.id);" class='search_result_action_accept'>Accept</button>
                 <button class='search_result_action_reject'>Reject</button>
             </div>
         </div>
@@ -139,6 +139,8 @@ export default {
             }
         },
         async showNotifications() {
+            $(".notifications_div").attr("data-status", "clicked")
+            $(".notifications_div").show()
             let user = getCookie("user")
             let user_id = ""
 
@@ -180,8 +182,6 @@ export default {
                     text: "There was a problem fetching your notifications",
                 })
             }
-            $(".notifications_div").attr("data-status", "clicked")
-            $(".notifications_div").show()
         }
     },
     async mounted() {
