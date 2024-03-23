@@ -11,7 +11,7 @@
                 {{ item.posts.content }}
             </div>
             <div class="user_post_time">
-                {{ item.posts.date_time }}
+                {{ item.posts.date }}
             </div>
             <div class="user_post_left">
                 <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)" data-status="active"

@@ -8,7 +8,7 @@
                 {{ item.posts.content }}
             </div>
             <div class="user_post_time">
-                {{ item.posts.date_time }}
+                {{ item.posts.date }}
             </div>
             <div class="user_post_left">
                 <form @submit.prevent="submit">
