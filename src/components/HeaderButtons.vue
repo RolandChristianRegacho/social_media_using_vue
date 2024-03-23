@@ -41,7 +41,7 @@
     </div>
     <div class="notifications_div">
         <div class="notifications_result_div" v-for="item in notifications" :key="item.id">
-            <div v-if="item.context == 'Reply'">
+            <div class="notification_result_div_for_full_height" v-if="item.context == 'Reply'">
                 <div class="notifications_content_post">
                     <button @click='goToPost(item.post_id);'>{{ item.first_name }} replied in your
                         post</button>

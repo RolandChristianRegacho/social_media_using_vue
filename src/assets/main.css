@@ -319,6 +319,12 @@ button:hover {
   text-align: left;
 }
 
+.notification_result_div_for_full_height {
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+
 .notifications_content {
   float: left;
   width: 70%;
