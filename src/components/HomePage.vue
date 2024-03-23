@@ -3,11 +3,11 @@
         No Posts To Show
     </div>
     <div class="post_container" v-else>
-        <div @click="goToPost(item.posts.id)" v-for="item in posts" class="user_post" :key="item.posts">
+        <div v-for="item in posts" class="user_post" :key="item.posts">
             <div class="user_post_sender">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
-            <div class="user_post_content">
+            <div @click="goToPost(item.posts.id)" class="user_post_content">
                 {{ item.posts.content }}
             </div>
             <div class="user_post_time">
