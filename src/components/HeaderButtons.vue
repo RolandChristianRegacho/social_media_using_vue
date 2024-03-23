@@ -205,7 +205,6 @@ export default {
     },
     async mounted() {
         let user = getCookie("user")
-        this.owner = JSON.parse(user).id
 
         if (user == "") {
             this.$router.push({ name: "LoginPage" });
@@ -376,7 +375,8 @@ input[type="search"]:focus {
     top: 60px;
     right: 0px;
     width: 268px;
-    height: 400px;
+    height: auto;
+    min-height: 400px;
     background: rgba(38, 71, 78, 1);
     display: none;
 }

@@ -319,12 +319,6 @@ button:hover {
   text-align: left;
 }
 
-.notifications_result_div div {
-  float: left;
-  width: 100%;
-  height: 99%;
-}
-
 .notifications_content {
   float: left;
   width: 70%;
