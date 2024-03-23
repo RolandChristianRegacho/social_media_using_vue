@@ -205,6 +205,7 @@ export default {
     },
     async mounted() {
         let user = getCookie("user")
+        this.owner = JSON.parse(user).id
 
         if (user == "") {
             this.$router.push({ name: "LoginPage" });

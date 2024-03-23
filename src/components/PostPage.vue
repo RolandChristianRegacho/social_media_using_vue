@@ -1,5 +1,5 @@
 <template>
-    <div class="post_container" v-if="renderComponent">
+    <div class="post_container">
         <div v-for="item in posts" class="user_post" :key="item.posts">
             <div class="user_post_sender">
                 {{ item.user.first_name }} {{ item.user.last_name }}
@@ -16,7 +16,7 @@
                     <button class="post_button" @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
-            <div class="user_post_right">
+            <div class="user_post_right" v-if="item.user.id == this.owner">
                 <button class="post_button_right" @click="deletePost(item.posts.id)">
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
@@ -60,7 +60,7 @@ export default {
                 reply_user_id: "",
                 reply: ""
             },
-            renderComponent: true
+            owner: ""
         }
     },
     components: {
@@ -69,6 +69,7 @@ export default {
     },
     async mounted() {
         let user = getCookie("user")
+        this.owner = JSON.parse(user).id
 
         if (user == "") {
             logout()
