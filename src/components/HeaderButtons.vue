@@ -40,13 +40,23 @@
         <h1>Not Found</h1>
     </div>
     <div class="notifications_div">
-        <div class="notifications_result_div" v-for="items in notifications" :key="items.id">
-            <div class="notifications_content" data-attr=items.status>
-                <button @click='viewUser(items.id);'>{{ items.first_name }} sent you a friend request</button>
+        <div class="notifications_result_div" v-for="item in notifications" :key="item.id">
+            <div v-if="item.context == 'Reply'">
+                <div class="notifications_content_post">
+                    <button @click='goToPost(item.post_id);'>{{ item.first_name }} replied in your
+                        post</button>
+                </div>
             </div>
-            <div class='notifications_action'>
-                <button @click="sendFriendRequest(items.id);" class='search_result_action_accept'>Accept</button>
-                <button class='search_result_action_reject'>Reject</button>
+            <div v-else>
+                <div class="notifications_content">
+                    <button>{{ item.first_name }} sent you a friend
+                        request</button>
+                </div>
+                <div class='notifications_action'>
+                    <button onClick="sendFriendRequest(${data[items].id});"
+                        class='search_result_action_accept'>Accept</button>
+                    <button class='search_result_action_reject'>Reject</button>
+                </div>
             </div>
         </div>
     </div>
@@ -166,7 +176,7 @@ export default {
                         if (result.data.unread_count > 9) {
                             $(".notification p").text(" 9+")
                         }
-                        else if(result.data.unread_count > 0 && result.data.unread_count < 10) {
+                        else if (result.data.unread_count > 0 && result.data.unread_count < 10) {
                             $(".notification p").text(`${result.data.unread_count}`)
                         }
                         else {
@@ -181,6 +191,15 @@ export default {
                     title: "Server Error!",
                     text: "There was a problem fetching your notifications",
                 })
+            }
+        },
+        goToPost(id) {
+            if (this.$router.currentRoute._value.name == "PostPage") {
+                this.emitter.emit("onChangePost", id);
+            }
+            else {
+                this.$router.push(`/post=${id}`)
+                console.log("hi")
             }
         }
     },
@@ -202,7 +221,7 @@ export default {
                 if (result.data.unread_count > 9) {
                     $(".notification p").text(" 9+")
                 }
-                else if(result.data.unread_count > 0 && result.data.unread_count < 10) {
+                else if (result.data.unread_count > 0 && result.data.unread_count < 10) {
                     $(".notification p").text(`${result.data.unread_count}`)
                 }
                 else {
@@ -212,6 +231,7 @@ export default {
         }
     }
 }
+
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);

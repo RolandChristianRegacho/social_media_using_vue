@@ -196,6 +196,14 @@ button:hover {
   display: none;
 }
 
+.user_reply_post {
+  float: left;
+  width: 100%;
+  height: auto;
+  color: rgba(250, 250, 250, 1);
+  padding: 10px;
+}
+
 .user_reply_content {
   float: left;
   width: 100%;
@@ -311,11 +319,31 @@ button:hover {
   text-align: left;
 }
 
+.notifications_result_div div {
+  float: left;
+  width: 100%;
+  height: 99%;
+}
+
 .notifications_content {
   float: left;
   width: 70%;
   height: 85px;
   margin-top: 1px;
+}
+
+.notifications_content_post {
+  float: left;
+  width: 100%;
+  height: 99%;
+  margin-top: 1px;
+}
+
+.notifications_content_post button {
+  float: left;
+  width: 100%;
+  height: 100%;
+  cursor: text;
 }
 
 .notifications_content button {

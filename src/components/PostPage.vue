@@ -1,9 +1,6 @@
 <template>
-    <div class="post_container" v-if="posts.length == 0">
-        No Posts To Show
-    </div>
-    <div class="post_container" v-else>
-        <div @click="goToPost(item.posts.id)" v-for="item in posts" class="user_post" :key="item.posts">
+    <div class="post_container" v-if="renderComponent">
+        <div v-for="item in posts" class="user_post" :key="item.posts">
             <div class="user_post_sender">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
@@ -14,28 +11,12 @@
                 {{ item.posts.date_time }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)" data-status="active"
-                    :id="'rp-btn-shw-' + item.posts.id">
-                    <BxShow />
-                </button>
-                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
-                    <BxHide />
-                </button>
-                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)" data-status="active"
-                    :id="'rp-btn-shw-wrd-' + item.posts.id">
-                    Show Replies
-                </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
-                    Hide Replies
-                </button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
                     <button class="post_button" @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
-            <div class="user_post_right" v-if="item.user.id == this.owner">
+            <div class="user_post_right">
                 <button class="post_button_right" @click="deletePost(item.posts.id)">
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
@@ -45,7 +26,7 @@
                     <p>Edit</p>
                 </button>
             </div>
-            <div class="user_reply" :id="'reply-' + item.posts.id">
+            <div class="user_reply_post" :id="'reply-' + item.posts.id">
                 <div v-for="replies, id in item.reply" class="user_reply_content" :key="id">
                     <div class="user_reply_pic">
                         <img :src="getReply(replies.sender, 'picture')" />
@@ -68,8 +49,6 @@ import swal from 'sweetalert';
 import $ from "jquery";
 import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
 import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
-import { BxShow } from "@kalimahapps/vue-icons";
-import { BxHide } from "@kalimahapps/vue-icons";
 
 export default {
     name: "HomePage",
@@ -81,30 +60,29 @@ export default {
                 reply_user_id: "",
                 reply: ""
             },
-            owner: ""
+            renderComponent: true
         }
     },
     components: {
         AnOutlinedEdit,
-        AnTwotoneDelete,
-        BxShow,
-        BxHide
+        AnTwotoneDelete
     },
     async mounted() {
         let user = getCookie("user")
-        this.owner = JSON.parse(user).id
 
         if (user == "") {
             logout()
         }
 
-        getPosts(this.BASE_URL)
+        let post_id = this.$router.currentRoute._value.params.id.split("=")[1]
+
+        getPosts(this.BASE_URL, post_id)
             .then(result => {
                 this.posts = result
             })
 
-        this.emitter.on("onPost", () => {
-            getPosts(this.BASE_URL)
+        this.emitter.on("onChangePost", (id) => {
+            getPosts(this.BASE_URL, id)
                 .then(result => {
                     this.posts = result
                 })
@@ -204,7 +182,7 @@ export default {
                     icon: "success",
                 });
                 this.replies.reply = ""
-                getPosts(this.BASE_URL)
+                getPosts(this.BASE_URL, post_id)
                     .then(result => {
                         this.posts = result
                     })
@@ -222,28 +200,25 @@ export default {
                     denyButton: 'order-2',
                 }
             }).then((result) => {
-                if(result.isConfirmed) {
+                if (result.isConfirmed) {
                     console.log(id)
                     swal("Poof! Your post has been deleted!", {
                         icon: "success",
                     });
                 }
             })
-        },
-        goToPost(id) {
-            this.$router.push(`/post=${id}`)
         }
     }
 }
 
-async function getPosts(BASE_URL) {
+async function getPosts(BASE_URL, id) {
     let user = getCookie("user")
 
     if (user == "") {
         logout()
     }
 
-    const result_posts = await axios.get(`${BASE_URL}/home/post.php?user_id=${JSON.parse(user).id}`)
+    const result_posts = await axios.get(`${BASE_URL}/home/post.php?post_id=${id}`)
 
     if (result_posts.status == 200) {
         if (result_posts.data != "") {

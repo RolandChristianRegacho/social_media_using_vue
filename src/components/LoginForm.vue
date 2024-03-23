@@ -55,7 +55,7 @@ export default {
             const result = await axios.post(`${this.BASE_URL}/login/auth.php`, data)
 
             if (result.status == 200) {
-                if(result.data.type == "success") {
+                if (result.data.type == "success") {
                     setCookie("user", JSON.stringify(result.data.data), 5)
                     this.$swal({
                         icon: result.data.type,
@@ -65,7 +65,7 @@ export default {
                     setTimeout(() => {
                         this.$router.push({ name: "HomePage" });
                         this.$swal.close()
-                    }, 2000)
+                    }, 1000)
                 }
                 else {
                     this.$swal({
