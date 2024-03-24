@@ -1,10 +1,12 @@
 <template>
     <div class="post_container" v-if="posts.length == 0">
+        <br>
+        <br>
         No Posts To Show
     </div>
     <div class="post_container" v-else>
         <div v-for="item in posts" class="user_post" :key="item.posts">
-            <div class="user_post_sender">
+            <div @click="goToProfile(item.user.id)" class="user_post_sender">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id)" class="user_post_content">
@@ -232,6 +234,9 @@ export default {
         },
         goToPost(id) {
             this.$router.push(`/post=${id}`)
+        },
+        goToProfile(id) {
+            this.$router.push(`/profile=${id}`)
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="post_container">
         <div v-for="item in posts" class="user_post" :key="item.posts">
-            <div class="user_post_sender">
+            <div @click="goToProfile(item.user.id)" class="user_post_sender">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div class="user_post_content">
@@ -208,6 +208,9 @@ export default {
                     });
                 }
             })
+        },
+        goToProfile(id) {
+            this.$router.push(`/profile=${id}`)
         }
     }
 }

@@ -121,6 +121,7 @@ button:hover {
   padding: 10px;
   font-size: 1em;
   border-bottom: 2px solid white;
+  cursor: pointer;
 }
 
 .user_post_time {
@@ -350,7 +351,7 @@ button:hover {
   float: left;
   width: 100%;
   height: 100%;
-  cursor: text;
+  cursor: pointer;
 }
 
 .notifications_content button:hover {

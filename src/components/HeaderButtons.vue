@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div v-else>
-                <div class="notifications_content">
+                <div @click="goToProfileInNotif(item.sender)" class="notifications_content">
                     <button>{{ item.first_name }} sent you a friend
                         request</button>
                 </div>
@@ -217,6 +217,9 @@ export default {
             }
 
             this.$router.push(`/profile=${user_id}`)
+        },
+        goToProfileInNotif(id) {
+            this.$router.push(`/profile=${id}`)
         }
     },
     async mounted() {

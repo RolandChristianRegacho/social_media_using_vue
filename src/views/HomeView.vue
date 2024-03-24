@@ -44,9 +44,10 @@ function hideSearch() {
 
 <style scoped>
 .center_form {
-  display: inline-block;
+  display: block;
   width: 50%;
   height: 100%;
+  margin-left: 250px;
   overflow-y: scroll;
   -ms-overflow-style: none;
   /* IE and Edge */
@@ -57,6 +58,7 @@ main {
   float: left;
   text-align: center;
   margin-top: 60px;
+  width: 100%;
 }
 
 @media only screen and (orientation: portrait) {
@@ -66,6 +68,7 @@ main {
 
   .center_form {
     width: 80%;
+    margin-left: 10%;
   }
 }
 </style>
