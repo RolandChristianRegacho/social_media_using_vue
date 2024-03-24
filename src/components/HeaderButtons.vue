@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="profile_div">
-        <button>Profile</button>
+        <button @click="goToProfile">Profile</button>
         <button @click="logout">Logout</button>
     </div>
 </template>
@@ -204,6 +204,19 @@ export default {
         showProfile() {
             $(".profile_div").attr("data-status", "clicked")
             $(".profile_div").show()
+        },
+        goToProfile() {
+            let user = getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+
+            this.$router.push(`/profile=${user_id}`)
         }
     },
     async mounted() {

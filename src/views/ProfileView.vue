@@ -1,6 +1,6 @@
 <script setup>
 import HeaderButtons from '../components/HeaderButtons.vue'
-import PostPage from '../components/PostPage.vue'
+import ProfilePage from '../components/ProfilePage.vue'
 import $ from "jquery"
 
 function hideSearch() {
@@ -23,17 +23,16 @@ function hideSearch() {
         <HeaderButtons />
     </nav>
     <main @click="hideSearch()">
-        <div class="center_form_post">
-            <PostPage />
+        <div class="profile_form">
+            <ProfilePage />
         </div>
     </main>
 </template>
 
 <style scoped>
-.center_form_post {
+.profile_form {
     display: inline-block;
-    margin-left: 10%;
-    width: 80%;
+    width: 100%;
     height: 100%;
     overflow-y: scroll;
     -ms-overflow-style: none;
