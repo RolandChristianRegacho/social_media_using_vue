@@ -52,7 +52,7 @@
                     <div class="user_reply_pic">
                         <img :src="getReply(replies.sender, 'picture')" />
                     </div>
-                    <div class="user_reply_sender">
+                    <div @click="goToProfile(replies.sender.id)" class="user_reply_sender">
                         {{ getReply(replies.sender, "sender") }}
                     </div>
                     <div class="user_reply_message">
