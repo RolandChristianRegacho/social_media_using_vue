@@ -111,6 +111,7 @@ button:hover {
   border-bottom: 2px solid white;
   color: white;
   padding: 10px;
+  cursor: pointer;
 }
 
 .user_post_sender {
@@ -265,7 +266,7 @@ button:hover {
 
 .search_result_name {
   float: left;
-  width: 50%;
+  width: 70%;
   height: 85px;
   margin-top: 1px;
 }
@@ -274,34 +275,27 @@ button:hover {
   cursor: pointer;
 }
 
-.search_result_prompt {
-  float: left;
-  width: 50%;
-  height: 45px;
-  margin-top: 1px;
-}
-
 .search_result_action {
   float: left;
-  width: 50%;
-  height: 40px;
+  width: 30%;
+  height: 85px;
   margin-top: 1px;
 }
 
 .search_result_action button {
   float: left;
-  width: 50%;
+  width: 100%;
   height: 40px;
-  margin-top: 1px;
+  margin-top: 20px;
   cursor: pointer;
 }
 
 .search_result_action_accept {
-  background: rgba(50, 150, 50, 1);
+  background: inherit;
 }
 
-.search_result_action_accept:hover {
-  background: rgba(50, 200, 50, 1) !important;
+.search_result_action button:hover {
+  background: rgba(78, 111, 118, 1);
 }
 
 .search_result_action_reject {

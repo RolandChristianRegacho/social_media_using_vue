@@ -17,6 +17,9 @@
         <button class="header_button">
             <AnOutlinedSetting class="icon" />
         </button>
+        <button class="header_button">
+            <AnOutlinedMessage class="icon" />
+        </button>
     </div>
     <div class="search_div">
         <div class='search_result_div' v-for="item in search_result" :key="item.id">
@@ -24,12 +27,8 @@
                 <button @click='viewUser(item.id);'>{{ item.first_name }} {{ item.middle_name }} {{ item.last_name
                     }}</button>
             </div>
-            <div class='search_result_prompt'>
-                <button>Add Friend?</button>
-            </div>
             <div class='search_result_action'>
                 <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Add</button>
-                <button class='search_result_action_reject'>Reject</button>
             </div>
         </div>
     </div>
@@ -67,6 +66,7 @@
 import { AnOutlinedUser } from "@kalimahapps/vue-icons";
 import { AnOutlinedSetting } from "@kalimahapps/vue-icons";
 import { AnOutlinedNotification } from "@kalimahapps/vue-icons";
+import { AnOutlinedMessage } from "@kalimahapps/vue-icons";
 import axios from "axios";
 import $ from "jquery";
 import swal from 'sweetalert';
@@ -86,7 +86,8 @@ export default {
     components: {
         AnOutlinedUser,
         AnOutlinedSetting,
-        AnOutlinedNotification
+        AnOutlinedNotification,
+        AnOutlinedMessage
     },
     methods: {
         logout() {

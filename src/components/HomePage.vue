@@ -66,7 +66,6 @@
 
 <script>
 import axios from "axios"
-import swal from 'sweetalert';
 import $ from "jquery";
 import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
 import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
@@ -202,9 +201,10 @@ export default {
             const result = await axios.post(`${this.BASE_URL}/home/post.php`, data)
 
             if (result.status == 200) {
-                swal("Reply sent!", {
+                this.$swal({
                     icon: "success",
-                });
+                    text: "Reply sent!",
+                })
                 this.replies.reply = ""
                 getPosts(this.BASE_URL)
                     .then(result => {
@@ -225,10 +225,14 @@ export default {
                 }
             }).then((result) => {
                 if(result.isConfirmed) {
-                    console.log(id)
-                    swal("Poof! Your post has been deleted!", {
-                        icon: "success",
-                    });
+                    deletePost(id, this.BASE_URL)
+                    .then(result => {
+                        this.emitter.emit("onPost");
+                        this.$swal({
+                            icon: result.data.type,
+                            text: result.data.text,
+                        })
+                    })
                 }
             })
         },
@@ -239,6 +243,22 @@ export default {
             this.$router.push(`/profile=${id}`)
         }
     }
+}
+
+async function deletePost(id, url) {
+    let data = {
+        post_id: id
+    }
+    const result = await axios.delete(`${url}/home/post.php`, {data: data})
+
+    if(result.status == 200) {
+        return result
+    }
+    console.log("test")
+    this.$swal({
+        icon: "error",
+        text: "Server error!",
+    })
 }
 
 async function getPosts(BASE_URL) {
