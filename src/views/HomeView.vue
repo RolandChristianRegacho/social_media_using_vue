@@ -17,6 +17,13 @@ function hideSearch() {
   else {
     $(".notifications_div").attr("data-status", "show")
   }
+  if ($(".profile_div").attr("data-status") == "show") {
+    $(".profile_div").hide()
+    $(".profile_div").attr("data-status", "hidden")
+  }
+  else {
+    $(".profile_div").attr("data-status", "show")
+  }
   $("#search_txt").val("")
 }
 </script>
@@ -28,7 +35,7 @@ function hideSearch() {
   <main @click="hideSearch()">
     <HomeInfoArea />
     <div class="center_form">
-      <HomePostArea />
+      <HomePostArea class="user_information_area" />
       <HomePage />
     </div>
     <!--<HomeOthersArea />-->
@@ -50,5 +57,15 @@ main {
   float: left;
   text-align: center;
   margin-top: 60px;
+}
+
+@media only screen and (orientation: portrait) {
+  .home_info_area {
+    display: none;
+  }
+
+  .center_form {
+    width: 80%;
+  }
 }
 </style>

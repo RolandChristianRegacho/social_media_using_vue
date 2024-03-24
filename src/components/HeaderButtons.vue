@@ -7,8 +7,8 @@
             <input type="search" id="search_txt" v-model="this.search.name" placeholder="Search a friend" />
             <button @click="searchPeople()" class="hiddenEnter">Search</button>
         </form>
-        <button @click="logout" class="header_button">
-            <AnOutlinedLogout class="icon" />
+        <button @click="showProfile" class="header_button">
+            <AnOutlinedUser class="icon" />
         </button>
         <button @click="showNotifications" class="header_button notification" data-status="hidden">
             <AnOutlinedNotification class="icon" style="font-size: 2em; text-align: left;" />
@@ -16,9 +16,6 @@
         </button>
         <button class="header_button">
             <AnOutlinedSetting class="icon" />
-        </button>
-        <button class="header_button">
-            <AnOutlinedUser class="icon" />
         </button>
     </div>
     <div class="search_div">
@@ -60,10 +57,13 @@
             </div>
         </div>
     </div>
+    <div class="profile_div">
+        <button>Profile</button>
+        <button @click="logout">Logout</button>
+    </div>
 </template>
 
 <script>
-import { AnOutlinedLogout } from "@kalimahapps/vue-icons";
 import { AnOutlinedUser } from "@kalimahapps/vue-icons";
 import { AnOutlinedSetting } from "@kalimahapps/vue-icons";
 import { AnOutlinedNotification } from "@kalimahapps/vue-icons";
@@ -84,7 +84,6 @@ export default {
         }
     },
     components: {
-        AnOutlinedLogout,
         AnOutlinedUser,
         AnOutlinedSetting,
         AnOutlinedNotification
@@ -201,6 +200,10 @@ export default {
                 this.$router.push(`/post=${id}`)
                 console.log("hi")
             }
+        },
+        showProfile() {
+            $(".profile_div").attr("data-status", "clicked")
+            $(".profile_div").show()
         }
     },
     async mounted() {
@@ -379,5 +382,21 @@ input[type="search"]:focus {
     min-height: 400px;
     background: rgba(38, 71, 78, 1);
     display: none;
+}
+
+.profile_div {
+    position: fixed;
+    z-index: 100 !important;
+    top: 60px;
+    right: 0px;
+    width: 268px;
+    height: auto;
+    min-height: 80px;
+    background: rgba(38, 71, 78, 1);
+    display: none;
+}
+
+.profile_div button {
+    width: 100%;
 }
 </style>

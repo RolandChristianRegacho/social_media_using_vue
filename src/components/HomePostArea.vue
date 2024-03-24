@@ -1,8 +1,10 @@
 <template>
     <div class="post_form">
         <form @submit.prevent="submit">
-            <textarea placeholder="Open up a discussion" id="post_text" v-model="message.text"></textarea>
-            <button @click="postMessage()">Post</button>
+            <textarea placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
+                v-model="message.text"></textarea>
+            <label id="character">255</label>
+            <button id="postBtn" disabled @click="postMessage()">Post</button>
         </form>
     </div>
 </template>
@@ -42,10 +44,32 @@ export default {
 
                 if (result.status == 200) {
                     this.emitter.emit("onPost");
+                    $("#postBtn").attr("disabled", true)
+                    $("#character").html("255")
                 }
             }
             catch (e) {
                 console.log(e)
+            }
+        },
+        checkCharacter() {
+            if (this.message.text.length > 0) {
+                if (this.message.text.length > 255) {
+                    let remaining_char = 255
+                    $("#postBtn").attr("disabled", true)
+                    remaining_char -= this.message.text.length
+                    $("#character").html(remaining_char)
+                }
+                else {
+                    let remaining_char = 255
+                    $("#postBtn").attr("disabled", false)
+                    remaining_char -= this.message.text.length
+                    $("#character").html(remaining_char)
+                }
+            }
+            else {
+                $("#postBtn").attr("disabled", true)
+                $("#character").html("255")
             }
         }
     }
@@ -101,5 +125,20 @@ function getCookie(cname) {
     padding-right: 15px;
     margin-right: 10px;
     height: 35px;
+}
+
+.post_form button:disabled {
+    color: gray;
+    cursor: not-allowed;
+}
+
+.post_form button:disabled:hover {
+    background: rgba(38, 71, 78, 1);
+}
+
+.post_form label {
+    float: left;
+    font-size: 1.5em;
+    padding-left: 10px;
 }
 </style>
