@@ -16,13 +16,38 @@ function hideSearch() {
     }
     $("#search_txt").val("")
 }
+
+$(() => {
+  if($(document).width() > 1200) {
+    let document_width = $(document).width()
+
+    let margin = document_width - 1200
+    let margin_left = Math. round(margin / 2)
+
+    $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+  }
+
+  $(window).resize(function(){
+    if($(document).width() > 1200) {
+      let document_width = $(document).width()
+
+      let margin = document_width - 1200
+      let margin_left = Math. round(margin / 2)
+
+      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+    }
+    else {
+      $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none;`)
+    }
+  });
+})
 </script>
 
 <template>
     <nav @click="hideSearch()">
         <HeaderButtons />
     </nav>
-    <main @click="hideSearch()">
+    <main @click="hideSearch()" id="main">
         <div class="center_form_post">
             <PostPage />
         </div>
@@ -47,5 +72,6 @@ main {
     margin-top: 60px;
     width: 100%;
     height: auto;
+    max-width: 1200px;
 }
 </style>
