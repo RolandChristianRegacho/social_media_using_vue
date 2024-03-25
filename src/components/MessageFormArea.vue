@@ -1,7 +1,7 @@
 <template>
     <div class="message_form">
         <form @submit.prevent="submit">
-            <textarea placeholder="Message" id="post_text" @input="checkCharacter"
+            <textarea placeholder="Message" id="message_text" disabled @input="checkCharacter"
                 v-model="message.text"></textarea>
             <button id="postBtn" disabled @click="postMessage()"><AnOutlinedSend class="icon" /></button>
             <label id="character">255</label>
@@ -12,6 +12,9 @@
 <script>
 import { AnOutlinedSend } from "@kalimahapps/vue-icons";
 import $ from "jquery"
+import axios from "axios"
+
+
     export default {
         name: "MessageFormArea",
         components: {
@@ -22,8 +25,7 @@ import $ from "jquery"
                 message: {
                     text: "",
                     user_id: "",
-                    receiver_id: "",
-                    date: ""
+                    receiver_id: ""
                 }
             }
         },
@@ -48,11 +50,62 @@ import $ from "jquery"
                     $("#character").html("255")
                 }
             },
-            postMessage() {
-                console.log(this.message.text)
+            async postMessage() {
+                let data = {
+                    "sender_id": this.message.user_id,
+                    "receiver_id": this.message.receiver_id,
+                    "content": this.message.text
+                }
+
+                const result = await axios.post(`${this.BASE_URL}/home/messages.php`, data)
+
+                if(result.status == 200) {
+                    this.emitter.emit("selectUser", this.message.receiver_id)
+
+                    this.message.text = ""
+                }
             }
+        },
+        async mounted() {
+            let user = getCookie("user")
+            this.message.user_id = JSON.parse(user).id
+
+            if(this.message.receiver_id != "") {
+                $("#message_text").attr("disabled", false)
+            }
+
+            if (user == "") {
+                logout()
+            }
+
+            this.emitter.on("selectUser", (id) => {
+                this.message.receiver_id = id
+
+                $("#message_text").attr("disabled", false)
+            })
         }
     }
+
+function logout() {
+    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    this.$router.push({ name: "LoginPage" })
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 </script>
 
 <style scoped>

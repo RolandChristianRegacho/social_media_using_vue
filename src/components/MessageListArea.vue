@@ -13,6 +13,12 @@
             return {
                 users: [
                     {
+                        id: "1",
+                        first_name: "Roland Christian",
+                        last_name: "Regacho",
+                        profile_picture: "@assets/image.png"
+                    },
+                    {
                         id: "2",
                         first_name: "test",
                         last_name: "test",
