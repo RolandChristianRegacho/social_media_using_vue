@@ -59,17 +59,20 @@ export default {
                     $("#postBtn").attr("disabled", true)
                     remaining_char -= this.message.text.length
                     $("#character").html(remaining_char)
+                    $("#character").attr("style", "color: red;")
                 }
                 else {
                     let remaining_char = 255
                     $("#postBtn").attr("disabled", false)
                     remaining_char -= this.message.text.length
                     $("#character").html(remaining_char)
+                    $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
                 }
             }
             else {
                 $("#postBtn").attr("disabled", true)
                 $("#character").html("255")
+                $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
             }
         }
     }

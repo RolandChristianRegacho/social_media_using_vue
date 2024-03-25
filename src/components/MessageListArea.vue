@@ -7,38 +7,55 @@
 </template>
 
 <script>
+import axios from "axios"
+
     export default {
         name: "MessageList",
         data() {
             return {
-                users: [
-                    {
-                        id: "1",
-                        first_name: "Roland Christian",
-                        last_name: "Regacho",
-                        profile_picture: "@assets/image.png"
-                    },
-                    {
-                        id: "2",
-                        first_name: "test",
-                        last_name: "test",
-                        profile_picture: "@assets/image.png"
-                    },
-                    {
-                        id: "3",
-                        first_name: "test2",
-                        last_name: "test",
-                        profile_picture: "@assets/image.png"
-                    }
-                ]
+                users: []
             }
         },
         methods: {
             selectUser(id) {
                 this.emitter.emit("selectUser", id)
             }
+        },
+        async mounted() {
+            let user = getCookie("user")
+
+            if (user == "") {
+                logout()
+            }
+
+            const result = await axios.get(`${this.BASE_URL}/home/users.php?user_id=${JSON.parse(user).id}`)
+
+            if(result.status == 200) {
+                this.users = result.data.data
+            }
         }
     }
+
+function logout() {
+    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    this.$router.push({ name: "LoginPage" })
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 </script>   
 
 <style scoped>
@@ -62,6 +79,8 @@
         height: 99%;
         background: inherit;
         border: none;
+        text-align: left;
+        padding-left: 10px;
     }
 
     .user_list_items button:hover {
