@@ -17,7 +17,7 @@
         <button class="header_button">
             <AnOutlinedSetting class="icon" />
         </button>
-        <button class="header_button">
+        <button @click="showMessage" class="header_button">
             <AnOutlinedMessage class="icon" />
         </button>
     </div>
@@ -199,12 +199,14 @@ export default {
             }
             else {
                 this.$router.push(`/post=${id}`)
-                console.log("hi")
             }
         },
         showProfile() {
             $(".profile_div").attr("data-status", "clicked")
             $(".profile_div").show()
+        },
+        showMessage() {
+            this.$router.push({name:"MessagePage"})
         },
         goToProfile() {
             let user = getCookie("user")
