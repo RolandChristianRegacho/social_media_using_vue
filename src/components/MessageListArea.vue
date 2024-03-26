@@ -4,7 +4,7 @@
             <button class="btnUserListInactive">New Message</button>
         </div>
         <div v-for="item in users" :key="item.id" class="user_list_items">
-            <button class="btnUserListInactive" @click="selectUser(item.id)" :id="'btnUserList-' + item.id">{{ item.first_name }} {{ item.last_name }}</button>
+            <button class="btnUserListInactive" @click="selectUser(item.id)" :id="'btnUserList-' + item.id">{{ item.first_name }} {{ item.last_name }}<p v-if="item.unread_count > 0">{{ item.unread_count }}</p></button>
         </div>
     </div>
 </template>
@@ -110,16 +110,6 @@ function getCookie(cname) {
         box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
     }
 
-    .user_list_items:nth-child(even) .btnUserListInactive {
-        background: white;
-        color: rgba(38, 71, 78, 1);
-    }
-
-    .user_list_items:nth-child(even) .btnUserListInactive:hover {
-        background: rgb(52, 73, 94);
-        color: white;
-    }
-
     .btnUserListInactive:hover {
         background: rgb(52, 73, 94);
         color: white;
@@ -128,5 +118,22 @@ function getCookie(cname) {
     .btnUserListActive:hover {
         background: rgb(52, 73, 94);
         color: white;
+    }
+
+    p {
+        float: right;
+        animation-name: animateNotification;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes animateNotification {
+        0% {
+            background: inherit;
+        }
+
+        100% {
+            background: rgba(200, 50, 50, 1);
+        }
     }
 </style>

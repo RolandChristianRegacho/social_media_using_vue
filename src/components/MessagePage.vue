@@ -56,7 +56,7 @@ import $ from "jquery"
                     $.when(this.messages = configureTime(result.data.data))
                     .done(() => {
                         $(".convo").animate({
-                            scrollTop: $(".convo").offset().top + $(".convo")[0].scrollHeight + 500
+                            scrollTop: $(".convo").offset().top + $(".convo")[0].scrollHeight + 500000000000
                         }, 500)
 
                         console.log($(".end_on_convo"))

@@ -24,13 +24,6 @@ function hideSearch() {
   else {
     $(".profile_div").attr("data-status", "show")
   }
-  if ($(".settings_div").attr("data-status") == "show") {
-    $(".settings_div").hide()
-    $(".settings_div").attr("data-status", "hidden")
-  }
-  else {
-    $(".settings_div").attr("data-status", "show")
-  }
   $("#search_txt").val("")
 }
 

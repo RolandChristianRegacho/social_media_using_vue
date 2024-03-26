@@ -14,11 +14,9 @@
             <AnOutlinedNotification class="icon" style="font-size: 2em; text-align: left;" />
             <p></p>
         </button>
-        <button @click="showSettings" class="header_button">
-            <AnOutlinedSetting class="icon" />
-        </button>
-        <button @click="showMessage" class="header_button">
-            <AnOutlinedMessage class="icon" />
+        <button @click="showMessage" class="header_button message">
+            <AnOutlinedMessage class="icon" style="font-size: 2em; text-align: left;"  />
+            <p></p>
         </button>
     </div>
     <div class="search_div">
@@ -27,8 +25,15 @@
                 <button @click='viewUser(item.id);'>{{ item.first_name }} {{ item.middle_name }} {{ item.last_name
                     }}</button>
             </div>
-            <div class='search_result_action'>
+            <div class='search_result_action' v-if="item.request_type == null">
                 <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Add</button>
+            </div>
+            <div class='search_result_action' v-else-if="item.request_type == 'sender'">
+                <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept'>Cancel</button>
+            </div>
+            <div class='search_result_actions' v-else>
+                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
+                <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
             </div>
         </div>
     </div>
@@ -58,21 +63,17 @@
     </div>
     <div class="profile_div">
         <button @click="goToProfile">Profile</button>
-        <button @click="logout">Logout</button>
-    </div>
-    <div class="settings_div">
         <button @click="goToProfile">Change Password</button>
+        <button @click="logout">Logout</button>
     </div>
 </template>
 
 <script>
 import { AnOutlinedUser } from "@kalimahapps/vue-icons";
-import { AnOutlinedSetting } from "@kalimahapps/vue-icons";
 import { AnOutlinedNotification } from "@kalimahapps/vue-icons";
 import { AnOutlinedMessage } from "@kalimahapps/vue-icons";
 import axios from "axios";
 import $ from "jquery";
-import swal from 'sweetalert';
 
 export default {
     name: "HeaderButton",
@@ -83,12 +84,12 @@ export default {
                 name: ""
             },
             search_result: [],
-            notifications: []
+            notifications: [],
+            unread_messages: ""
         }
     },
     components: {
         AnOutlinedUser,
-        AnOutlinedSetting,
         AnOutlinedNotification,
         AnOutlinedMessage
     },
@@ -145,10 +146,75 @@ export default {
             const result = await axios.post(`${this.BASE_URL}/home/notifications.php`, data)
 
             if (result.status == 200) {
-                swal({
+                this.$swal({
                     icon: "success",
                     title: "Friend Request Sent!"
                 })
+            }
+        },
+        async cancelSendFriendRequest(id) {
+            let user = getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+            let data = {
+                "sender": user_id,
+                "receiver": id
+            }
+
+            const result = await axios.delete(`${this.BASE_URL}/home/notifications.php`, {data:data})
+
+            if (result.status == 200) {
+                this.$swal({
+                    icon: "success",
+                    title: "Friend Request cancelled!"
+                })
+            }
+        },
+        async deleteFriendRequest(id) {
+            let user = getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+            let data = {
+                "sender": id,
+                "receiver": user_id
+            }
+
+            const result = await axios.delete(`${this.BASE_URL}/home/notifications.php`, {data:data})
+
+            if (result.status == 200) {
+                this.$swal({
+                    icon: "success",
+                    title: "Friend Request cancelled!"
+                })
+            }
+
+            const response = await axios.get(`${this.BASE_URL}/home/notifications.php?user_id=${JSON.parse(user).id}`)
+
+            if (response.status == 200) {
+                if (response.data.type == "found") {
+                    this.notifications = response.data.data
+                    if (response.data.unread_count > 9) {
+                        $(".notification p").text(" 9+")
+                    }
+                    else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
+                        $(".notification p").text(`${response.data.unread_count}`)
+                    }
+                    else {
+                        $(".notification p").text("")
+                    }
+                }
             }
         },
         async showNotifications() {
@@ -226,10 +292,6 @@ export default {
         },
         goToProfileInNotif(id) {
             this.$router.push(`/profile=${id}`)
-        },
-        showSettings() {
-            $(".settings_div").attr("data-status", "clicked")
-            $(".settings_div").show()
         }
     },
     async mounted() {
@@ -255,6 +317,23 @@ export default {
                 }
                 else {
                     $(".notification p").text("")
+                }
+            }
+        }
+
+        const response = await axios.get(`${this.BASE_URL}/home/messages.php?user_id=${JSON.parse(user).id}`)
+
+        if (response.status == 200) {
+            if (response.data.type == "found") {
+                this.unread_messages = response.data.unread_count
+                if (response.data.unread_count > 9) {
+                    $(".message p").text(" 9+")
+                }
+                else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
+                    $(".message p").text(`${response.data.unread_count}`)
+                }
+                else {
+                    $(".message p").text("")
                 }
             }
         }
@@ -297,7 +376,7 @@ a:hover {
 .header_button {
     float: right;
     height: 50px;
-    width: 50px;
+    width: 75px;
     margin-top: 5px;
     margin-right: 10px;
     background: rgba(58, 91, 98, 1);
@@ -313,11 +392,16 @@ a:hover {
     background: rgba(78, 111, 118, 1);
 }
 
-.notification {
-    width: 75px;
+.notification p {
+    margin: 0;
+    float: right;
+    background: rgba(200, 50, 50, 1);
+    animation-name: animateNotification;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 }
 
-.notification p {
+.message p {
     margin: 0;
     float: right;
     background: rgba(200, 50, 50, 1);
@@ -423,22 +507,6 @@ input[type="search"]:focus {
 }
 
 .profile_div button {
-    width: 100%;
-}
-
-.settings_div {
-    position: fixed;
-    z-index: 100 !important;
-    top: 60px;
-    right: 0px;
-    width: 268px;
-    height: auto;
-    min-height: 40px;
-    background: rgba(38, 71, 78, 1);
-    display: none;
-}
-
-.settings_div button {
     width: 100%;
 }
 </style>
