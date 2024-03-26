@@ -1,13 +1,17 @@
 <template>
     <div class="user_list">
+        <div class="user_list_items">
+            <button class="btnUserListInactive">New Message</button>
+        </div>
         <div v-for="item in users" :key="item.id" class="user_list_items">
-            <button @click="selectUser(item.id)">{{ item.first_name }} {{ item.last_name }}</button>
+            <button class="btnUserListInactive" @click="selectUser(item.id)" :id="'btnUserList-' + item.id">{{ item.first_name }} {{ item.last_name }}</button>
         </div>
     </div>
 </template>
 
 <script>
 import axios from "axios"
+import $ from "jquery"
 
     export default {
         name: "MessageList",
@@ -18,7 +22,12 @@ import axios from "axios"
         },
         methods: {
             selectUser(id) {
+                $(".btnUserListActive").attr("disabled", false)
+                $(".btnUserListActive").attr("class", "btnUserListInactive")
                 this.emitter.emit("selectUser", id)
+
+                $("#btnUserList-" + id).attr("class", "btnUserListActive")
+                $("#btnUserList-" + id).attr("disabled", true)
             }
         },
         async mounted() {
@@ -68,22 +77,56 @@ function getCookie(cname) {
     .user_list_items {
         float: left;
         width: 100%;
-        height: 50px;
-        border-bottom: 2px solid gray;
+        height: 100px;
         margin-top: 10px;
     }
 
-    .user_list_items button {
+    .btnUserListInactive {
         float: left;
-        width: 100%;
-        height: 99%;
+        width: 80%;
+        height: 80%;
         background: inherit;
         border: none;
         text-align: left;
         padding-left: 10px;
+        margin-left: 10%;
+        border-radius: 5px;
+        background: rgba(38, 71, 78, 1);
+        box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
     }
 
-    .user_list_items button:hover {
+    .btnUserListActive {
+        float: left;
+        width: 80%;
+        height: 80%;
+        background: inherit;
+        border: none;
+        text-align: left;
+        padding-left: 10px;
+        margin-left: 10%;
+        border-radius: 5px;
         background: rgb(52, 73, 94);
+        color: white;
+        box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+    }
+
+    .user_list_items:nth-child(even) .btnUserListInactive {
+        background: white;
+        color: rgba(38, 71, 78, 1);
+    }
+
+    .user_list_items:nth-child(even) .btnUserListInactive:hover {
+        background: rgb(52, 73, 94);
+        color: white;
+    }
+
+    .btnUserListInactive:hover {
+        background: rgb(52, 73, 94);
+        color: white;
+    }
+
+    .btnUserListActive:hover {
+        background: rgb(52, 73, 94);
+        color: white;
     }
 </style>

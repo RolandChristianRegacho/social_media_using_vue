@@ -14,7 +14,7 @@
             <AnOutlinedNotification class="icon" style="font-size: 2em; text-align: left;" />
             <p></p>
         </button>
-        <button class="header_button">
+        <button @click="showSettings" class="header_button">
             <AnOutlinedSetting class="icon" />
         </button>
         <button @click="showMessage" class="header_button">
@@ -59,6 +59,9 @@
     <div class="profile_div">
         <button @click="goToProfile">Profile</button>
         <button @click="logout">Logout</button>
+    </div>
+    <div class="settings_div">
+        <button @click="goToProfile">Change Password</button>
     </div>
 </template>
 
@@ -121,7 +124,7 @@ export default {
             }
         },
         viewUser(id) {
-            console.log(id)
+            this.$router.push(`/profile=${id}`)
         },
         async sendFriendRequest(id) {
             let user = getCookie("user")
@@ -223,6 +226,10 @@ export default {
         },
         goToProfileInNotif(id) {
             this.$router.push(`/profile=${id}`)
+        },
+        showSettings() {
+            $(".settings_div").attr("data-status", "clicked")
+            $(".settings_div").show()
         }
     },
     async mounted() {
@@ -416,6 +423,22 @@ input[type="search"]:focus {
 }
 
 .profile_div button {
+    width: 100%;
+}
+
+.settings_div {
+    position: fixed;
+    z-index: 100 !important;
+    top: 60px;
+    right: 0px;
+    width: 268px;
+    height: auto;
+    min-height: 40px;
+    background: rgba(38, 71, 78, 1);
+    display: none;
+}
+
+.settings_div button {
     width: 100%;
 }
 </style>

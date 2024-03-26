@@ -116,6 +116,7 @@ function getCookie(cname) {
     margin: auto;
     font-size: 25px;
     outline: none;
+    padding: 10px;
 }
 
 .post_form button {

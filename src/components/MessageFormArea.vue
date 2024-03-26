@@ -141,6 +141,7 @@ function getCookie(cname) {
     outline: none;
     margin-left: 5%;
     margin-top: 10px;
+    padding: 10px;
 }
 
 .message_form button {
@@ -169,5 +170,11 @@ function getCookie(cname) {
     padding-left: 10px;
     margin-left: 20px;
     margin-top: 10px;
+}
+
+@media only screen and (orientation: portrait) {
+    .message_form textarea {
+        width: 65%;
+    }
 }
 </style>

@@ -1,16 +1,37 @@
 <template>
-    <div class="convo" v-if="receiver != ''">
-        <div v-for="item in messages" :key="item.id">
-            <div class="speech right" v-if="item.sender_id == owner">{{ item.content }}</div>
-            <div class="speech left" v-else>{{ item.content }}</div>
+  <div class="convo" v-if="receiver != ''">
+    <div class="start_of_convo"><h3>Start of conversation</h3></div>
+    <div v-for="item in messages" :key="item.id">
+      <div class="speech" v-if="item.sender_id == owner">
+        <div class="owner">
+          <div class="speech_content">
+            {{ item.content }}
+          </div>
+          <div class="speech_time">
+            {{ item.time }}
+          </div>
         </div>
+      </div>
+      <div class="speech" v-else>
+        <div class="receiver">
+          <div class="speech_content">
+            {{ item.content }}
+          </div>
+          <div class="speech_time">
+            {{ item.time }}
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="convo" v-else>
-    </div>
+  <div class="end_of_convo">end</div>
+  </div>
+  <div class="convo" v-else></div>
 </template>
 
 <script>
 import axios from "axios"
+import $ from "jquery"
+
     export default {
         name: "MessagePage",
         data() {
@@ -30,14 +51,58 @@ import axios from "axios"
 
             this.emitter.on("selectUser", (id) => {
                 this.receiver = id
-                
+
                 getMessages(this.BASE_URL, this.receiver, this.owner)
                 .then(result => {
-                    this.messages = result.data.data
+                    $.when(this.messages = configureTime(result.data.data))
+                    .done(() => {
+                        $(".convo").animate({
+                            scrollTop: $(".convo").offset().top + $(".convo")[0].scrollHeight + 500
+                        }, 500)
+
+                        console.log($(".end_on_convo"))
+                    })
                 })
             })
+
+            setInterval(() => {
+                this.messages = configureTime(this.messages)
+            }, 5000);
         }
     }
+
+function configureTime(data) {
+    let currentDate = new Date()
+    let currentStamp = currentDate.getTime()
+
+    for(let message in data) {
+        let timeDifference = (Math.round(currentStamp/1000)) - data[message].timestamp
+
+        if(timeDifference < 60) {
+            if(timeDifference == 1 || timeDifference == 0) {
+                data[message].time = "a second ago"
+            }
+            else {
+                data[message].time = `${timeDifference} seconds ago`
+            }
+        }
+        else if(timeDifference >= 60 && timeDifference <= 3600) {
+            let minute = Math.round(timeDifference / 60)
+
+            if(minute == 1) {
+                data[message].time = "a minute ago"
+            }
+            else {
+                data[message].time = `${minute} minutes ago`
+            }
+        }
+        else {
+            data[message].time = data[message].date
+        }
+    }
+
+    return data
+}
 
 async function getMessages(url, receiver, owner) {
     const result = await axios.get(`${url}/home/messages.php?user_id=${owner}&message_user_id=${receiver}`)
@@ -70,78 +135,74 @@ function getCookie(cname) {
 </script>
 
 <style scoped>
-    .convo {
-        float: left;
-        width: 100%;
-        height: 100%;
-    }
+.convo {
+  float: left;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
 
-    /* (A) SPEECH BOX */
+.start_of_convo {
+    float: left;
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+}
+
 .speech {
-  /* (A1) FONT & COLORS */
-  font-size: 1.2em;
-  color: #fff;
-
-  /* (A2) DIMENSIONS */
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
+  float: left;
+  width: 100%;
+  height: auto;
+  min-height: 50px;
+  margin-top: 10px;
 }
 
-/* (B) USE ::AFTER TO CREATE THE "CALLOUT" */
-.speech::after {
-  display: block; width: 0; content: "";
-  border: 15px solid transparent;
-}
- 
-/* (C) "CALLOUT" DIRECTIONS */
-.speech.up::after {
-  border-bottom-color: #a53d38;
-  border-top: 0;
-}
-.speech.down::after {
-  border-top-color: #a53d38;
-  border-bottom: 0;
-}
-.speech.left::after {
-  border-right-color: rgba(38, 71, 78, 1);
-  border-left: 0;
-}
-.speech.right::after {
-  border-left-color: white;
-  border-right: 0;
-}
-.speech.right {
-    margin-left: 30%;
-    background: white;
-    color: rgba(38, 71, 78, 1);
-}
-.speech.left {
-    background: rgba(38, 71, 78, 1);
+.owner {
+  float: right;
+  width: auto;
+  min-width: 100px;
+  height: 100%;
+  min-height: 80px;
+  background: white;
+  color: rgba(38, 71, 78, 1);
+  margin-right: 50px;
+  border-radius: 8px;
+  box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+  margin-bottom: 10px;
 }
 
-/* (D) POSITION THE CALLOUT */
-.speech {
-  position: relative;
-  margin: 30px;
-}
-.speech::after { position: absolute; }
-.speech.up::after {
-  top: -15px; left: calc(50% - 15px);
-}
-.speech.down::after {
-  bottom: -15px; left: calc(50% - 15px);
-}
-.speech.left::after {
-  left: -15px; top: calc(50% - 15px);
-}
-.speech.right::after {
-  right: -15px; top: calc(50% - 15px);
+.receiver {
+  float: left;
+  width: auto;
+  min-width: 100px;
+  height: 100%;
+  min-height: 80px;
+  background: rgba(38, 71, 78, 1);
+  color: white;
+  margin-left: 50px;
+  border-radius: 8px;
+  box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+  margin-bottom: 10px;
 }
 
-@media only screen and (orientation: portrait) {
-    .speech.right {
-        margin-left: 5%;
-    }
+.speech_content {
+  float: left;
+  text-align: left;
+  width: 100%;
+  height: auto;
+  min-height: 60px;
+  padding: 10px;
+}
+
+.speech_time {
+  float: left;
+  text-align: right;
+  width: 100%;
+  height: auto;
+  min-height: 20px;
+  font-size: 0.8em;
+  padding: 10px;
 }
 </style>
