@@ -54,9 +54,9 @@
                         request</button>
                 </div>
                 <div class='notifications_action'>
-                    <button onClick="sendFriendRequest(${data[items].id});"
+                    <button @click="sendFriendRequest(item.id);"
                         class='search_result_action_accept'>Accept</button>
-                    <button class='search_result_action_reject'>Reject</button>
+                    <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
                 </div>
             </div>
         </div>
