@@ -23,7 +23,6 @@
         </div>
       </div>
     </div>
-  <div class="end_of_convo">end</div>
   </div>
   <div class="convo" v-else></div>
 </template>
@@ -86,7 +85,7 @@ function configureTime(data) {
                 data[message].time = `${timeDifference} seconds ago`
             }
         }
-        else if(timeDifference >= 60 && timeDifference <= 3600) {
+        else if(timeDifference >= 60 && timeDifference < 3600) {
             let minute = Math.round(timeDifference / 60)
 
             if(minute == 1) {
@@ -94,6 +93,16 @@ function configureTime(data) {
             }
             else {
                 data[message].time = `${minute} minutes ago`
+            }
+        }
+        else if(timeDifference >= 3600 && timeDifference < 46800) {
+            let hour = Math.round(Math.round(timeDifference / 60) / 60)
+
+            if(hour == 1) {
+                data[message].time = "an hour ago"
+            }
+            else {
+                data[message].time = `${hour} hours ago`
             }
         }
         else {
