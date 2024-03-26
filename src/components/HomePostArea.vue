@@ -28,7 +28,14 @@ export default {
                 let user = getCookie("user")
 
                 if (user == "") {
-                    this.$router.push({ name: "LoginPage" });
+                    this.$swal({
+                        title: "Logging out",
+                    })
+                    this.$swal.showLoading()
+                    setTimeout(() => {
+                        this.$router.push({ name: "LoginPage" })
+                        this.$swal.close()
+                    }, 1000)
                 }
                 else {
                     this.message.id = JSON.parse(user).id

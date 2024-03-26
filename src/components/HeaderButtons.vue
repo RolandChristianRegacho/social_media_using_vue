@@ -96,7 +96,14 @@ export default {
     methods: {
         logout() {
             document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            this.$router.push({ name: "LoginPage" })
+            this.$swal({
+                title: "Logging out",
+            })
+            this.$swal.showLoading()
+            setTimeout(() => {
+                this.$router.push({ name: "LoginPage" })
+                this.$swal.close()
+            }, 1000)
         },
         goHome() {
             this.$router.push({ name: "HomePage" })
