@@ -8,6 +8,7 @@
     <div class="profile_information_div">
         <div class="profile_information_div_name">
             <h1>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h1>
+            <h3>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h3>
         </div>
     </div>
 </template>
@@ -127,5 +128,43 @@ function getCookie(cname) {
 .profile_information_div h1 {
     float: left;
     text-align: left;
+}
+
+.profile_information_div h3 {
+    display: none;
+}
+
+@media only screen and (orientation: portrait) {
+    .banner {
+        height: 150px;
+    }
+
+    .profile_pic_profile {
+        width: 100px;
+        height: 100px;
+        margin-top: 95px;
+        margin-left: 20px;
+    }
+
+    .profile_information_div {
+        height: 130px;
+    }
+
+    .profile_information_div h1 {
+        display: none;
+    }
+
+    .profile_information_div h3 {
+        text-align: center;
+        display: block;
+        margin: 0;
+    }
+
+    .profile_information_div_name {
+        margin: 0;
+        margin-top: 80px;
+        width: 100%;
+        text-align: center;
+    }
 }
 </style>

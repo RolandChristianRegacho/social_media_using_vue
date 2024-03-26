@@ -21,32 +21,39 @@ function hideSearch() {
     else {
         $(".profile_div").attr("data-status", "show")
     }
+    if ($(".menu_div").attr("data-status") == "show") {
+        $(".menu_div").hide()
+        $(".menu_div").attr("data-status", "hidden")
+    }
+    else {
+        $(".menu_div").attr("data-status", "show")
+    }
     $("#search_txt").val("")
 }
 
 $(() => {
-  if($(document).width() > 1200) {
-    let document_width = $(document).width()
+    if ($(document).width() > 1200) {
+        let document_width = $(document).width()
 
-    let margin = document_width - 1200
-    let margin_left = Math. round(margin / 2)
+        let margin = document_width - 1200
+        let margin_left = Math.round(margin / 2)
 
-    $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
-  }
-
-  $(window).resize(function(){
-    if($(document).width() > 1200) {
-      let document_width = $(document).width()
-
-      let margin = document_width - 1200
-      let margin_left = Math. round(margin / 2)
-
-      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
     }
-    else {
-      $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none;`)
-    }
-  });
+
+    $(window).resize(function () {
+        if ($(document).width() > 1200) {
+            let document_width = $(document).width()
+
+            let margin = document_width - 1200
+            let margin_left = Math.round(margin / 2)
+
+            $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+        }
+        else {
+            $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none;`)
+        }
+    });
 })
 </script>
 

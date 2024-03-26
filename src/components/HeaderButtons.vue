@@ -1,7 +1,7 @@
 <template>
     <div>
         <button @click="goHome" class="header_icon"></button>
-        <router-link to="/">Social Crowd</router-link>
+        <router-link to="/" id="web_title">Social Crowd</router-link>
         <!--<a>{{ name }}</a>-->
         <form @submit.prevent="submit">
             <input type="search" id="search_txt" v-model="this.search.name" placeholder="Search a friend" />
@@ -15,9 +15,22 @@
             <p></p>
         </button>
         <button @click="showMessage" class="header_button message">
-            <AnOutlinedMessage class="icon" style="font-size: 2em; text-align: left;"  />
+            <AnOutlinedMessage class="icon" style="font-size: 2em; text-align: left;" />
             <p></p>
         </button>
+        <button @click="showMenu" class="header_button_mobile">
+            <AnOutlinedMenuFold class="icon_mobile" style="font-size: 2em; text-align: left;" />
+        </button>
+        <button @click="hideMenu" class="header_button_mobile_hide">
+            <AnOutlinedMenuUnfold class="icon_mobile" style="font-size: 2em; text-align: left;" />
+        </button>
+    </div>
+    <div class="menu_div">
+        <button @click="showMessage">Messages</button>
+        <button @click="showNotifications">Notifications</button>
+        <button @click="goToProfile">Profile</button>
+        <button @click="goToProfile">Change Password</button>
+        <button @click="logout">Logout</button>
     </div>
     <div class="search_div">
         <div class='search_result_div' v-for="item in search_result" :key="item.id">
@@ -54,8 +67,7 @@
                         request</button>
                 </div>
                 <div class='notifications_action'>
-                    <button @click="sendFriendRequest(item.id);"
-                        class='search_result_action_accept'>Accept</button>
+                    <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
                     <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
                 </div>
             </div>
@@ -72,8 +84,11 @@
 import { AnOutlinedUser } from "@kalimahapps/vue-icons";
 import { AnOutlinedNotification } from "@kalimahapps/vue-icons";
 import { AnOutlinedMessage } from "@kalimahapps/vue-icons";
+import { AnOutlinedMenuFold } from "@kalimahapps/vue-icons";
+import { AnOutlinedMenuUnfold } from "@kalimahapps/vue-icons";
 import axios from "axios";
-import $ from "jquery";
+import $ from "jquery"
+window.$ = $.extend('jquery-ui');
 
 export default {
     name: "HeaderButton",
@@ -91,7 +106,9 @@ export default {
     components: {
         AnOutlinedUser,
         AnOutlinedNotification,
-        AnOutlinedMessage
+        AnOutlinedMessage,
+        AnOutlinedMenuFold,
+        AnOutlinedMenuUnfold
     },
     methods: {
         logout() {
@@ -174,7 +191,7 @@ export default {
                 "receiver": id
             }
 
-            const result = await axios.delete(`${this.BASE_URL}/home/notifications.php`, {data:data})
+            const result = await axios.delete(`${this.BASE_URL}/home/notifications.php`, { data: data })
 
             if (result.status == 200) {
                 this.$swal({
@@ -198,7 +215,7 @@ export default {
                 "receiver": user_id
             }
 
-            const result = await axios.delete(`${this.BASE_URL}/home/notifications.php`, {data:data})
+            const result = await axios.delete(`${this.BASE_URL}/home/notifications.php`, { data: data })
 
             if (result.status == 200) {
                 this.$swal({
@@ -282,7 +299,19 @@ export default {
             $(".profile_div").show()
         },
         showMessage() {
-            this.$router.push({name:"MessagePage"})
+            this.$router.push({ name: "MessagePage" })
+        },
+        showMenu() {
+            $(".menu_div").attr("data-status", "clicked")
+            $(".menu_div").show();
+            $(".header_button_mobile").hide()
+            $(".header_button_mobile_hide").show()
+        },
+        hideMenu() {
+            $(".menu_div").attr("data-status", "hidden")
+            $(".menu_div").hide()
+            $(".header_button_mobile_hide").hide()
+            $(".header_button_mobile").show()
         },
         goToProfile() {
             let user = getCookie("user")
@@ -397,6 +426,38 @@ a:hover {
 
 .header_button:hover {
     background: rgba(78, 111, 118, 1);
+}
+
+.header_button_mobile {
+    float: right;
+    height: 50px;
+    width: 50px;
+    margin-top: 5px;
+    margin-right: 10px;
+    background: rgba(58, 91, 98, 1);
+    color: rgba(250, 250, 250, 1);
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 100%;
+    display: none;
+}
+
+.header_button_mobile_hide {
+    float: right;
+    height: 50px;
+    width: 50px;
+    margin-top: 5px;
+    margin-right: 10px;
+    background: rgba(58, 91, 98, 1);
+    color: rgba(250, 250, 250, 1);
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 100%;
+    display: none;
 }
 
 .notification p {
@@ -515,5 +576,46 @@ input[type="search"]:focus {
 
 .profile_div button {
     width: 100%;
+}
+
+.menu_div {
+    position: fixed;
+    z-index: 100 !important;
+    top: 60px;
+    right: 0px;
+    width: 268px;
+    height: auto;
+    min-height: 80px;
+    background: rgba(38, 71, 78, 1);
+    display: none;
+}
+
+.menu_div button {
+    width: 100%;
+}
+
+@media only screen and (orientation: portrait) {
+    #web_title {
+        display: none;
+    }
+
+    input[type="search"] {
+        width: 230px;
+        margin-left: 10px !important;
+    }
+
+    .header_button {
+        display: none;
+    }
+
+    .icon {
+        color: white;
+        font-size: 2em;
+        vertical-align: middle;
+    }
+
+    .header_button_mobile {
+        display: block;
+    }
 }
 </style>

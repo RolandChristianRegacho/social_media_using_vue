@@ -28,21 +28,21 @@ function hideSearch() {
 }
 
 $(() => {
-  if($(document).width() > 1200) {
+  if ($(document).width() > 1200) {
     let document_width = $(document).width()
 
     let margin = document_width - 1200
-    let margin_left = Math. round(margin / 2)
+    let margin_left = Math.round(margin / 2)
 
     $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
   }
 
-  $(window).resize(function(){
-    if($(document).width() > 1200) {
+  $(window).resize(function () {
+    if ($(document).width() > 1200) {
       let document_width = $(document).width()
 
       let margin = document_width - 1200
-      let margin_left = Math. round(margin / 2)
+      let margin_left = Math.round(margin / 2)
 
       $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
     }
@@ -93,8 +93,8 @@ main {
   }
 
   .center_form {
-    width: 80%;
-    margin-left: 10%;
+    width: 100%;
+    margin-left: 0;
   }
 }
 </style>

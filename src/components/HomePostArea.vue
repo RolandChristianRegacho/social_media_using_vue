@@ -152,4 +152,20 @@ function getCookie(cname) {
     font-size: 1.5em;
     padding-left: 10px;
 }
+
+@media only screen and (orientation: portrait) {
+    .post_form {
+        height: 150px;
+    }
+
+    .post_form textarea {
+        font-size: 1em;
+        height: 100px;
+    }
+
+    .post_form label {
+        font-size: 1em;
+        padding: 10px;
+    }
+}
 </style>

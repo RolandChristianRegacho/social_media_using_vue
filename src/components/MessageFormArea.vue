@@ -3,7 +3,9 @@
         <form @submit.prevent="submit">
             <textarea placeholder="Message" id="message_text" disabled @input="checkCharacter"
                 v-model="message.text"></textarea>
-            <button id="postBtn" disabled @click="postMessage()"><AnOutlinedSend class="icon" /></button>
+            <button id="postBtn" disabled @click="postMessage()">
+                <AnOutlinedSend class="icon" />
+            </button>
             <label id="character">255</label>
         </form>
     </div>
@@ -15,79 +17,79 @@ import $ from "jquery"
 import axios from "axios"
 
 
-    export default {
-        name: "MessageFormArea",
-        components: {
-            AnOutlinedSend
-        },
-        data() {
-            return {
-                message: {
-                    text: "",
-                    user_id: "",
-                    receiver_id: ""
-                }
+export default {
+    name: "MessageFormArea",
+    components: {
+        AnOutlinedSend
+    },
+    data() {
+        return {
+            message: {
+                text: "",
+                user_id: "",
+                receiver_id: ""
             }
-        },
-        methods: {
-            checkCharacter() {
-                if (this.message.text.length > 0) {
-                    if (this.message.text.length > 255) {
-                        let remaining_char = 255
-                        $("#postBtn").attr("disabled", true)
-                        remaining_char -= this.message.text.length
-                        $("#character").html(remaining_char)
-                        $("#character").attr("style", "color: red;")
-                    }
-                    else {
-                        let remaining_char = 255
-                        $("#postBtn").attr("disabled", false)
-                        remaining_char -= this.message.text.length
-                        $("#character").html(remaining_char)
-                        $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
-                    }
+        }
+    },
+    methods: {
+        checkCharacter() {
+            if (this.message.text.length > 0) {
+                if (this.message.text.length > 255) {
+                    let remaining_char = 255
+                    $("#postBtn").attr("disabled", true)
+                    remaining_char -= this.message.text.length
+                    $("#character").html(remaining_char)
+                    $("#character").attr("style", "color: red;")
                 }
                 else {
-                    $("#postBtn").attr("disabled", true)
-                    $("#character").html("255")
+                    let remaining_char = 255
+                    $("#postBtn").attr("disabled", false)
+                    remaining_char -= this.message.text.length
+                    $("#character").html(remaining_char)
                     $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
                 }
-            },
-            async postMessage() {
-                let data = {
-                    "sender_id": this.message.user_id,
-                    "receiver_id": this.message.receiver_id,
-                    "content": this.message.text
-                }
-
-                const result = await axios.post(`${this.BASE_URL}/home/messages.php`, data)
-
-                if(result.status == 200) {
-                    this.emitter.emit("selectUser", this.message.receiver_id)
-
-                    this.message.text = ""
-                }
+            }
+            else {
+                $("#postBtn").attr("disabled", true)
+                $("#character").html("255")
+                $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
             }
         },
-        async mounted() {
-            let user = getCookie("user")
-            this.message.user_id = JSON.parse(user).id
-
-            if(this.message.receiver_id != "") {
-                $("#message_text").attr("disabled", false)
+        async postMessage() {
+            let data = {
+                "sender_id": this.message.user_id,
+                "receiver_id": this.message.receiver_id,
+                "content": this.message.text
             }
 
-            if (user == "") {
-                logout()
+            const result = await axios.post(`${this.BASE_URL}/home/messages.php`, data)
+
+            if (result.status == 200) {
+                this.emitter.emit("selectUser", this.message.receiver_id)
+
+                this.message.text = ""
             }
-
-            this.emitter.on("selectUser", (id) => {
-                this.message.receiver_id = id
-
-                $("#message_text").attr("disabled", false)
-            })
         }
+    },
+    async mounted() {
+        let user = getCookie("user")
+        this.message.user_id = JSON.parse(user).id
+
+        if (this.message.receiver_id != "") {
+            $("#message_text").attr("disabled", false)
+        }
+
+        if (user == "") {
+            logout()
+        }
+
+        this.emitter.on("selectUser", (id) => {
+            this.message.receiver_id = id
+
+            $("#message_text").attr("disabled", false)
+        })
     }
+}
 
 function logout() {
     document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -181,7 +183,7 @@ function getCookie(cname) {
 
 @media only screen and (orientation: portrait) {
     .message_form textarea {
-        width: 65%;
+        width: 75%;
     }
 }
 </style>

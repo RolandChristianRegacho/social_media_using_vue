@@ -1,6 +1,7 @@
 <script setup>
 import HeaderButtons from '../components/HeaderButtons.vue'
 import MessageListArea from '../components/MessageListArea.vue'
+import MessageNavArea from '../components/MessageNavArea.vue'
 import MessagePage from '../components/MessagePage.vue'
 import MessageFormArea from '../components/MessageFormArea.vue'
 import $ from "jquery"
@@ -23,26 +24,33 @@ function hideSearch() {
   else {
     $(".profile_div").attr("data-status", "show")
   }
+  if ($(".menu_div").attr("data-status") == "show") {
+    $(".menu_div").hide()
+    $(".menu_div").attr("data-status", "hidden")
+  }
+  else {
+    $(".menu_div").attr("data-status", "show")
+  }
   $("#search_txt").val("")
 }
 
 $(() => {
   let value = $(document).height() - 60
-  if($("#main").height() < value) {
+  if ($("#main").height() < value) {
     $("#main").height(value)
     $("#main").attr("style", `height: ${value}px !important;`)
   }
 
-  if($(document).width() > 1200) {
+  if ($(document).width() > 1200) {
     let document_width = $(document).width()
 
     let margin = document_width - 1200
     let margin_left = Math.round(margin / 2)
 
-    if($("#main").height() < value) {
+    if ($("#main").height() < value) {
       $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
     }
-    else if($("#main").height() == value) {
+    else if ($("#main").height() == value) {
       $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
     }
     else {
@@ -50,17 +58,17 @@ $(() => {
     }
   }
 
-  $(window).resize(function(){
-    if($(document).width() > 1200) {
+  $(window).resize(function () {
+    if ($(document).width() > 1200) {
       let document_width = $(document).width()
 
       let margin = document_width - 1200
-      let margin_left = Math. round(margin / 2)
+      let margin_left = Math.round(margin / 2)
 
-      if($("#main").height() < value) {
+      if ($("#main").height() < value) {
         $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
       }
-      else if($("#main").height() == value) {
+      else if ($("#main").height() == value) {
         $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
       }
       else {
@@ -68,10 +76,10 @@ $(() => {
       }
     }
     else {
-      if($("#main").height() < value) {
+      if ($("#main").height() < value) {
         $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none; height: ${value}px;`)
       }
-      else if($("#main").height() == value) {
+      else if ($("#main").height() == value) {
         $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none; height: ${value}px;`)
       }
       else {
@@ -87,9 +95,10 @@ $(() => {
     <HeaderButtons />
   </nav>
   <main @click="hideSearch()" id="main">
-      <MessageListArea class="message_list_div" />
-      <MessagePage class="message_page_div" />
-      <MessageFormArea class="message_form_div" />
+    <MessageListArea class="message_list_div" />
+    <MessageNavArea class="message_nav_div" />
+    <MessagePage class="message_page_div" />
+    <MessageFormArea class="message_form_div" />
   </main>
 </template>
 
@@ -101,10 +110,15 @@ $(() => {
   border-right: 2px solid gray;
 }
 
+.message_nav_div {
+  float: left;
+  box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+}
+
 .message_page_div {
   float: left;
   width: 70%;
-  height: 79%;
+  height: 74%;
   border-bottom: 2px solid gray;
 }
 
@@ -121,6 +135,7 @@ main {
   width: 100%;
   max-width: 1200px;
   min-height: 800px;
+  overflow-y: hidden;
 }
 
 @media only screen and (orientation: portrait) {
@@ -131,6 +146,28 @@ main {
   .center_form {
     width: 80%;
     margin-left: 10%;
+  }
+
+  .message_list_div {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    overflow: auto;
+  }
+
+  .message_nav_div {
+    display: none;
+  }
+
+  .message_page_div {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .message_form_div {
+    display: none;
+    width: 100%;
+    margin-left: 0;
   }
 }
 </style>

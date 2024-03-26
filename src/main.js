@@ -16,10 +16,10 @@ app.use(VueSweetalert2)
 app.config.globalProperties.emitter = emitter
 app.mount('#app')
 
-app.config.globalProperties.ENVIRONMENT = true
+app.config.globalProperties.ENVIRONMENT = false
 
 if (app.config.globalProperties.ENVIRONMENT) {
   app.config.globalProperties.BASE_URL = 'http://192.168.4.200:81/social_media_api'
 } else {
-  app.config.globalProperties.BASE_URL = 'http://192.168.4.200/social_media_api'
+  app.config.globalProperties.BASE_URL = 'http://192.168.1.9/social_media_api'
 }
