@@ -161,7 +161,9 @@ main {
 
   .message_page_div {
     width: 100%;
+    height: 50%;
     margin-left: 0;
+    max-height: 400px;
   }
 
   .message_form_div {

@@ -24,6 +24,13 @@ function hideSearch() {
   else {
     $(".profile_div").attr("data-status", "show")
   }
+  if ($(".menu_div").attr("data-status") == "show") {
+    $(".menu_div").hide()
+    $(".menu_div").attr("data-status", "hidden")
+  }
+  else {
+    $(".menu_div").attr("data-status", "show")
+  }
   $("#search_txt").val("")
 }
 
@@ -85,6 +92,7 @@ main {
   margin-top: 60px;
   width: 100%;
   max-width: 1200px;
+  overflow: auto;
 }
 
 @media only screen and (orientation: portrait) {

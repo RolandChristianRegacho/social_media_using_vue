@@ -183,7 +183,11 @@ function getCookie(cname) {
 
 @media only screen and (orientation: portrait) {
     .message_form textarea {
-        width: 75%;
+        width: 70%;
+    }
+
+    .message_form button {
+        width: 60px;
     }
 }
 </style>

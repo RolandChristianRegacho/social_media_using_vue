@@ -52,7 +52,7 @@ export default {
 
 .convo_nav_back {
     float: left;
-    width: 10%;
+    width: 20%;
     height: 100%;
     text-align: center;
     background: inherit;
@@ -66,11 +66,12 @@ export default {
 
 @media only screen and (orientation: portrait) {
     .convo_nav {
-        width: 99%;
+        width: 100%;
+        margin-left: 0;
     }
 
     .convo_nav_name {
-        width: 90%;
+        width: 80%;
     }
 
     .convo_nav_back {
