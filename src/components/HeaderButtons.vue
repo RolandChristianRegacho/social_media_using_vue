@@ -44,6 +44,8 @@
             <div class='search_result_action' v-else-if="item.request_type == 'sender'">
                 <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept'>Cancel</button>
             </div>
+            <div class='search_result_action' v-else-if="item.request_type == 'friend'">
+            </div>
             <div class='search_result_actions' v-else>
                 <button @click="acceptFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
                 <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
