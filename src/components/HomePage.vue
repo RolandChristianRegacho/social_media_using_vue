@@ -92,20 +92,20 @@ export default {
         BxHide
     },
     async mounted() {
-        let user = getCookie("user")
+        let user = this.getCookie("user")
         this.owner = JSON.parse(user).id
 
         if (user == "") {
             logout()
         }
 
-        getPosts(this.BASE_URL)
+        getPosts(this.BASE_URL, user)
             .then(result => {
                 this.posts = result
             })
 
         this.emitter.on("onPost", () => {
-            getPosts(this.BASE_URL)
+            getPosts(this.BASE_URL, user)
                 .then(result => {
                     this.posts = result
                 })
@@ -180,7 +180,7 @@ export default {
             }
         },
         async postReply(post_id) {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
 
             if (user == "") {
                 this.$router.push({ name: "LoginPage" });
@@ -206,7 +206,7 @@ export default {
                     text: "Reply sent!",
                 })
                 this.replies.reply = ""
-                getPosts(this.BASE_URL)
+                getPosts(this.BASE_URL, user)
                     .then(result => {
                         this.posts = result
                     })
@@ -260,9 +260,7 @@ async function deletePost(id, url) {
     })
 }
 
-async function getPosts(BASE_URL) {
-    let user = getCookie("user")
-
+async function getPosts(BASE_URL, user) {
     if (user == "") {
         logout()
     }
@@ -286,22 +284,6 @@ function logout() {
         this.$router.push({ name: "LoginPage" })
         this.$swal.close()
     }, 1000)
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
 </script>
 

@@ -68,7 +68,7 @@ export default {
         AnTwotoneDelete
     },
     async mounted() {
-        let user = getCookie("user")
+        let user = this.getCookie("user")
         this.owner = JSON.parse(user).id
 
         if (user == "") {
@@ -77,13 +77,13 @@ export default {
 
         let post_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
-        getPosts(this.BASE_URL, post_id)
+        getPosts(this.BASE_URL, post_id, user)
             .then(result => {
                 this.posts = result
             })
 
         this.emitter.on("onChangePost", (id) => {
-            getPosts(this.BASE_URL, id)
+            getPosts(this.BASE_URL, id, user)
                 .then(result => {
                     this.posts = result
                 })
@@ -158,7 +158,7 @@ export default {
             }
         },
         async postReply(post_id) {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
 
             if (user == "") {
                 this.$router.push({ name: "LoginPage" });
@@ -183,7 +183,7 @@ export default {
                     icon: "success",
                 });
                 this.replies.reply = ""
-                getPosts(this.BASE_URL, post_id)
+                getPosts(this.BASE_URL, post_id, user)
                     .then(result => {
                         this.posts = result
                     })
@@ -215,9 +215,7 @@ export default {
     }
 }
 
-async function getPosts(BASE_URL, id) {
-    let user = getCookie("user")
-
+async function getPosts(BASE_URL, id, user) {
     if (user == "") {
         logout()
     }
@@ -241,22 +239,6 @@ function logout() {
         this.$router.push({ name: "LoginPage" })
         this.$swal.close()
     }, 1000)
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
 </script>
 

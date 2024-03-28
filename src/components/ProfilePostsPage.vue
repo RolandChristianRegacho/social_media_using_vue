@@ -16,20 +16,20 @@
                 {{ item.posts.date }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)" data-status="active"
-                    :id="'rp-btn-shw-' + item.posts.id">
+                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)"
+                    data-status="active" :id="'rp-btn-shw-' + item.posts.id">
                     <BxShow />
                 </button>
-                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
+                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)"
+                    data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
                     <BxHide />
                 </button>
-                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)" data-status="active"
-                    :id="'rp-btn-shw-wrd-' + item.posts.id">
+                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)"
+                    data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
                     Show Replies
                 </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
+                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)"
+                    data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
                     Hide Replies
                 </button>
                 <form @submit.prevent="submit">
@@ -92,20 +92,20 @@ export default {
         BxHide
     },
     async mounted() {
-        let user = getCookie("user")
+        let user = this.getCookie("user")
         this.owner = JSON.parse(user).id
 
         if (user == "") {
             logout()
         }
 
-        getPosts(this.BASE_URL)
+        getPosts(this.BASE_URL, user)
             .then(result => {
                 this.posts = result
             })
 
         this.emitter.on("onPostInProfile", () => {
-            getPosts(this.BASE_URL)
+            getPosts(this.BASE_URL, user)
                 .then(result => {
                     this.posts = result
                 })
@@ -180,7 +180,7 @@ export default {
             }
         },
         async postReply(post_id) {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
 
             if (user == "") {
                 this.$router.push({ name: "LoginPage" });
@@ -206,7 +206,7 @@ export default {
                     text: "Reply sent!",
                 })
                 this.replies.reply = ""
-                getPosts(this.BASE_URL)
+                getPosts(this.BASE_URL, user)
                     .then(result => {
                         this.posts = result
                     })
@@ -224,15 +224,15 @@ export default {
                     denyButton: 'order-2',
                 }
             }).then((result) => {
-                if(result.isConfirmed) {
+                if (result.isConfirmed) {
                     deletePost(id, this.BASE_URL)
-                    .then(result => {
-                        this.emitter.emit("onPost");
-                        this.$swal({
-                            icon: result.data.type,
-                            text: result.data.text,
+                        .then(result => {
+                            this.emitter.emit("onPost");
+                            this.$swal({
+                                icon: result.data.type,
+                                text: result.data.text,
+                            })
                         })
-                    })
                 }
             })
         },
@@ -249,9 +249,9 @@ async function deletePost(id, url) {
     let data = {
         post_id: id
     }
-    const result = await axios.delete(`${url}/home/post.php`, {data: data})
+    const result = await axios.delete(`${url}/home/post.php`, { data: data })
 
-    if(result.status == 200) {
+    if (result.status == 200) {
         return result
     }
     console.log("test")
@@ -261,9 +261,7 @@ async function deletePost(id, url) {
     })
 }
 
-async function getPosts(BASE_URL) {
-    let user = getCookie("user")
-
+async function getPosts(BASE_URL, user) {
     if (user == "") {
         logout()
     }
@@ -287,22 +285,6 @@ function logout() {
         this.$router.push({ name: "LoginPage" })
         this.$swal.close()
     }, 1000)
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
 </script>
 

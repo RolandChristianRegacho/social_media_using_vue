@@ -45,7 +45,7 @@
                 <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept'>Cancel</button>
             </div>
             <div class='search_result_actions' v-else>
-                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
+                <button @click="acceptFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
                 <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
             </div>
         </div>
@@ -67,7 +67,8 @@
                         request</button>
                 </div>
                 <div class='notifications_action'>
-                    <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
+                    <button @click="acceptFriendRequest(item.sender);"
+                        class='search_result_action_accept'>Accept</button>
                     <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
                 </div>
             </div>
@@ -88,7 +89,6 @@ import { AnOutlinedMenuFold } from "@kalimahapps/vue-icons";
 import { AnOutlinedMenuUnfold } from "@kalimahapps/vue-icons";
 import axios from "axios";
 import $ from "jquery"
-window.$ = $.extend('jquery-ui');
 
 export default {
     name: "HeaderButton",
@@ -126,7 +126,7 @@ export default {
             this.$router.push({ name: "HomePage" })
         },
         async searchPeople() {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -152,7 +152,7 @@ export default {
             this.$router.push(`/profile=${id}`)
         },
         async sendFriendRequest(id) {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -176,8 +176,32 @@ export default {
                 })
             }
         },
+        async acceptFriendRequest(id) {
+            let user = this.getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                this.$router.push({ name: "LoginPage" });
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+            let data = {
+                "sender_id": id,
+                "receiver_id": user_id
+            }
+
+            const result = await axios.post(`${this.BASE_URL}/home/friends.php`, data)
+
+            if (result.status == 200) {
+                this.$swal({
+                    icon: "success",
+                    title: "Friend Request Accepted!"
+                })
+            }
+        },
         async cancelSendFriendRequest(id) {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -201,7 +225,7 @@ export default {
             }
         },
         async deleteFriendRequest(id) {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -244,7 +268,7 @@ export default {
         async showNotifications() {
             $(".notifications_div").attr("data-status", "clicked")
             $(".notifications_div").show()
-            let user = getCookie("user")
+            let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -314,7 +338,7 @@ export default {
             $(".header_button_mobile").show()
         },
         goToProfile() {
-            let user = getCookie("user")
+            let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -331,7 +355,7 @@ export default {
         }
     },
     async mounted() {
-        let user = getCookie("user")
+        let user = this.getCookie("user")
 
         if (user == "") {
             this.$router.push({ name: "LoginPage" });
@@ -374,22 +398,6 @@ export default {
             }
         }
     }
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
 </script>
 
@@ -616,6 +624,11 @@ input[type="search"]:focus {
 
     .header_button_mobile {
         display: block;
+    }
+
+    .search_div {
+        left: 0;
+        width: 100%;
     }
 }
 </style>
