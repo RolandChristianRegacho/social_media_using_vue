@@ -168,6 +168,7 @@ function logout() {
 @media only screen and (orientation: portrait) {
     .message_form textarea {
         width: 70%;
+        font-size: 20px;
     }
 
     .message_form button {

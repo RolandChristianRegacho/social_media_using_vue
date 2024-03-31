@@ -250,22 +250,24 @@ export default {
                 })
             }
 
-            const response = await axios.get(`${this.BASE_URL}/home/notifications.php?user_id=${JSON.parse(user).id}`)
-
-            if (response.status == 200) {
-                if (response.data.type == "found") {
-                    this.notifications = response.data.data
-                    if (response.data.unread_count > 9) {
-                        $(".notification p").text(" 9+")
-                    }
-                    else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
-                        $(".notification p").text(`${response.data.unread_count}`)
+            getNotifs(this.BASE_URL, JSON.parse(user).id)
+                .then(response => {
+                    if (response.data.type == "found") {
+                        this.notifications = response.data.data
+                        if (response.data.unread_count > 9) {
+                            $(".notification p").text(" 9+")
+                        }
+                        else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
+                            $(".notification p").text(`${response.data.unread_count}`)
+                        }
+                        else {
+                            $(".notification p").text("")
+                        }
                     }
                     else {
                         $(".notification p").text("")
                     }
-                }
-            }
+                })
         },
         async showNotifications() {
             $(".notifications_div").attr("data-status", "clicked")
@@ -287,22 +289,24 @@ export default {
             const result = await axios.put(`${this.BASE_URL}/home/notifications.php`, data)
 
             if (result.status == 200) {
-                const result = await axios.get(`${this.BASE_URL}/home/notifications.php?user_id=${JSON.parse(user).id}`)
-
-                if (result.status == 200) {
-                    if (result.data.type == "found") {
-                        this.notifications = result.data.data
-                        if (result.data.unread_count > 9) {
-                            $(".notification p").text(" 9+")
-                        }
-                        else if (result.data.unread_count > 0 && result.data.unread_count < 10) {
-                            $(".notification p").text(`${result.data.unread_count}`)
+                getNotifs(this.BASE_URL, JSON.parse(user).id)
+                    .then(result => {
+                        if (result.data.type == "found") {
+                            this.notifications = result.data.data
+                            if (result.data.unread_count > 9) {
+                                $(".notification p").text(" 9+")
+                            }
+                            else if (result.data.unread_count > 0 && result.data.unread_count < 10) {
+                                $(".notification p").text(`${result.data.unread_count}`)
+                            }
+                            else {
+                                $(".notification p").text("")
+                            }
                         }
                         else {
                             $(".notification p").text("")
                         }
-                    }
-                }
+                    })
             }
             else {
                 this.$swal({
@@ -366,39 +370,77 @@ export default {
             this.name = JSON.parse(user).first_name
         }
 
-        const result = await axios.get(`${this.BASE_URL}/home/notifications.php?user_id=${JSON.parse(user).id}`)
-
-        if (result.status == 200) {
-            if (result.data.type == "found") {
-                this.notifications = result.data.data
-                if (result.data.unread_count > 9) {
-                    $(".notification p").text(" 9+")
-                }
-                else if (result.data.unread_count > 0 && result.data.unread_count < 10) {
-                    $(".notification p").text(`${result.data.unread_count}`)
+        getNotifs(this.BASE_URL, JSON.parse(user).id)
+            .then(result => {
+                if (result.data.type == "found") {
+                    this.notifications = result.data.data
+                    if (result.data.unread_count > 9) {
+                        $(".notification p").text(" 9+")
+                    }
+                    else if (result.data.unread_count > 0 && result.data.unread_count < 10) {
+                        $(".notification p").text(`${result.data.unread_count}`)
+                    }
+                    else {
+                        $(".notification p").text("")
+                    }
                 }
                 else {
                     $(".notification p").text("")
                 }
-            }
-        }
+            })
 
-        const response = await axios.get(`${this.BASE_URL}/home/messages.php?user_id=${JSON.parse(user).id}`)
+        getMessageNotif(this.BASE_URL, JSON.parse(user).id)
+            .then(response => {
+                if (response.data.type == "found") {
+                    this.unread_messages = response.data.unread_count
+                    if (response.data.unread_count > 9) {
+                        $(".message p").text(" 9+")
+                    }
+                    else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
+                        $(".message p").text(`${response.data.unread_count}`)
+                    }
+                    else {
+                        $(".message p").text("")
+                    }
+                }
+            })
 
-        if (response.status == 200) {
-            if (response.data.type == "found") {
-                this.unread_messages = response.data.unread_count
-                if (response.data.unread_count > 9) {
-                    $(".message p").text(" 9+")
-                }
-                else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
-                    $(".message p").text(`${response.data.unread_count}`)
-                }
-                else {
-                    $(".message p").text("")
-                }
-            }
-        }
+        this.emitter.on("readMessage", () => {
+            getMessageNotif(this.BASE_URL, JSON.parse(user).id)
+                .then(response => {
+                    if (response.data.type == "found") {
+                        this.unread_messages = response.data.unread_count
+                        if (response.data.unread_count > 9) {
+                            $(".message p").text(" 9+")
+                        }
+                        else if (response.data.unread_count > 0 && response.data.unread_count < 10) {
+                            $(".message p").text(`${response.data.unread_count}`)
+                        }
+                        else {
+                            $(".message p").text("")
+                        }
+                    }
+                    else {
+                        $(".message p").text("")
+                    }
+                })
+        })
+    }
+}
+
+async function getNotifs(url, id) {
+    const response = await axios.get(`${url}/home/notifications.php?user_id=${id}`)
+
+    if (response.status == 200) {
+        return response
+    }
+}
+
+async function getMessageNotif(url, id) {
+    const response = await axios.get(`${url}/home/messages.php?user_id=${id}`)
+
+    if (response.status == 200) {
+        return response
     }
 }
 </script>

@@ -48,11 +48,25 @@ export default {
             logout()
         }
 
-        const result = await axios.get(`${this.BASE_URL}/home/users.php?user_id=${JSON.parse(user).id}`)
+        getListOfUser(this.BASE_URL, JSON.parse(user).id)
+            .then(result => {
+                this.users = result
+            })
 
-        if (result.status == 200) {
-            this.users = result.data.data
-        }
+        this.emitter.on("readMessage", () => {
+            getListOfUser(this.BASE_URL, JSON.parse(user).id)
+                .then(result => {
+                    this.users = result
+                })
+        })
+    }
+}
+
+async function getListOfUser(url, id) {
+    const result = await axios.get(`${url}/home/users.php?user_id=${id}`)
+
+    if (result.status == 200) {
+        return result.data.data
     }
 }
 

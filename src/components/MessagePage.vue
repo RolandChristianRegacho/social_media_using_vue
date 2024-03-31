@@ -60,6 +60,16 @@ export default {
               $(".convo").animate({
                 scrollTop: $(".convo").offset().top + $(".convo")[0].scrollHeight + 500000000000
               }, 500)
+
+              let data = {
+                "sender_id": id,
+                "receiver_id": this.owner
+              }
+
+              readMessages(this.BASE_URL, data)
+                .then(() => {
+                  this.emitter.emit("readMessage")
+                })
             })
         })
     })
@@ -121,6 +131,14 @@ async function getMessages(url, receiver, owner) {
   }
 }
 
+async function readMessages(url, data) {
+  const result = await axios.put(`${url}/home/messages.php`, data)
+
+  if (result.status == 200) {
+    return result
+  }
+}
+
 function logout() {
   document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   this.$swal({
@@ -164,6 +182,7 @@ function logout() {
   float: right;
   width: auto;
   min-width: 100px;
+  max-width: 90%;
   height: 100%;
   min-height: 80px;
   background: white;
@@ -178,6 +197,7 @@ function logout() {
   float: left;
   width: auto;
   min-width: 100px;
+  max-width: 90%;
   height: 100%;
   min-height: 80px;
   background: rgba(38, 71, 78, 1);
