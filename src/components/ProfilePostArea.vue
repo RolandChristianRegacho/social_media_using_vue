@@ -1,5 +1,5 @@
 <template>
-    <div class="post_form">
+    <div class="post_form" v-if="owner == profile_id">
         <form @submit.prevent="submit">
             <textarea placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
                 v-model="message.text"></textarea>
@@ -19,7 +19,9 @@ export default {
                 text: "",
                 user_id: "",
                 date: ""
-            }
+            },
+            profile_id: "",
+            owner: ""
         }
     },
     methods: {
@@ -79,6 +81,11 @@ export default {
                 $("#character").html("255")
             }
         }
+    },
+    mounted() {
+        let user = this.getCookie("user")
+        this.profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
+        this.owner = JSON.parse(user).id
     }
 }
 

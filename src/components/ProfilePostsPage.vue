@@ -94,18 +94,19 @@ export default {
     async mounted() {
         let user = this.getCookie("user")
         this.owner = JSON.parse(user).id
+        let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
         if (user == "") {
             logout()
         }
 
-        getPosts(this.BASE_URL, user)
+        getPosts(this.BASE_URL, profile_id)
             .then(result => {
                 this.posts = result
             })
 
         this.emitter.on("onPostInProfile", () => {
-            getPosts(this.BASE_URL, user)
+            getPosts(this.BASE_URL, JSON.parse(user).id)
                 .then(result => {
                     this.posts = result
                 })
@@ -206,7 +207,7 @@ export default {
                     text: "Reply sent!",
                 })
                 this.replies.reply = ""
-                getPosts(this.BASE_URL, user)
+                getPosts(this.BASE_URL, JSON.parse(user).id)
                     .then(result => {
                         this.posts = result
                     })
@@ -266,7 +267,7 @@ async function getPosts(BASE_URL, user) {
         logout()
     }
 
-    const result_posts = await axios.get(`${BASE_URL}/home/post.php?user_id=${JSON.parse(user).id}&context=profile`)
+    const result_posts = await axios.get(`${BASE_URL}/home/post.php?user_id=${user}&context=profile`)
 
     if (result_posts.status == 200) {
         if (result_posts.data != "") {
