@@ -72,7 +72,7 @@ function logout() {
 }
 
 .profile_pic_profile {
-    position: absolute;
+    position: relative;
     width: 200px;
     height: 200px;
     background: white;
@@ -85,6 +85,7 @@ function logout() {
     float: left;
     width: 100%;
     height: 100%;
+    position: absolute;
 }
 
 .profile_pic_profile_img_default {
@@ -94,6 +95,7 @@ function logout() {
     background: url("../assets/image.png");
     background-size: 100% 100%;
     box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+    position: absolute;
 }
 
 .profile_information_div {
@@ -148,7 +150,6 @@ function logout() {
 
     .profile_information_div_name {
         margin: 0;
-        margin-top: 80px;
         width: 100%;
         text-align: center;
     }
