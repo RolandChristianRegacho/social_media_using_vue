@@ -11,6 +11,7 @@
             <form @submit.prevent="submit">
                 <input type="email" v-model="user.username" placeholder="Username">
                 <input type="password" v-model="user.password" placeholder="Password" minlength="10">
+                <input type="password" v-model="user.password" placeholder="Confirm Password" minlength="10">
                 <input type="text" v-model="user.first_name" placeholder="First Name">
                 <input type="text" v-model="user.middle_name" placeholder="Middle Name">
                 <input type="text" v-model="user.last_name" placeholder="Last Name">
@@ -24,8 +25,7 @@
 </template>
 
 <script>
-import axios from "axios"
-import swal from 'sweetalert';
+import { postAxiosData } from "@/additional_scripts/fetch-script";
 export default {
     name: "LoginForm",
     data() {
@@ -33,6 +33,7 @@ export default {
             user: {
                 username: "",
                 password: "",
+                confirm: "",
                 first_name: "",
                 middle_name: "",
                 last_name: "",
@@ -52,20 +53,25 @@ export default {
             let data = {
                 "email": this.user.username,
                 "password": this.user.password,
+                "confirm": this.user.confirm,
                 "first_name": this.user.first_name,
                 "middle_name": this.user.middle_name,
                 "last_name": this.user.last_name,
                 "birthday": this.user.birthday
             }
 
-            const result = await axios.post(`${this.BASE_URL}/login/signup.php`, data)
-
-            if (result.status == 200) {
-                swal("Sign up Successful!", "You may now log in", "success")
-                    .then(() => {
-                        this.$router.push({ name: "LoginPage" });
-                    });
-            }
+            postAxiosData(`${this.BASE_URL}/login/signup.php`, data)
+            .then(result => {
+                if(result.type == "success") {
+                    this.$swal("Sign up Successful!", "You may now log in", "success")
+                        .then(() => {
+                            this.$router.push({ name: "LoginPage" });
+                        });
+                }
+                else {
+                    this.$swal("Sign up failed!", result.text, result.type)
+                }
+            })
         }
     }
 }
@@ -84,4 +90,4 @@ export default {
 a {
     color: rgb(52, 73, 94);
 }
-</style>
+</style>@/additional_scripts/fetch-script

@@ -9,7 +9,7 @@
     </div>
 </template>
 <script>
-import axios from "axios"
+import { postAxiosData } from "@/additional_scripts/fetch-script"
 import $ from "jquery"
 export default {
     name: "HomePostArea",
@@ -47,13 +47,20 @@ export default {
                 }
                 $("#post_text").val("")
 
-                const result = await axios.post(`${this.BASE_URL}/home/post.php`, data)
-
-                if (result.status == 200) {
-                    this.emitter.emit("onPost");
-                    $("#postBtn").attr("disabled", true)
-                    $("#character").html("255")
-                }
+                postAxiosData(`${this.BASE_URL}/home/post.php`, data)
+                .then(result => {
+                    if(result.type == "success") {
+                        this.emitter.emit("onPost");
+                        $("#postBtn").attr("disabled", true)
+                        $("#character").html("255")
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.type,
+                            text: result.message,
+                        })
+                    }
+                })
             }
             catch (e) {
                 console.log(e)

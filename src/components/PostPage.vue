@@ -44,11 +44,9 @@
 </template>
 
 <script>
-import axios from "axios"
-import swal from 'sweetalert';
 import $ from "jquery";
-import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
-import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
+import { AnOutlinedEdit, AnTwotoneDelete } from "@kalimahapps/vue-icons";
+import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 
 export default {
     name: "HomePage",
@@ -79,13 +77,13 @@ export default {
 
         getPosts(this.BASE_URL, post_id, user)
             .then(result => {
-                this.posts = result
+                this.posts = result.post
             })
 
         this.emitter.on("onChangePost", (id) => {
             getPosts(this.BASE_URL, id, user)
                 .then(result => {
-                    this.posts = result
+                    this.posts = result.post
                 })
         })
     },
@@ -175,19 +173,19 @@ export default {
                 },
                 "user_id": this.replies.reply_user_id
             }
-
-            const result = await axios.post(`${this.BASE_URL}/home/post.php`, data)
-
-            if (result.status == 200) {
-                swal("Reply sent!", {
-                    icon: "success",
-                });
-                this.replies.reply = ""
-                getPosts(this.BASE_URL, post_id, user)
-                    .then(result => {
-                        this.posts = result
-                    })
-            }
+            postAxiosData(`${this.BASE_URL}/home/post.php`, data)
+            .then(result => {
+                if(result.type == "success") {
+                    this.$swal("Reply sent!", {
+                        icon: "success",
+                    });
+                    this.replies.reply = ""
+                    getPosts(this.BASE_URL, post_id, user)
+                        .then(result => {
+                            this.posts = result.post
+                        })
+                }
+            })
         },
         async deletePost(id) {
             this.$swal({
@@ -202,10 +200,18 @@ export default {
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log(id)
-                    swal("Poof! Your post has been deleted!", {
-                        icon: "success",
-                    });
+                    let data = {
+                        post_id: id
+                    }
+
+                    deleteAxiosData(`${this.BASE_URL}/home/post.php`, data)
+                    .then(result => {
+                        this.emitter.emit("onPost");
+                        this.$swal({
+                            icon: result.type,
+                            text: result.text,
+                        })
+                    })
                 }
             })
         },
@@ -215,18 +221,12 @@ export default {
     }
 }
 
-async function getPosts(BASE_URL, id, user) {
+function getPosts(BASE_URL, id, user) {
     if (user == "") {
         logout()
     }
 
-    const result_posts = await axios.get(`${BASE_URL}/home/post.php?post_id=${id}`)
-
-    if (result_posts.status == 200) {
-        if (result_posts.data != "") {
-            return result_posts.data
-        }
-    }
+    return getAxiosData(`${BASE_URL}/home/post.php?post_id=${id}`)
 }
 
 function logout() {

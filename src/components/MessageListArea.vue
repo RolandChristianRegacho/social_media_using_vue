@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import { getAxiosData } from "@/additional_scripts/fetch-script"
 import $ from "jquery"
 
 export default {
@@ -50,24 +50,20 @@ export default {
 
         getListOfUser(this.BASE_URL, JSON.parse(user).id)
             .then(result => {
-                this.users = result
+                this.users = result.data
             })
 
         this.emitter.on("readMessage", () => {
             getListOfUser(this.BASE_URL, JSON.parse(user).id)
                 .then(result => {
-                    this.users = result
+                    this.users = result.data
                 })
         })
     }
 }
 
 async function getListOfUser(url, id) {
-    const result = await axios.get(`${url}/home/users.php?user_id=${id}`)
-
-    if (result.status == 200) {
-        return result.data.data
-    }
+    return getAxiosData(`${url}/home/users.php?user_id=${id}`)
 }
 
 function logout() {

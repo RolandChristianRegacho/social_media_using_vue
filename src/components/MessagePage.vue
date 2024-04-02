@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import { getAxiosData, updateAxiosData } from "@/additional_scripts/fetch-script"
 import $ from "jquery"
 
 export default {
@@ -55,7 +55,7 @@ export default {
 
       getMessages(this.BASE_URL, this.receiver, this.owner)
         .then(result => {
-          $.when(this.messages = configureTime(result.data.data))
+          $.when(this.messages = configureTime(result.data))
             .done(() => {
               $(".convo").animate({
                 scrollTop: $(".convo").offset().top + $(".convo")[0].scrollHeight + 500000000000
@@ -67,8 +67,16 @@ export default {
               }
 
               readMessages(this.BASE_URL, data)
-                .then(() => {
-                  this.emitter.emit("readMessage")
+                .then(result => {
+                  if(result.type == "success") {
+                    this.emitter.emit("readMessage")
+                  }
+                  else {
+                    this.$swal({
+                        icon: result.type,
+                        text: result.message,
+                    })
+                  }
                 })
             })
         })
@@ -123,20 +131,12 @@ function configureTime(data) {
   return data
 }
 
-async function getMessages(url, receiver, owner) {
-  const result = await axios.get(`${url}/home/messages.php?user_id=${owner}&message_user_id=${receiver}`)
-
-  if (result.status == 200) {
-    return result
-  }
+function getMessages(url, receiver, owner) {
+  return getAxiosData(`${url}/home/messages.php?user_id=${owner}&message_user_id=${receiver}`)
 }
 
-async function readMessages(url, data) {
-  const result = await axios.put(`${url}/home/messages.php`, data)
-
-  if (result.status == 200) {
-    return result
-  }
+function readMessages(url, data) {
+  return updateAxiosData(`${url}/home/messages.php`, data)
 }
 
 function logout() {

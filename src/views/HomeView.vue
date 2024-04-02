@@ -35,13 +35,27 @@ function hideSearch() {
 }
 
 $(() => {
+  let value = $(document).height() - 60
+  if ($("#main").height() < value) {
+    $("#main").height(value)
+    $("#main").attr("style", `height: ${value}px !important;`)
+  }
+
   if ($(document).width() > 1200) {
     let document_width = $(document).width()
 
     let margin = document_width - 1200
     let margin_left = Math.round(margin / 2)
 
-    $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+    if ($("#main").height() < value) {
+      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
+    }
+    else if ($("#main").height() == value) {
+      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
+    }
+    else {
+      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+    }
   }
 
   $(window).resize(function () {
@@ -51,10 +65,26 @@ $(() => {
       let margin = document_width - 1200
       let margin_left = Math.round(margin / 2)
 
-      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+      if ($("#main").height() < value) {
+        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
+      }
+      else if ($("#main").height() == value) {
+        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
+      }
+      else {
+        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
+      }
     }
     else {
-      $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none;`)
+      if ($("#main").height() < value) {
+        $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none; height: ${value}px;`)
+      }
+      else if ($("#main").height() == value) {
+        $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none; height: ${value}px;`)
+      }
+      else {
+        $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none;`)
+      }
     }
   });
 })

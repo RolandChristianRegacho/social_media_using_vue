@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import { getAxiosData } from "@/additional_scripts/fetch-script"
 export default {
     name: "ProfilePage",
     data() {
@@ -38,11 +38,10 @@ export default {
 
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
-        const result = await axios.get(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
-
-        if (result.status == 200) {
-            this.user_info = result.data.data
-        }
+        getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
+        .then(result => {
+            this.user_info = result.data
+        })
 
     }
 }

@@ -65,12 +65,12 @@
 </template>
 
 <script>
-import axios from "axios"
 import $ from "jquery";
 import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
 import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
 import { BxShow } from "@kalimahapps/vue-icons";
 import { BxHide } from "@kalimahapps/vue-icons";
+import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 
 export default {
     name: "ProfilePostsPage",
@@ -102,13 +102,14 @@ export default {
 
         getPosts(this.BASE_URL, profile_id)
             .then(result => {
-                this.posts = result
+                this.posts = result.post
             })
 
         this.emitter.on("onPostInProfile", () => {
+            console.log("!")
             getPosts(this.BASE_URL, JSON.parse(user).id)
                 .then(result => {
-                    this.posts = result
+                    this.posts = result.post
                 })
         })
     },
@@ -199,19 +200,20 @@ export default {
                 "user_id": this.replies.reply_user_id
             }
 
-            const result = await axios.post(`${this.BASE_URL}/home/post.php`, data)
-
-            if (result.status == 200) {
+            postAxiosData(`${this.BASE_URL}/home/post.php`, data)
+            .then(result => {
+                if(result.type == "success") {
+                    this.replies.reply = ""
+                    getPosts(this.BASE_URL, JSON.parse(user).id)
+                        .then(result => {
+                            this.posts = result.post
+                        })
+                }
                 this.$swal({
-                    icon: "success",
-                    text: "Reply sent!",
+                    icon: result.type,
+                    text: result.message,
                 })
-                this.replies.reply = ""
-                getPosts(this.BASE_URL, JSON.parse(user).id)
-                    .then(result => {
-                        this.posts = result
-                    })
-            }
+            })
         },
         async deletePost(id) {
             this.$swal({
@@ -228,10 +230,10 @@ export default {
                 if (result.isConfirmed) {
                     deletePost(id, this.BASE_URL)
                         .then(result => {
-                            this.emitter.emit("onPost");
+                            this.emitter.emit("onPostInProfile");
                             this.$swal({
-                                icon: result.data.type,
-                                text: result.data.text,
+                                icon: result.type,
+                                text: result.text,
                             })
                         })
                 }
@@ -246,34 +248,20 @@ export default {
     }
 }
 
-async function deletePost(id, url) {
+function deletePost(id, url) {
     let data = {
         post_id: id
     }
-    const result = await axios.delete(`${url}/home/post.php`, { data: data })
 
-    if (result.status == 200) {
-        return result
-    }
-    console.log("test")
-    this.$swal({
-        icon: "error",
-        text: "Server error!",
-    })
+    return deleteAxiosData(`${url}/home/post.php`, data)
 }
 
-async function getPosts(BASE_URL, user) {
+function getPosts(BASE_URL, user) {
     if (user == "") {
         logout()
     }
 
-    const result_posts = await axios.get(`${BASE_URL}/home/post.php?user_id=${user}&context=profile`)
-
-    if (result_posts.status == 200) {
-        if (result_posts.data != "") {
-            return result_posts.data
-        }
-    }
+    return getAxiosData(`${BASE_URL}/home/post.php?user_id=${user}&context=profile`)
 }
 
 function logout() {

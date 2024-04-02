@@ -14,7 +14,7 @@
 <script>
 import { AnOutlinedSend } from "@kalimahapps/vue-icons";
 import $ from "jquery"
-import axios from "axios"
+import { postAxiosData } from "@/additional_scripts/fetch-script";
 
 
 export default {
@@ -62,13 +62,14 @@ export default {
                 "content": this.message.text
             }
 
-            const result = await axios.post(`${this.BASE_URL}/home/messages.php`, data)
+            postAxiosData(`${this.BASE_URL}/home/messages.php`, data)
+            .then(result => {
+                if(result.type == "success") {
+                    this.emitter.emit("selectUser", this.message.receiver_id)
 
-            if (result.status == 200) {
-                this.emitter.emit("selectUser", this.message.receiver_id)
-
-                this.message.text = ""
-            }
+                    this.message.text = ""
+                }
+            })
         }
     },
     async mounted() {

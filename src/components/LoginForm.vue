@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import axios from "axios"
 import { CaLogin } from "@kalimahapps/vue-icons";
+import { postAxiosData } from "@/additional_scripts/fetch-script";
 
 export default {
     name: "LoginForm",
@@ -52,13 +52,12 @@ export default {
                 password: this.user.password
             }
 
-            const result = await axios.post(`${this.BASE_URL}/login/auth.php`, data)
-
-            if (result.status == 200) {
-                if (result.data.type == "success") {
-                    this.setCookie("user", JSON.stringify(result.data.data), 5)
+            postAxiosData(`${this.BASE_URL}/login/auth.php`, data)
+            .then(result => {
+                if (result.type == "success") {
+                    this.setCookie("user", JSON.stringify(result.data), 5)
                     this.$swal({
-                        icon: result.data.type,
+                        icon: result.type,
                         title: "Login Success!",
                     })
                     this.$swal.showLoading()
@@ -69,12 +68,12 @@ export default {
                 }
                 else {
                     this.$swal({
-                        icon: result.data.type,
+                        icon: result.type,
                         title: "Login Failed!",
-                        text: result.data.message,
+                        text: result.message,
                     })
                 }
-            }
+            })
         }
     }
 }
@@ -99,4 +98,4 @@ export default {
 a {
     color: rgb(52, 73, 94);
 }
-</style>
+</style>@/additional_scripts/fetch-script
