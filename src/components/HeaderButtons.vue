@@ -202,6 +202,25 @@ export default {
                         icon: "success",
                         title: "Friend Request Accepted!"
                     })
+                    getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
+                    .then(response => {
+                        if (response.type == "found") {
+                            if (response.unread_count > 9) {
+                                $(".notification p").text(" 9+")
+                            }
+                            else if (response.unread_count > 0 && response.unread_count < 10) {
+                                $(".notification p").text(`${response.unread_count}`)
+                            }
+                            else {
+                                $(".notification p").text("")
+                            }
+                            this.notifications = response.data
+                        }
+                        else {
+                            $(".notification p").text("")
+                            this.notifications = []
+                        }
+                    })
                 }
                 else {
                     this.$swal({
@@ -278,11 +297,11 @@ export default {
                             else {
                                 $(".notification p").text("")
                             }
-                            return response.data
+                            this.notifications = response.data
                         }
                         else {
                             $(".notification p").text("")
-                            return []
+                            this.notifications = []
                         }
                     })
                 }
@@ -326,11 +345,11 @@ export default {
                             else {
                                 $(".notification p").text("")
                             }
-                            return response.data
+                            this.notifications = response.data
                         }
                         else {
                             $(".notification p").text("")
-                            return []
+                            this.notifications = []
                         }
                     })
                 }
@@ -415,6 +434,7 @@ export default {
             }
             else {
                 $(".notification p").text("")
+                this.notifications = []
             }
         })
 
@@ -457,9 +477,6 @@ export default {
                 }
             })
         })
-    },
-    unmounted() {
-        window.open("http://localhost:81/social_media/Home/?home")
     }
 }
 </script>
