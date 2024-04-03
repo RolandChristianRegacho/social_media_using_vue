@@ -7,4 +7,6 @@ if (ENVIRONMENT) {
   URL = 'http://192.168.1.3/social_media_api'
 }
 
+console.log('test change')
+
 export default URL
