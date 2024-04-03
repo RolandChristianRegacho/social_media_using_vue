@@ -6,6 +6,7 @@ import router from './router'
 import mitt from 'mitt'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
+import URL from './additional_scripts/environment'
 const emitter = mitt()
 
 const app = createApp(App)
@@ -16,13 +17,7 @@ app.use(VueSweetalert2)
 app.config.globalProperties.emitter = emitter
 app.mount('#app')
 
-app.config.globalProperties.ENVIRONMENT = true
-
-if (app.config.globalProperties.ENVIRONMENT) {
-  app.config.globalProperties.BASE_URL = 'http://192.168.4.200:81/social_media_api'
-} else {
-  app.config.globalProperties.BASE_URL = 'http://192.168.1.3/social_media_api'
-}
+app.config.globalProperties.BASE_URL = URL
 
 app.config.globalProperties.getCookie = (cname) => {
   let name = cname + '='
