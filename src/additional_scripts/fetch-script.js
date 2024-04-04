@@ -1,4 +1,6 @@
-const token = "$2y$10$bqBmVWnLueHlcyuDbeFmWuZXZs.D6Hy8IdTDQCFHAbqmvCkk9gLJu"
+import GoToErrorPage from "./error-pages"
+
+const token = "$2y$10$bqBmVWnLueHlcyuDbeFmWuZXZs.D6Hy8IdTDQCFHAbqmvCkk9gLJ"
 
 export async function getAxiosData(link) {
   const response = await fetch(link, {
@@ -13,13 +15,7 @@ export async function getAxiosData(link) {
   })
 
   if(response.status != 200) {
-      const result = {
-          type: "error",
-          code: response.status,
-          message: response.statusText
-      }
-
-      return result
+      GoToErrorPage(response.status)
   }
   else {
       return response.json()
@@ -42,13 +38,7 @@ export async function postAxiosData(link, data = {}) {
     })
 
     if(response.status != 200) {
-        const result = {
-            type: "error",
-            code: response.status,
-            message: response.statusText
-        }
-
-        return result
+      GoToErrorPage(response.status)
     }
     else {
         return response.json()
@@ -70,13 +60,7 @@ export async function updateAxiosData(link, data = {}) {
   })
 
   if(response.status != 200) {
-      const result = {
-          type: "error",
-          code: response.status,
-          message: response.statusText
-      }
-
-      return result
+    GoToErrorPage(response.status)
   }
   else {
       return response.json()
@@ -97,13 +81,7 @@ export async function deleteAxiosData(link, data = {}) {
   })
 
   if(response.status != 200) {
-      const result = {
-          type: "error",
-          code: response.status,
-          message: response.statusText
-      }
-
-      return result
+    GoToErrorPage(response.status)
   }
   else {
       return response.json()
