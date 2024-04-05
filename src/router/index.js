@@ -62,7 +62,8 @@ const router = createRouter({
       path: '/500',
       name: 'ServerError',
       component: ServerError
-    }
+    },
+    //{ path: "*", component: NotFound }
   ]
 })
 

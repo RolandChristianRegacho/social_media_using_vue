@@ -77,13 +77,13 @@ export default {
 
         getPosts(this.BASE_URL, post_id, user)
             .then(result => {
-                this.posts = result.post
+                this.posts = result
             })
 
         this.emitter.on("onChangePost", (id) => {
             getPosts(this.BASE_URL, id, user)
                 .then(result => {
-                    this.posts = result.post
+                    this.posts = result
                 })
         })
     },
@@ -182,7 +182,7 @@ export default {
                     this.replies.reply = ""
                     getPosts(this.BASE_URL, post_id, user)
                         .then(result => {
-                            this.posts = result.post
+                            this.posts = result
                         })
                 }
             })

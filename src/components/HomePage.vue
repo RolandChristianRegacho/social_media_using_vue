@@ -11,6 +11,7 @@
             </div>
             <div @click="goToPost(item.posts.id)" class="user_post_content">
                 {{ item.posts.content }}
+                <img v-if="item.posts.image != null" v-bind:src="item.posts.image" width="50" height="50" />
             </div>
             <div class="user_post_time">
                 {{ item.posts.date }}
