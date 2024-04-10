@@ -8,8 +8,9 @@
     <div class="profile_information_div">
         <div class="profile_information_div_name">
             <h1>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h1>
-            <h3>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h3>
+            <h2>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h2>
         </div>
+        <button>Edit</button>
     </div>
 </template>
 
@@ -39,9 +40,9 @@ export default {
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
         getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
-        .then(result => {
-            this.user_info = result.data
-        })
+            .then(result => {
+                this.user_info = result.data
+            })
 
     }
 }
@@ -97,10 +98,17 @@ function logout() {
     position: absolute;
 }
 
+.profile_information_div button {
+    float: right;
+    margin-right: 20px;
+    max-width: 80%;
+    margin-top: 20px;
+}
+
 .profile_information_div {
     float: left;
     width: 100%;
-    height: 100px;
+    height: 80px;
     border-bottom: 2px solid white;
 }
 
@@ -117,7 +125,7 @@ function logout() {
     text-align: left;
 }
 
-.profile_information_div h3 {
+.profile_information_div h2 {
     display: none;
 }
 
@@ -137,11 +145,16 @@ function logout() {
         height: 130px;
     }
 
+    .profile_information_div button {
+        margin-right: 10%;
+        margin-top: 0;
+    }
+
     .profile_information_div h1 {
         display: none;
     }
 
-    .profile_information_div h3 {
+    .profile_information_div h2 {
         text-align: center;
         display: block;
         margin: 0;
@@ -149,8 +162,10 @@ function logout() {
 
     .profile_information_div_name {
         margin: 0;
+        margin-top: 20px;
         width: 100%;
         text-align: center;
+        text-overflow: ellipsis;
     }
 }
 </style>

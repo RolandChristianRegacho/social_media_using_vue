@@ -5,7 +5,12 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div class="user_post_content">
-                {{ item.posts.content }}
+                <span>{{ item.posts.content }}</span>
+                <br>
+                <br>
+                <div class="image_in_post" v-if="item.posts.image != null"
+                    :style="{ backgroundImage: 'url(\'' + item.posts.image + '\')', backgroundPosition: 'center center', backgroundSize: '100%, 100%', backgroundRepeat: 'no-repeat' }">
+                </div>
             </div>
             <div class="user_post_time">
                 {{ item.posts.date }}
@@ -174,18 +179,18 @@ export default {
                 "user_id": this.replies.reply_user_id
             }
             postAxiosData(`${this.BASE_URL}/home/post.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.$swal("Reply sent!", {
-                        icon: "success",
-                    });
-                    this.replies.reply = ""
-                    getPosts(this.BASE_URL, post_id, user)
-                        .then(result => {
-                            this.posts = result
-                        })
-                }
-            })
+                .then(result => {
+                    if (result.type == "success") {
+                        this.$swal("Reply sent!", {
+                            icon: "success",
+                        });
+                        this.replies.reply = ""
+                        getPosts(this.BASE_URL, post_id, user)
+                            .then(result => {
+                                this.posts = result
+                            })
+                    }
+                })
         },
         async deletePost(id) {
             this.$swal({
@@ -205,13 +210,13 @@ export default {
                     }
 
                     deleteAxiosData(`${this.BASE_URL}/home/post.php`, data)
-                    .then(result => {
-                        this.emitter.emit("onPost");
-                        this.$swal({
-                            icon: result.type,
-                            text: result.text,
+                        .then(result => {
+                            this.emitter.emit("onPost");
+                            this.$swal({
+                                icon: result.type,
+                                text: result.text,
+                            })
                         })
-                    })
                 }
             })
         },
@@ -268,6 +273,15 @@ button p {
     display: block;
 }
 
+.image_in_post {
+    min-width: 400px;
+    min-height: 400px;
+}
+
+span {
+    white-space: pre;
+}
+
 @media only screen and (orientation: portrait) {
     .icon {
         display: block;
@@ -283,6 +297,11 @@ button p {
 
     .icon_hide {
         display: block;
+    }
+
+    .image_in_post {
+        min-width: 300px;
+        min-height: 200px;
     }
 }
 </style>

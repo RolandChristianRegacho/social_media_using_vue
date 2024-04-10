@@ -10,27 +10,32 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id)" class="user_post_content">
-                {{ item.posts.content }}
-                <img v-if="item.posts.image != null" v-bind:src="item.posts.image" width="50" height="50" />
+                <span>{{ item.posts.content }}</span>
+                <br>
+                <br>
+                <div class="image_in_post" v-if="item.posts.image != null"
+                    :style="{ backgroundImage: 'url(\'' + item.posts.image + '\')', backgroundPosition: 'center center', backgroundSize: '100%, 100%', backgroundRepeat: 'no-repeat' }">
+                </div>
+                <!--<img v-if="item.posts.image != null" v-bind:src="item.posts.image" width="400" height="400" />-->
             </div>
             <div class="user_post_time">
                 {{ item.posts.date }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)" data-status="active"
-                    :id="'rp-btn-shw-' + item.posts.id">
+                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)"
+                    data-status="active" :id="'rp-btn-shw-' + item.posts.id">
                     <BxShow />
                 </button>
-                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
+                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)"
+                    data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
                     <BxHide />
                 </button>
-                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)" data-status="active"
-                    :id="'rp-btn-shw-wrd-' + item.posts.id">
+                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)"
+                    data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
                     Show Replies
                 </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)" data-status="inactive"
-                    :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
+                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)"
+                    data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
                     Hide Replies
                 </button>
                 <form @submit.prevent="submit">
@@ -63,12 +68,14 @@
             </div>
         </div>
     </div>
+    <FooterPage />
 </template>
 
 <script>
 import $ from "jquery";
 import { AnOutlinedEdit, AnTwotoneDelete, BxShow, BxHide } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
+import FooterPage from '../components/FooterPage.vue'
 
 export default {
     name: "HomePage",
@@ -87,7 +94,8 @@ export default {
         AnOutlinedEdit,
         AnTwotoneDelete,
         BxShow,
-        BxHide
+        BxHide,
+        FooterPage
     },
     async mounted() {
         let user = this.getCookie("user")
@@ -197,25 +205,25 @@ export default {
             }
 
             postAxiosData(`${this.BASE_URL}/home/post.php`, data)
-            .then(result => {
-                if (result.type == "success") {
-                    this.$swal({
-                        icon: "success",
-                        text: "Reply sent!",
-                    })
-                    this.replies.reply = ""
-                    getPosts(this.BASE_URL, user)
-                        .then(result => {
-                            this.posts = result.post
+                .then(result => {
+                    if (result.type == "success") {
+                        this.$swal({
+                            icon: "success",
+                            text: "Reply sent!",
                         })
-                }
-                else {
-                    this.$swal({
-                        icon: result.type,
-                        text: result.text,
-                    })
-                }
-            })
+                        this.replies.reply = ""
+                        getPosts(this.BASE_URL, user)
+                            .then(result => {
+                                this.posts = result.post
+                            })
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.type,
+                            text: result.text,
+                        })
+                    }
+                })
         },
         async deletePost(id) {
             this.$swal({
@@ -229,19 +237,19 @@ export default {
                     denyButton: 'order-2',
                 }
             }).then((result) => {
-                if(result.isConfirmed) {
+                if (result.isConfirmed) {
                     let data = {
                         post_id: id
                     }
 
                     deleteAxiosData(`${this.BASE_URL}/home/post.php`, data)
-                    .then(result => {
-                        this.emitter.emit("onPost");
-                        this.$swal({
-                            icon: result.type,
-                            text: result.text,
+                        .then(result => {
+                            this.emitter.emit("onPost");
+                            this.$swal({
+                                icon: result.type,
+                                text: result.text,
+                            })
                         })
-                    })
                 }
             })
         },
@@ -250,6 +258,11 @@ export default {
         },
         goToProfile(id) {
             this.$router.push(`/profile=${id}`)
+        },
+        sanitizeContent(content) {
+            let splitted_content = content.split("\n")
+
+            return splitted_content.join(" <br>")
         }
     }
 }
@@ -301,6 +314,15 @@ button p {
     display: block;
 }
 
+.image_in_post {
+    min-width: 400px;
+    min-height: 400px;
+}
+
+span {
+    white-space: pre;
+}
+
 @media only screen and (orientation: portrait) {
     .icon {
         display: block;
@@ -316,6 +338,11 @@ button p {
 
     .icon_hide {
         display: block;
+    }
+
+    .image_in_post {
+        min-width: 300px;
+        min-height: 200px;
     }
 }
 </style>

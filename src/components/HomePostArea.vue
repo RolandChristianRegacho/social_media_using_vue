@@ -1,16 +1,18 @@
 <template>
     <div class="post_form">
         <form @submit.prevent="submit">
-            <div class="border_white" >
+            <div class="border_white">
                 <textarea placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
                     v-model="message.text"></textarea>
                 <div v-if="message.image != ''">
-                    <img id="pstImg" @src=message.img  />
+                    <img id="pstImg" @src=message.img />
                 </div>
             </div>
             <label id="character">255</label>
             <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile" />
-            <label for="file"><AnOutlinedCloudUpload class="icon" /></label>
+            <label for="file">
+                <AnOutlinedCloudUpload class="icon" />
+            </label>
             <button id="postBtn" disabled @click="postMessage()">Post</button>
             <button id="cancelPst" @click="cancelMessage()" v-if="message.text.length > 0">Cancel</button>
         </form>
@@ -56,36 +58,54 @@ export default {
 
                 let formData = {}
 
-                if($("#pstImg").attr("src") == undefined || $("#pstImg").attr("src") == "") {
+                if ($('#file')[0].files.length == 0) {
                     formData = {
                         "user_id": this.message.id,
                         "content": this.message.text
                     }
+
+                    postAxiosData(`${this.BASE_URL}/home/post.php`, formData)
+                        .then(result => {
+                            if (result.type == "success") {
+                                this.emitter.emit("onPost");
+                                $("#postBtn").attr("disabled", true)
+                                $("#character").html("255")
+                                $("#post_text").val("")
+                                $("#pstImg").attr("src", "")
+                                this.message.text = ""
+                            }
+                            else {
+                                this.$swal({
+                                    icon: result.type,
+                                    text: result.message,
+                                })
+                            }
+                        })
                 }
                 else {
                     formData = new FormData()
                     formData.append('image_file', $('#file')[0].files[0]);
                     formData.append('user_id', this.message.id)
                     formData.append('content', this.message.text)
-                }
-                
-                postImageData(`${this.BASE_URL}/home/upload.php`, formData)
-                .then(result => {
-                    if(result.type == "success") {
-                        this.emitter.emit("onPost");
-                        $("#postBtn").attr("disabled", true)
-                        $("#character").html("255")
-                        $("#post_text").val("")
-                        $("#pstImg").attr("src", "")
-                        this.message.text = ""
-                    }
-                    else {
-                        this.$swal({
-                            icon: result.type,
-                            text: result.message,
+
+                    postImageData(`${this.BASE_URL}/home/upload.php`, formData)
+                        .then(result => {
+                            if (result.type == "success") {
+                                this.emitter.emit("onPost");
+                                $("#postBtn").attr("disabled", true)
+                                $("#character").html("255")
+                                $("#post_text").val("")
+                                $("#pstImg").attr("src", "")
+                                this.message.text = ""
+                            }
+                            else {
+                                this.$swal({
+                                    icon: result.type,
+                                    text: result.message,
+                                })
+                            }
                         })
-                    }
-                })
+                }
             }
             catch (e) {
                 console.log(e)
@@ -121,10 +141,9 @@ export default {
         },
         previewImage() {
             var reader = new FileReader();
-            reader.onload = function(){
+            reader.onload = function () {
                 $("#pstImg").attr("src", reader.result)
             };
-            console.log("trigger")
             reader.readAsDataURL($("#file")[0].files[0])
             this.message.image = reader.result
         },
@@ -228,30 +247,30 @@ export default {
 }
 
 .inputfile {
-    
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
 
 
-.inputfile + label {
+.inputfile+label {
     margin-left: 10px;
     color: white;
     background: rgba(38, 71, 78, 1);
     display: inline-block;
-	cursor: pointer;
+    cursor: pointer;
     height: 35px;
     text-align: center;
     padding: 10px;
     padding-top: 0;
 }
 
-.inputfile:focus + label,
-.inputfile + label:hover {
+.inputfile:focus+label,
+.inputfile+label:hover {
     background: rgba(58, 91, 98, 1);
 }
 

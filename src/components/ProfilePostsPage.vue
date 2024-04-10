@@ -10,7 +10,12 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id)" class="user_post_content">
-                {{ item.posts.content }}
+                <span>{{ item.posts.content }}</span>
+                <br>
+                <br>
+                <div class="image_in_post" v-if="item.posts.image != null"
+                    :style="{ backgroundImage: 'url(\'' + item.posts.image + '\')', backgroundPosition: 'center center', backgroundSize: '100%, 100%', backgroundRepeat: 'no-repeat' }">
+                </div>
             </div>
             <div class="user_post_time">
                 {{ item.posts.date }}
@@ -62,6 +67,7 @@
             </div>
         </div>
     </div>
+    <FooterPage />
 </template>
 
 <script>
@@ -71,6 +77,7 @@ import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
 import { BxShow } from "@kalimahapps/vue-icons";
 import { BxHide } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
+import FooterPage from '../components/FooterPage.vue'
 
 export default {
     name: "ProfilePostsPage",
@@ -89,7 +96,8 @@ export default {
         AnOutlinedEdit,
         AnTwotoneDelete,
         BxShow,
-        BxHide
+        BxHide,
+        FooterPage
     },
     async mounted() {
         let user = this.getCookie("user")
@@ -201,19 +209,19 @@ export default {
             }
 
             postAxiosData(`${this.BASE_URL}/home/post.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.replies.reply = ""
-                    getPosts(this.BASE_URL, JSON.parse(user).id)
-                        .then(result => {
-                            this.posts = result.post
-                        })
-                }
-                this.$swal({
-                    icon: result.type,
-                    text: result.message,
+                .then(result => {
+                    if (result.type == "success") {
+                        this.replies.reply = ""
+                        getPosts(this.BASE_URL, JSON.parse(user).id)
+                            .then(result => {
+                                this.posts = result.post
+                            })
+                    }
+                    this.$swal({
+                        icon: result.type,
+                        text: result.message,
+                    })
                 })
-            })
         },
         async deletePost(id) {
             this.$swal({
@@ -303,6 +311,15 @@ button p {
     display: block;
 }
 
+.image_in_post {
+    min-width: 400px;
+    min-height: 400px;
+}
+
+span {
+    white-space: pre;
+}
+
 @media only screen and (orientation: portrait) {
     .icon {
         display: block;
@@ -318,6 +335,11 @@ button p {
 
     .icon_hide {
         display: block;
+    }
+
+    .image_in_post {
+        min-width: 300px;
+        min-height: 200px;
     }
 }
 </style>

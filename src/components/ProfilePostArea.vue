@@ -1,24 +1,39 @@
 <template>
     <div class="post_form" v-if="owner == profile_id">
         <form @submit.prevent="submit">
-            <textarea placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
-                v-model="message.text"></textarea>
+            <div class="border_white">
+                <textarea placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
+                    v-model="message.text"></textarea>
+                <div v-if="message.image != ''">
+                    <img id="pstImg" @src=message.img />
+                </div>
+            </div>
             <label id="character">255</label>
+            <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile" />
+            <label for="file">
+                <AnOutlinedCloudUpload class="icon" />
+            </label>
             <button id="postBtn" disabled @click="postMessage()">Post</button>
+            <button id="cancelPst" @click="cancelMessage()" v-if="message.text.length > 0">Cancel</button>
         </form>
     </div>
 </template>
 <script>
-import { postAxiosData } from "@/additional_scripts/fetch-script"
+import { AnOutlinedCloudUpload } from "@kalimahapps/vue-icons";
+import { postAxiosData, postImageData } from "@/additional_scripts/fetch-script"
 import $ from "jquery"
 export default {
     name: "ProfilePostArea",
+    components: {
+        AnOutlinedCloudUpload
+    },
     data() {
         return {
             message: {
                 text: "",
                 user_id: "",
-                date: ""
+                date: "",
+                image: ""
             },
             profile_id: "",
             owner: ""
@@ -43,24 +58,56 @@ export default {
                     this.message.id = JSON.parse(user).id
                 }
 
-                let data = {
-                    "user_id": this.message.id,
-                    "content": this.message.text
-                }
-                $("#post_text").val("")
+                let formData = {}
 
-                postAxiosData(`${this.BASE_URL}/home/post.php`, data)
-                .then(result => {
-                    if(result.type == "success") {
-                        this.emitter.emit("onPostInProfile");
-                        $("#postBtn").attr("disabled", true)
-                        $("#character").html("255")
+                if ($('#file')[0].files.length == 0) {
+                    formData = {
+                        "user_id": this.message.id,
+                        "content": this.message.text
                     }
-                    this.$swal({
-                        icon: result.type,
-                        title: result.message
-                    })
-                })
+
+                    postAxiosData(`${this.BASE_URL}/home/post.php`, formData)
+                        .then(result => {
+                            if (result.type == "success") {
+                                this.emitter.emit("onPostInProfile");
+                                $("#postBtn").attr("disabled", true)
+                                $("#character").html("255")
+                                $("#post_text").val("")
+                                $("#pstImg").attr("src", "")
+                                this.message.text = ""
+                            }
+                            else {
+                                this.$swal({
+                                    icon: result.type,
+                                    text: result.message,
+                                })
+                            }
+                        })
+                }
+                else {
+                    formData = new FormData()
+                    formData.append('image_file', $('#file')[0].files[0]);
+                    formData.append('user_id', this.message.id)
+                    formData.append('content', this.message.text)
+
+                    postImageData(`${this.BASE_URL}/home/upload.php`, formData)
+                        .then(result => {
+                            if (result.type == "success") {
+                                this.emitter.emit("onPostInProfile");
+                                $("#postBtn").attr("disabled", true)
+                                $("#character").html("255")
+                                $("#post_text").val("")
+                                $("#pstImg").attr("src", "")
+                                this.message.text = ""
+                            }
+                            else {
+                                this.$swal({
+                                    icon: result.type,
+                                    text: result.message,
+                                })
+                            }
+                        })
+                }
             }
             catch (e) {
                 console.log(e)
@@ -85,7 +132,16 @@ export default {
                 $("#postBtn").attr("disabled", true)
                 $("#character").html("255")
             }
-        }
+        },
+        previewImage() {
+            var reader = new FileReader();
+            reader.onload = function () {
+                $("#pstImg").attr("src", reader.result)
+            };
+            console.log("trigger")
+            reader.readAsDataURL($("#file")[0].files[0])
+            this.message.image = reader.result
+        },
     },
     mounted() {
         let user = this.getCookie("user")
@@ -101,7 +157,8 @@ export default {
     float: left;
     width: 96%;
     margin-left: 2%;
-    height: 200px;
+    min-height: 200px;
+    height: auto;
     margin-top: 10px;
     color: rgba(235, 235, 235, 0.64);
     border-radius: 5px;
@@ -110,9 +167,9 @@ export default {
 
 .post_form textarea {
     width: 100%;
-    height: 150px;
+    min-height: 150px;
+    height: auto;
     border: none;
-    border-bottom: 2px solid white;
     background: rgba(0, 0, 0, 0);
     color: rgba(235, 235, 235, 0.64);
     resize: none;
@@ -120,6 +177,7 @@ export default {
     font-size: 25px;
     outline: none;
     padding: 10px;
+    overflow: hidden;
 }
 
 .post_form button {
@@ -146,6 +204,25 @@ export default {
     padding-left: 10px;
 }
 
+.border_white {
+    width: 100%;
+    min-height: 150px;
+    height: auto;
+    border: none;
+    border-bottom: 2px solid white;
+}
+
+.post_form input[type="file"] {
+    float: left;
+    width: 100px;
+    margin-left: 20px;
+}
+
+.post_form img {
+    max-width: 800px;
+    max-height: 400px;
+}
+
 @media only screen and (orientation: portrait) {
     .post_form {
         height: 150px;
@@ -160,5 +237,42 @@ export default {
         font-size: 1em;
         padding: 10px;
     }
+}
+
+.inputfile {
+
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+
+.inputfile+label {
+    margin-left: 10px;
+    color: white;
+    background: rgba(38, 71, 78, 1);
+    display: inline-block;
+    cursor: pointer;
+    height: 35px;
+    text-align: center;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.inputfile:focus+label,
+.inputfile+label:hover {
+    background: rgba(58, 91, 98, 1);
+}
+
+.icon {
+    color: white;
+    font-size: 1.5em;
+}
+
+#cancelPst {
+    background: rgba(200, 50, 50, 1);
 }
 </style>
