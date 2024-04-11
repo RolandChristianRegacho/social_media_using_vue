@@ -254,7 +254,10 @@ export default {
             })
         },
         goToPost(id) {
-            this.$router.push(`/post=${id}`)
+            if(event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
+                this.$router.push(`/post=${id}`)
+            }
+            
         },
         goToProfile(id) {
             this.$router.push(`/profile=${id}`)
