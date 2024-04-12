@@ -3,6 +3,8 @@ import HeaderButtons from '../components/HeaderButtons.vue'
 import ProfilePage from '../components/ProfilePage.vue'
 import ProfilePostArea from '../components/ProfilePostArea.vue'
 import ProfilePostsPage from '../components/ProfilePostsPage.vue'
+import zoomImagePage from '@/components/zoomImagePage.vue'
+
 import $ from "jquery"
 
 function hideSearch() {
@@ -97,6 +99,7 @@ $(() => {
 </script>
 
 <template>
+    <zoomImagePage class="zoomImageDiv" />
     <nav @click="hideSearch()">
         <HeaderButtons />
     </nav>

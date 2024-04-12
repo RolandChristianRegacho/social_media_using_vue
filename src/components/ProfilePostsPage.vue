@@ -9,7 +9,7 @@
             <div @click="goToProfile(item.user.id)" class="user_post_sender">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
-            <div @click="goToPost(item.posts.id)" class="user_post_content">
+            <div @click="goToPost(item.posts.id, $event)" class="user_post_content">
                 <span>{{ item.posts.content }}</span>
                 <br>
                 <br>
@@ -247,8 +247,20 @@ export default {
                 }
             })
         },
-        goToPost(id) {
-            this.$router.push(`/post=${id}`)
+        goToPost(id, event) {
+            //this.$router.push(`/post=${id}`)
+            if(event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
+                this.$router.push(`/post=${id}`)
+            }
+            else {
+                for(let i in this.posts) {
+                    if(this.posts[i].posts.id == id) {
+                        $("#zoomImageImd").attr("src", this.posts[i].posts.image)
+                        $("#zoomImageDiv").attr("style", "display: flex;")
+                        break
+                    }
+                }
+            }
         },
         goToProfile(id) {
             this.$router.push(`/profile=${id}`)

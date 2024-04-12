@@ -392,6 +392,16 @@ button:hover {
   width: auto;
 }
 
+.zoomImageDiv {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(50, 50, 50, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
 @media only screen and (orientation: portrait) {
   .user_post .post_button {
     display: none;

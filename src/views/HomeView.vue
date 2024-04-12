@@ -4,6 +4,8 @@ import HomeInfoArea from '../components/HomeInfoArea.vue'
 import HomePostArea from '../components/HomePostArea.vue'
 //import HomeOthersArea from '../components/HomeOthersArea.vue'
 import HomePage from '../components/HomePage.vue'
+import zoomImagePage from '../components/zoomImagePage.vue'
+
 import $ from "jquery"
 
 function hideSearch() {
@@ -91,6 +93,7 @@ $(() => {
 </script>
 
 <template>
+  <zoomImagePage class="zoomImageDiv" />
   <nav @click="hideSearch()">
     <HeaderButtons />
   </nav>
@@ -114,6 +117,16 @@ $(() => {
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
+}
+
+.zoomImageDiv {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(50, 50, 50, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 main {
