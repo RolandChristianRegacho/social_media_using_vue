@@ -119,16 +119,6 @@ $(() => {
   scrollbar-width: none;
 }
 
-.zoomImageDiv {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(50, 50, 50, 0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-
 main {
   float: left;
   text-align: center;

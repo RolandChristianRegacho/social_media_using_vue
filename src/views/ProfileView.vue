@@ -4,6 +4,7 @@ import ProfilePage from '../components/ProfilePage.vue'
 import ProfilePostArea from '../components/ProfilePostArea.vue'
 import ProfilePostsPage from '../components/ProfilePostsPage.vue'
 import zoomImagePage from '@/components/zoomImagePage.vue'
+import EditProfilePage from '../components/EditProfilePage.vue'
 
 import $ from "jquery"
 
@@ -99,6 +100,7 @@ $(() => {
 </script>
 
 <template>
+    <EditProfilePage />
     <zoomImagePage class="zoomImageDiv" />
     <nav @click="hideSearch()">
         <HeaderButtons />
@@ -131,4 +133,4 @@ main {
     height: auto;
     max-width: 1200px;
 }
-</style>../components/ProfilePostsPage.vue
+</style>

@@ -10,12 +10,14 @@
             <h1>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h1>
             <h2>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h2>
         </div>
-        <button>Edit</button>
+        <button @click="showEditInfo(this.user_info.id)">Edit</button>
     </div>
 </template>
 
 <script>
 import { getAxiosData } from "@/additional_scripts/fetch-script"
+import $ from 'jquery';
+
 export default {
     name: "ProfilePage",
     data() {
@@ -44,6 +46,12 @@ export default {
                 this.user_info = result.data
             })
 
+    },
+    methods: {
+        showEditInfo(id) {
+            console.log(id)
+            $("#grayBgDiv").attr("style", "display: flex;")
+        }
     }
 }
 
