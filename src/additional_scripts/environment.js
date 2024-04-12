@@ -1,4 +1,4 @@
-var ENVIRONMENT = true
+var ENVIRONMENT = false
 var URL = ''
 
 if (ENVIRONMENT) {

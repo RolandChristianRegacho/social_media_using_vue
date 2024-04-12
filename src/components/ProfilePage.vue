@@ -16,6 +16,7 @@
 
 <script>
 import { getAxiosData } from "@/additional_scripts/fetch-script"
+import logout from "@/additional_scripts/logout";
 import $ from 'jquery';
 
 export default {
@@ -36,7 +37,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout()
+            logout(this.$swal, this.$router)
         }
 
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
@@ -53,18 +54,6 @@ export default {
             $("#grayBgDiv").attr("style", "display: flex;")
         }
     }
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 

@@ -22,6 +22,7 @@
 import { AnOutlinedCloudUpload } from "@kalimahapps/vue-icons";
 import { postAxiosData, postImageData } from "@/additional_scripts/fetch-script"
 import $ from "jquery"
+import logout from "@/additional_scripts/logout";
 export default {
     name: "HomePostArea",
     components: {
@@ -43,14 +44,7 @@ export default {
                 let user = this.getCookie("user")
 
                 if (user == "") {
-                    this.$swal({
-                        title: "Logging out",
-                    })
-                    this.$swal.showLoading()
-                    setTimeout(() => {
-                        this.$router.push({ name: "LoginPage" })
-                        this.$swal.close()
-                    }, 1000)
+                    logout(this.$swal, this.$router)
                 }
                 else {
                     this.message.id = JSON.parse(user).id

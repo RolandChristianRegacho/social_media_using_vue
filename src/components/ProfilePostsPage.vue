@@ -78,6 +78,7 @@ import { BxShow } from "@kalimahapps/vue-icons";
 import { BxHide } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 import FooterPage from '../components/FooterPage.vue'
+import logout from "@/additional_scripts/logout";
 
 export default {
     name: "ProfilePostsPage",
@@ -101,12 +102,12 @@ export default {
     },
     async mounted() {
         let user = this.getCookie("user")
-        this.owner = JSON.parse(user).id
-        let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
         if (user == "") {
-            logout()
+            logout(this.$swal, this.$router)
         }
+        this.owner = JSON.parse(user).id
+        let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
         getPosts(this.BASE_URL, profile_id)
             .then(result => {
@@ -114,7 +115,6 @@ export default {
             })
 
         this.emitter.on("onPostInProfile", () => {
-            console.log("!")
             getPosts(this.BASE_URL, JSON.parse(user).id)
                 .then(result => {
                     this.posts = result.post
@@ -193,7 +193,7 @@ export default {
             let user = this.getCookie("user")
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 this.replies.reply_user_id = JSON.parse(user).id
@@ -249,12 +249,12 @@ export default {
         },
         goToPost(id, event) {
             //this.$router.push(`/post=${id}`)
-            if(event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
+            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
                 this.$router.push(`/post=${id}`)
             }
             else {
-                for(let i in this.posts) {
-                    if(this.posts[i].posts.id == id) {
+                for (let i in this.posts) {
+                    if (this.posts[i].posts.id == id) {
                         $("#zoomImageImd").attr("src", this.posts[i].posts.image)
                         $("#zoomImageDiv").attr("style", "display: flex;")
                         break
@@ -278,22 +278,10 @@ function deletePost(id, url) {
 
 function getPosts(BASE_URL, user) {
     if (user == "") {
-        logout()
+        logout(this.$swal, this.$router)
     }
 
     return getAxiosData(`${BASE_URL}/home/post.php?user_id=${user}&context=profile`)
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 

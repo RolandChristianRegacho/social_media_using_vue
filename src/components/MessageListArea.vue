@@ -6,7 +6,7 @@
         <div v-for="item in users" :key="item.id" class="user_list_items">
             <button class="btnUserListInactive" @click="selectUser(item.id, item.first_name + ' ' + item.last_name)"
                 :id="'btnUserList-' + item.id">{{
-            item.first_name }} {{ item.last_name }}<p v-if="item.unread_count > 0">{{ item.unread_count }}</p>
+                    item.first_name }} {{ item.last_name }}<p v-if="item.unread_count > 0">{{ item.unread_count }}</p>
             </button>
         </div>
     </div>
@@ -14,6 +14,7 @@
 
 <script>
 import { getAxiosData } from "@/additional_scripts/fetch-script"
+import logout from "@/additional_scripts/logout"
 import $ from "jquery"
 
 export default {
@@ -45,7 +46,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout()
+            logout(this.$swal, this.$router)
         }
 
         getListOfUser(this.BASE_URL, JSON.parse(user).id)
@@ -64,18 +65,6 @@ export default {
 
 async function getListOfUser(url, id) {
     return getAxiosData(`${url}/home/users.php?user_id=${id}`)
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 

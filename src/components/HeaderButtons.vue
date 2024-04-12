@@ -87,6 +87,7 @@
 import { AnOutlinedUser, AnOutlinedNotification, AnOutlinedMessage, AnOutlinedMenuFold, AnOutlinedMenuUnfold } from "@kalimahapps/vue-icons";
 import $ from "jquery";
 import { getAxiosData, postAxiosData, updateAxiosData, deleteAxiosData } from "@/additional_scripts/fetch-script";
+import logout from "@/additional_scripts/logout";
 
 export default {
     name: "HeaderButton",
@@ -110,15 +111,7 @@ export default {
     },
     methods: {
         logout() {
-            document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            this.$swal({
-                title: "Logging out",
-            })
-            this.$swal.showLoading()
-            setTimeout(() => {
-                this.$router.push({ name: "LoginPage" })
-                this.$swal.close()
-            }, 1000)
+            logout(this.$swal, this.$router)
         },
         goHome() {
             this.$router.push({ name: "HomePage" })
@@ -128,22 +121,22 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
             }
 
             getAxiosData(`${this.BASE_URL}/home/users.php?search=${this.search.name}&user_id=${user_id}`)
-            .then(result => {
-                if (result.type == "found") {
-                    this.search_result = result.data
-                    $(".search_div").show()
-                }
-                else {
-                    $(".search_div_not_found").show()
-                }
-            })
+                .then(result => {
+                    if (result.type == "found") {
+                        this.search_result = result.data
+                        $(".search_div").show()
+                    }
+                    else {
+                        $(".search_div_not_found").show()
+                    }
+                })
         },
         viewUser(id) {
             this.$router.push(`/profile=${id}`)
@@ -153,7 +146,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -165,27 +158,27 @@ export default {
             }
 
             postAxiosData(`${this.BASE_URL}/home/notifications.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.$swal({
-                        icon: "success",
-                        title: "Friend Request Sent!"
-                    })
-                }
-                else {
-                    this.$swal({
-                        icon: result.type,
-                        text: result.message,
-                    })
-                }
-            })
+                .then(result => {
+                    if (result.type == "success") {
+                        this.$swal({
+                            icon: "success",
+                            title: "Friend Request Sent!"
+                        })
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.type,
+                            text: result.message,
+                        })
+                    }
+                })
         },
         async acceptFriendRequest(id) {
             let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -196,46 +189,46 @@ export default {
             }
 
             postAxiosData(`${this.BASE_URL}/home/friends.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.$swal({
-                        icon: "success",
-                        title: "Friend Request Accepted!"
-                    })
-                    getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
-                    .then(response => {
-                        if (response.type == "found") {
-                            if (response.unread_count > 9) {
-                                $(".notification p").text(" 9+")
-                            }
-                            else if (response.unread_count > 0 && response.unread_count < 10) {
-                                $(".notification p").text(`${response.unread_count}`)
-                            }
-                            else {
-                                $(".notification p").text("")
-                            }
-                            this.notifications = response.data
-                        }
-                        else {
-                            $(".notification p").text("")
-                            this.notifications = []
-                        }
-                    })
-                }
-                else {
-                    this.$swal({
-                        icon: result.type,
-                        text: result.message,
-                    })
-                }
-            })
+                .then(result => {
+                    if (result.type == "success") {
+                        this.$swal({
+                            icon: "success",
+                            title: "Friend Request Accepted!"
+                        })
+                        getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
+                            .then(response => {
+                                if (response.type == "found") {
+                                    if (response.unread_count > 9) {
+                                        $(".notification p").text(" 9+")
+                                    }
+                                    else if (response.unread_count > 0 && response.unread_count < 10) {
+                                        $(".notification p").text(`${response.unread_count}`)
+                                    }
+                                    else {
+                                        $(".notification p").text("")
+                                    }
+                                    this.notifications = response.data
+                                }
+                                else {
+                                    $(".notification p").text("")
+                                    this.notifications = []
+                                }
+                            })
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.type,
+                            text: result.message,
+                        })
+                    }
+                })
         },
         async cancelSendFriendRequest(id) {
             let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -246,27 +239,27 @@ export default {
             }
 
             deleteAxiosData(`${this.BASE_URL}/home/notifications.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.$swal({
-                        icon: "success",
-                        title: "Friend Request cancelled!"
-                    })
-                }
-                else {
-                    this.$swal({
-                        icon: result.type,
-                        text: result.message,
-                    })
-                }
-            })
+                .then(result => {
+                    if (result.type == "success") {
+                        this.$swal({
+                            icon: "success",
+                            title: "Friend Request cancelled!"
+                        })
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.type,
+                            text: result.message,
+                        })
+                    }
+                })
         },
         async deleteFriendRequest(id) {
             let user = this.getCookie("user")
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -277,41 +270,41 @@ export default {
             }
 
             deleteAxiosData(`${this.BASE_URL}/home/notifications.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.$swal({
-                        icon: "success",
-                        title: "Friend Request deleted!"
-                    })
+                .then(result => {
+                    if (result.type == "success") {
+                        this.$swal({
+                            icon: "success",
+                            title: "Friend Request deleted!"
+                        })
 
 
-                    getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
-                    .then(response => {
-                        if (response.type == "found") {
-                            if (response.unread_count > 9) {
-                                $(".notification p").text(" 9+")
-                            }
-                            else if (response.unread_count > 0 && response.unread_count < 10) {
-                                $(".notification p").text(`${response.unread_count}`)
-                            }
-                            else {
-                                $(".notification p").text("")
-                            }
-                            this.notifications = response.data
-                        }
-                        else {
-                            $(".notification p").text("")
-                            this.notifications = []
-                        }
-                    })
-                }
-                else {
-                    this.$swal({
-                        icon: result.type,
-                        text: result.message,
-                    })
-                }
-            })
+                        getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
+                            .then(response => {
+                                if (response.type == "found") {
+                                    if (response.unread_count > 9) {
+                                        $(".notification p").text(" 9+")
+                                    }
+                                    else if (response.unread_count > 0 && response.unread_count < 10) {
+                                        $(".notification p").text(`${response.unread_count}`)
+                                    }
+                                    else {
+                                        $(".notification p").text("")
+                                    }
+                                    this.notifications = response.data
+                                }
+                                else {
+                                    $(".notification p").text("")
+                                    this.notifications = []
+                                }
+                            })
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.type,
+                            text: result.message,
+                        })
+                    }
+                })
         },
         async showNotifications() {
             $(".notifications_div").attr("data-status", "clicked")
@@ -320,7 +313,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -331,36 +324,36 @@ export default {
             }
 
             updateAxiosData(`${this.BASE_URL}/home/notifications.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
-                    .then(response => {
-                        if (response.type == "found") {
-                            if (response.unread_count > 9) {
-                                $(".notification p").text(" 9+")
-                            }
-                            else if (response.unread_count > 0 && response.unread_count < 10) {
-                                $(".notification p").text(`${response.unread_count}`)
-                            }
-                            else {
-                                $(".notification p").text("")
-                            }
-                            this.notifications = response.data
-                        }
-                        else {
-                            $(".notification p").text("")
-                            this.notifications = []
-                        }
-                    })
-                }
-                else {
-                    this.$swal({
-                        icon: result.data.type,
-                        title: "Server Error!",
-                        text: "There was a problem fetching your notifications",
-                    })
-                }
-            })
+                .then(result => {
+                    if (result.type == "success") {
+                        getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
+                            .then(response => {
+                                if (response.type == "found") {
+                                    if (response.unread_count > 9) {
+                                        $(".notification p").text(" 9+")
+                                    }
+                                    else if (response.unread_count > 0 && response.unread_count < 10) {
+                                        $(".notification p").text(`${response.unread_count}`)
+                                    }
+                                    else {
+                                        $(".notification p").text("")
+                                    }
+                                    this.notifications = response.data
+                                }
+                                else {
+                                    $(".notification p").text("")
+                                    this.notifications = []
+                                }
+                            })
+                    }
+                    else {
+                        this.$swal({
+                            icon: result.data.type,
+                            title: "Server Error!",
+                            text: "There was a problem fetching your notifications",
+                        })
+                    }
+                })
         },
         goToPost(id) {
             if (this.$router.currentRoute._value.name == "PostPage") {
@@ -394,7 +387,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -411,7 +404,7 @@ export default {
         let user_id = ""
 
         if (user == "") {
-            this.$router.push({ name: "LoginPage" });
+            logout(this.$swal, this.$router)
         }
         else {
             this.name = JSON.parse(user).first_name
@@ -419,46 +412,26 @@ export default {
         }
 
         getAxiosData(`${this.BASE_URL}/home/notifications.php?user_id=${user_id}`)
-        .then(response => {
-            if (response.type == "found") {
-                if (response.unread_count > 9) {
-                    $(".notification p").text(" 9+")
-                }
-                else if (response.unread_count > 0 && response.unread_count < 10) {
-                    $(".notification p").text(`${response.unread_count}`)
+            .then(response => {
+                if (response.type == "found") {
+                    if (response.unread_count > 9) {
+                        $(".notification p").text(" 9+")
+                    }
+                    else if (response.unread_count > 0 && response.unread_count < 10) {
+                        $(".notification p").text(`${response.unread_count}`)
+                    }
+                    else {
+                        $(".notification p").text("")
+                    }
+                    this.notifications = response.data
                 }
                 else {
                     $(".notification p").text("")
+                    this.notifications = []
                 }
-                this.notifications = response.data
-            }
-            else {
-                $(".notification p").text("")
-                this.notifications = []
-            }
-        })
+            })
 
         getAxiosData(`${this.BASE_URL}/home/messages.php?user_id=${user_id}`)
-        .then(response => {
-            if (response.type == "found") {
-                if (response.unread_count > 9) {
-                    $(".message p").text(" 9+")
-                }
-                else if (response.unread_count > 0 && response.unread_count < 10) {
-                    $(".message p").text(`${response.unread_count}`)
-                }
-                else {
-                    $(".message p").text("")
-                }
-                this.unread_messages = response.unread_count
-            }
-            else {
-                $(".message p").text("")
-            }
-        })
-
-        this.emitter.on("readMessage", () => {
-            getAxiosData(`${this.BASE_URL}/home/messages.php?user_id=${user_id}`)
             .then(response => {
                 if (response.type == "found") {
                     if (response.unread_count > 9) {
@@ -476,6 +449,26 @@ export default {
                     $(".message p").text("")
                 }
             })
+
+        this.emitter.on("readMessage", () => {
+            getAxiosData(`${this.BASE_URL}/home/messages.php?user_id=${user_id}`)
+                .then(response => {
+                    if (response.type == "found") {
+                        if (response.unread_count > 9) {
+                            $(".message p").text(" 9+")
+                        }
+                        else if (response.unread_count > 0 && response.unread_count < 10) {
+                            $(".message p").text(`${response.unread_count}`)
+                        }
+                        else {
+                            $(".message p").text("")
+                        }
+                        this.unread_messages = response.unread_count
+                    }
+                    else {
+                        $(".message p").text("")
+                    }
+                })
         })
     }
 }

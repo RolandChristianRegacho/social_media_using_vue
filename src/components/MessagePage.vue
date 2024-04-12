@@ -31,6 +31,7 @@
 
 <script>
 import { getAxiosData, updateAxiosData } from "@/additional_scripts/fetch-script"
+import logout from "@/additional_scripts/logout"
 import $ from "jquery"
 
 export default {
@@ -47,7 +48,7 @@ export default {
     this.owner = JSON.parse(user).id
 
     if (user == "") {
-      logout()
+      logout(this.$swal, this.$router)
     }
 
     this.emitter.on("selectUser", (id) => {
@@ -68,13 +69,13 @@ export default {
 
               readMessages(this.BASE_URL, data)
                 .then(result => {
-                  if(result.type == "success") {
+                  if (result.type == "success") {
                     this.emitter.emit("readMessage")
                   }
                   else {
                     this.$swal({
-                        icon: result.type,
-                        text: result.message,
+                      icon: result.type,
+                      text: result.message,
                     })
                   }
                 })
@@ -137,18 +138,6 @@ function getMessages(url, receiver, owner) {
 
 function readMessages(url, data) {
   return updateAxiosData(`${url}/home/messages.php`, data)
-}
-
-function logout() {
-  document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  this.$swal({
-    title: "Logging out",
-  })
-  this.$swal.showLoading()
-  setTimeout(() => {
-    this.$router.push({ name: "LoginPage" })
-    this.$swal.close()
-  }, 1000)
 }
 </script>
 

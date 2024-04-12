@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import logout from '@/additional_scripts/logout'
+
 export default {
     name: "HomeInfoArea",
     data() {
@@ -17,14 +19,12 @@ export default {
             user: ""
         }
     },
-    mounted() {
-    },
     methods: {
         displayName() {
             let user = this.getCookie("user")
 
             if (user == "") {
-                logout()
+                logout(this.$swal, this.$router)
             }
             else {
                 this.user = JSON.parse(user)
@@ -32,18 +32,6 @@ export default {
             }
         }
     }
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 

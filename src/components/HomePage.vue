@@ -76,6 +76,7 @@ import $ from "jquery";
 import { AnOutlinedEdit, AnTwotoneDelete, BxShow, BxHide } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 import FooterPage from '../components/FooterPage.vue'
+import logout from "@/additional_scripts/logout";
 
 export default {
     name: "HomePage",
@@ -99,11 +100,11 @@ export default {
     },
     async mounted() {
         let user = this.getCookie("user")
-        this.owner = JSON.parse(user).id
 
         if (user == "") {
-            logout()
+            logout(this.$router, this.$swal)
         }
+        this.owner = JSON.parse(user).id
 
         getPosts(this.BASE_URL, user)
             .then(result => {
@@ -189,7 +190,7 @@ export default {
             let user = this.getCookie("user")
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 this.replies.reply_user_id = JSON.parse(user).id
@@ -254,12 +255,12 @@ export default {
             })
         },
         goToPost(id, event) {
-            if(event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
+            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
                 this.$router.push(`/post=${id}`)
             }
             else {
-                for(let i in this.posts) {
-                    if(this.posts[i].posts.id == id) {
+                for (let i in this.posts) {
+                    if (this.posts[i].posts.id == id) {
                         $("#zoomImageImd").attr("src", this.posts[i].posts.image)
                         $("#zoomImageDiv").attr("style", "display: flex;")
                         break
@@ -280,22 +281,10 @@ export default {
 
 async function getPosts(BASE_URL, user) {
     if (user == "") {
-        logout()
+        logout(this.$swal, this.$router)
     }
 
     return getAxiosData(`${BASE_URL}/home/post.php?user_id=${JSON.parse(user).id}`)
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 

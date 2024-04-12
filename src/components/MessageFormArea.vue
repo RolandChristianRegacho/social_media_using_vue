@@ -15,6 +15,7 @@
 import { AnOutlinedSend } from "@kalimahapps/vue-icons";
 import $ from "jquery"
 import { postAxiosData } from "@/additional_scripts/fetch-script";
+import logout from "@/additional_scripts/logout";
 
 
 export default {
@@ -63,13 +64,13 @@ export default {
             }
 
             postAxiosData(`${this.BASE_URL}/home/messages.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.emitter.emit("selectUser", this.message.receiver_id)
+                .then(result => {
+                    if (result.type == "success") {
+                        this.emitter.emit("selectUser", this.message.receiver_id)
 
-                    this.message.text = ""
-                }
-            })
+                        this.message.text = ""
+                    }
+                })
         }
     },
     async mounted() {
@@ -81,7 +82,7 @@ export default {
         }
 
         if (user == "") {
-            logout()
+            logout(this.$swal, this.$router)
         }
 
         this.emitter.on("selectUser", (id) => {
@@ -90,18 +91,6 @@ export default {
             $("#message_text").attr("disabled", false)
         })
     }
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 

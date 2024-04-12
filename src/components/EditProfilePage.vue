@@ -19,75 +19,64 @@
 
 <script>
 import { getAxiosData } from '@/additional_scripts/fetch-script';
+import logout from '@/additional_scripts/logout';
 import $ from 'jquery';
-    export default {
-        name: "EditProfilePage",
-        data() {
-            return {
-                user_info: {
-                    id: "",
-                    profile_picture: "",
-                    first_name: "",
-                    middle_name: "",
-                    last_name: ""
-                }
+export default {
+    name: "EditProfilePage",
+    data() {
+        return {
+            user_info: {
+                id: "",
+                profile_picture: "",
+                first_name: "",
+                middle_name: "",
+                last_name: ""
             }
-        },
-        methods: {
-            hideZoom(event) {
-                if(event.target.nodeName != "BUTTON") {
-                    $("#grayBgDiv").hide()
-                }
-            },
-            updateInformation() {
-                console.log(this.user_info)
-            }
-        },
-        async mounted() {
-            let user = this.getCookie("user")
-
-            if (user == "") {
-                logout()
-            }
-
-            let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
-
-            getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
-                .then(result => {
-                    this.user_info = result.data
-                })
         }
-    }
+    },
+    methods: {
+        hideZoom(event) {
+            if (event.target.nodeName != "BUTTON") {
+                $("#grayBgDiv").hide()
+            }
+        },
+        updateInformation() {
+            console.log(this.user_info)
+        }
+    },
+    async mounted() {
+        let user = this.getCookie("user")
 
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
+        if (user == "") {
+            logout(this.$swal, this.$router)
+        }
+
+        let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
+
+        getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
+            .then(result => {
+                this.user_info = result.data
+            })
+    }
 }
 </script>
 
 <style scoped>
-    #grayBgDiv {
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(50, 50, 50, 0.8);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        color: rgba(38, 71, 78, 1);
-    }
+#grayBgDiv {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(50, 50, 50, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgba(38, 71, 78, 1);
+}
 
-    .editProfileDiv {
-        width: 400px;
-        height: 700px;
-        background: rgba(200, 200, 200, 1);
-    }
+.editProfileDiv {
+    width: 400px;
+    height: 700px;
+    background: rgba(200, 200, 200, 1);
+}
 </style>

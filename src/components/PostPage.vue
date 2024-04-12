@@ -52,6 +52,7 @@
 import $ from "jquery";
 import { AnOutlinedEdit, AnTwotoneDelete } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
+import logout from "@/additional_scripts/logout";
 
 export default {
     name: "HomePage",
@@ -75,7 +76,7 @@ export default {
         this.owner = JSON.parse(user).id
 
         if (user == "") {
-            logout()
+            logout(this.$swal, this.$router)
         }
 
         let post_id = this.$router.currentRoute._value.params.id.split("=")[1]
@@ -164,7 +165,7 @@ export default {
             let user = this.getCookie("user")
 
             if (user == "") {
-                this.$router.push({ name: "LoginPage" });
+                logout(this.$swal, this.$router)
             }
             else {
                 this.replies.reply_user_id = JSON.parse(user).id
@@ -228,22 +229,10 @@ export default {
 
 function getPosts(BASE_URL, id, user) {
     if (user == "") {
-        logout()
+        logout(this.$swal, this.$router)
     }
 
     return getAxiosData(`${BASE_URL}/home/post.php?post_id=${id}`)
-}
-
-function logout() {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    this.$swal({
-        title: "Logging out",
-    })
-    this.$swal.showLoading()
-    setTimeout(() => {
-        this.$router.push({ name: "LoginPage" })
-        this.$swal.close()
-    }, 1000)
 }
 </script>
 
