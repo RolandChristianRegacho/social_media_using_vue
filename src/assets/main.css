@@ -402,6 +402,16 @@ button:hover {
   align-items: center;
 }
 
+.input-checker {
+    border: 1px solid rgba(38, 71, 78, 1);
+    outline-color: black;
+}
+
+.input-checker-fail {
+    border: 1px solid red;
+    outline-color: red;
+}
+
 @media only screen and (orientation: portrait) {
   .user_post .post_button {
     display: none;

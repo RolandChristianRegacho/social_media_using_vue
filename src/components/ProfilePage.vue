@@ -1,7 +1,8 @@
 <template>
     <div class="banner"></div>
     <div class="profile_pic_profile">
-        <div class="profile_pic_profile_img" v-if="profile_picture != ''">
+        <div class="profile_pic_profile_img" v-if="user_info.profile_picture != null"
+                    :style="{ backgroundImage: 'url(\'' + user_info.profile_picture + '\')', backgroundPosition: 'center center', backgroundSize: '100%, 100%', backgroundRepeat: 'no-repeat' }">
         </div>
         <div class="profile_pic_profile_img_default" v-else></div>
     </div>
@@ -10,7 +11,7 @@
             <h1>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h1>
             <h2>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h2>
         </div>
-        <button @click="showEditInfo(this.user_info.id)">Edit</button>
+        <button v-if="owner_id == user_info.id" @click="showEditInfo()">Edit</button>
     </div>
 </template>
 
@@ -23,7 +24,7 @@ export default {
     name: "ProfilePage",
     data() {
         return {
-            profile_picture: "",
+            owner_id: "",
             user_info: {
                 id: "",
                 profile_picture: "",
@@ -39,7 +40,7 @@ export default {
         if (user == "") {
             logout(this.$swal, this.$router)
         }
-
+        this.owner_id = JSON.parse(user).id
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
         getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
@@ -47,10 +48,15 @@ export default {
                 this.user_info = result.data
             })
 
+        this.emitter.on("onEditProfile", () => {
+            getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${profile_id}`)
+                .then(result => {
+                    this.user_info = result.data
+                })
+        })
     },
     methods: {
-        showEditInfo(id) {
-            console.log(id)
+        showEditInfo() {
             $("#grayBgDiv").attr("style", "display: flex;")
         }
     }
