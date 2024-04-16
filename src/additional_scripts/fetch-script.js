@@ -60,7 +60,7 @@ export async function postImageData(link, data = {}) {
     })
 
     if (response.status != 200) {
-      //GoToErrorPage(response.status)
+      GoToErrorPage(response.status)
     } else {
       return response.json()
     }

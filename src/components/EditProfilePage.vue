@@ -23,7 +23,7 @@
 
 <script>
 import { getAxiosData, postImageData, updateAxiosData } from '@/additional_scripts/fetch-script';
-import form_check from '@/additional_scripts/form-checker';
+import form_check, { date_setter } from '@/additional_scripts/form-checker';
 import logout from '@/additional_scripts/logout';
 import { AnFilledEdit  } from "@kalimahapps/vue-icons";
 import $ from 'jquery';
@@ -140,6 +140,8 @@ export default {
         if (user == "") {
             logout(this.$swal, this.$router)
         }
+        let profile_bdate = document.getElementById("profile_bdate")
+        profile_bdate.max = date_setter()
 
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 

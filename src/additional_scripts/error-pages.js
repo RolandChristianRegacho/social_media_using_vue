@@ -1,6 +1,3 @@
-function GoToErrorPage(code) {
-    console.log(code)
+export default function GoToErrorPage(code) {
     window.location.href = `/${code}`
 }
-
-export default GoToErrorPage

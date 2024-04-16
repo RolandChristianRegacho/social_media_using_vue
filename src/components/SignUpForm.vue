@@ -9,13 +9,13 @@
         <br>
         <div>
             <form @submit.prevent="submit">
-                <input type="email" v-model="user.username" placeholder="Username">
-                <input type="password" v-model="user.password" placeholder="Password" minlength="10">
-                <input type="password" v-model="user.password" placeholder="Confirm Password" minlength="10">
-                <input type="text" v-model="user.first_name" placeholder="First Name">
+                <input type="email" id="signup_uname" v-model="user.username" placeholder="Username">
+                <input type="password" id="signup_pword" v-model="user.password" placeholder="Password" minlength="10">
+                <input type="password" id="signup_cword" v-model="user.confirm" placeholder="Confirm Password" minlength="10">
+                <input type="text" id="signup_fname" v-model="user.first_name" placeholder="First Name">
                 <input type="text" v-model="user.middle_name" placeholder="Middle Name">
-                <input type="text" v-model="user.last_name" placeholder="Last Name">
-                <input type="date" v-model="user.birthday">
+                <input type="text" id="signup_lname" v-model="user.last_name" placeholder="Last Name">
+                <input type="date" id="signup_bdate" v-model="user.birthday">
                 <button @click="signup()">Sign up</button>
             </form>
             <br>
@@ -26,6 +26,9 @@
 
 <script>
 import { postAxiosData } from "@/additional_scripts/fetch-script";
+import form_check, { date_setter } from "@/additional_scripts/form-checker";
+import $ from "jquery"
+
 export default {
     name: "LoginForm",
     data() {
@@ -47,31 +50,66 @@ export default {
         if (user) {
             this.$router.push({ name: "HomePage" });
         }
+        let signup_bdate = document.getElementById("signup_bdate")
+        signup_bdate.max = date_setter()
     },
     methods: {
         async signup() {
-            let data = {
-                "email": this.user.username,
-                "password": this.user.password,
-                "confirm": this.user.confirm,
-                "first_name": this.user.first_name,
-                "middle_name": this.user.middle_name,
-                "last_name": this.user.last_name,
-                "birthday": this.user.birthday
-            }
+            if(this.user.password == this.user.confirm) {
+                let data = {
+                    "email": this.user.username,
+                    "password": this.user.password,
+                    "confirm": this.user.confirm,
+                    "first_name": this.user.first_name,
+                    "middle_name": this.user.middle_name,
+                    "last_name": this.user.last_name,
+                    "birthday": this.user.birthday
+                }
 
-            postAxiosData(`${this.BASE_URL}/login/signup.php`, data)
-            .then(result => {
-                if(result.type == "success") {
-                    this.$swal("Sign up Successful!", "You may now log in", "success")
-                        .then(() => {
-                            this.$router.push({ name: "LoginPage" });
-                        });
+                let form_result = form_check(data)
+
+                if(form_result.type == "fail") {
+                    switch(form_result.data.form) {
+                        case "email": {
+                            $("#signup_uname").focus()
+                            $("#signup_uname").attr("class", "input-checker-fail")
+                            break
+                        }
+                        case "password": {
+                            $("#signup_pword").focus()
+                            $("#signup_pword").attr("class", "input-checker-fail")
+                            break
+                        }
+                        case "first_name": {
+                            $("#signup_fname").focus()
+                            $("#signup_fname").attr("class", "input-checker-fail")
+                            break
+                        }
+                        case "last_name": {
+                            $("#signup_lname").focus()
+                            $("#signup_lname").attr("class", "input-checker-fail")
+                            break
+                        }
+                    }
+                    return 
                 }
-                else {
-                    this.$swal("Sign up failed!", result.text, result.type)
-                }
-            })
+
+                postAxiosData(`${this.BASE_URL}/login/signup.php`, data)
+                .then(result => {
+                    if(result.type == "success") {
+                        this.$swal("Sign up Successful!", "You may now log in", "success")
+                            .then(() => {
+                                this.$router.push({ name: "LoginPage" });
+                            });
+                    }
+                    else {
+                        this.$swal("Sign up failed!", result.text, result.type)
+                    }
+                })
+            }
+            else {
+                this.$swal("Password should be the same!", "", "error")
+            }
         }
     }
 }
@@ -80,7 +118,7 @@ export default {
 <style scoped>
 .signup_form {
     width: 500px;
-    height: 700px;
+    height: 750px;
     margin: auto;
     background: rgb(200, 200, 200) !important;
     color: rgb(52, 73, 94);
