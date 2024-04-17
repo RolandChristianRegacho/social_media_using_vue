@@ -1,17 +1,17 @@
 <template>
     <div class="banner"></div>
-    <div class="profile_pic_profile">
+    <div class="profile_pic_profile main_bg">
         <div class="profile_pic_profile_img" v-if="user_info.profile_picture != null"
                     :style="{ backgroundImage: 'url(\'' + user_info.profile_picture + '\')', backgroundPosition: 'center center', backgroundSize: '100%, 100%', backgroundRepeat: 'no-repeat' }">
         </div>
         <div class="profile_pic_profile_img_default" v-else></div>
     </div>
-    <div class="profile_information_div">
+    <div class="profile_information_div border_bottom_only">
         <div class="profile_information_div_name">
-            <h1>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h1>
-            <h2>{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h2>
+            <h1 class="main_color">{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h1>
+            <h2 class="main_color">{{ this.user_info.first_name }} {{ this.user_info.middle_name }} {{ this.user_info.last_name }}</h2>
         </div>
-        <button v-if="owner_id == user_info.id" @click="showEditInfo()">Edit</button>
+        <button v-if="owner_id == user_info.id" @click="showEditInfo()" class="main_bg_wHover main_color main_border">Edit</button>
     </div>
 </template>
 
@@ -78,7 +78,6 @@ export default {
     position: relative;
     width: 200px;
     height: 200px;
-    background: white;
     z-index: -1;
     margin-top: 95px;
     margin-left: 50px;
@@ -112,7 +111,6 @@ export default {
     float: left;
     width: 100%;
     height: 80px;
-    border-bottom: 2px solid white;
 }
 
 .profile_information_div_name {

@@ -5,6 +5,8 @@ import MessageNavArea from '../components/MessageNavArea.vue'
 import MessagePage from '../components/MessagePage.vue'
 import MessageFormArea from '../components/MessageFormArea.vue'
 import $ from "jquery"
+import { getAxiosData } from '@/additional_scripts/fetch-script'
+import URL from '@/additional_scripts/environment'
 
 function hideSearch() {
   $(".search_div").hide()
@@ -34,7 +36,31 @@ function hideSearch() {
   $("#search_txt").val("")
 }
 
+function getUser(cname) {
+  let name = cname + '='
+  let decodedCookie = decodeURIComponent(document.cookie)
+  let ca = decodedCookie.split(';')
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i]
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1)
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length)
+    }
+  }
+  return ''
+}
+
 $(() => {
+  let user = getUser("user")
+
+  getAxiosData(`${URL}/home/theme.php?user_id=${JSON.parse(user).id}`)
+  .then(result => {
+    import(`../assets/color/${result.data.color_theme}.css`)
+  })
+
+
   let value = $(document).height() - 60
   if ($("#main").height() < value) {
     $("#main").height(value)
@@ -91,7 +117,7 @@ $(() => {
 </script>
 
 <template>
-  <nav @click="hideSearch()">
+  <nav @click="hideSearch()" class="main_bg">
     <HeaderButtons />
   </nav>
   <main @click="hideSearch()" id="main">

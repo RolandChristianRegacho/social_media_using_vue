@@ -1,10 +1,10 @@
 <template>
     <div class="user_list">
         <div class="user_list_items">
-            <button class="btnUserListInactive" style="text-align: center;">New Message</button>
+            <button class="btnUserListInactive main_bg_wHover main_color" style="text-align: center;">New Message</button>
         </div>
         <div v-for="item in users" :key="item.id" class="user_list_items">
-            <button class="btnUserListInactive" @click="selectUser(item.id, item.first_name + ' ' + item.last_name)"
+            <button class="btnUserListInactive main_bg_wHover main_color" @click="selectUser(item.id, item.first_name + ' ' + item.last_name)"
                 :id="'btnUserList-' + item.id">{{
                     item.first_name }} {{ item.last_name }}<p v-if="item.unread_count > 0">{{ item.unread_count }}</p>
             </button>
@@ -27,7 +27,7 @@ export default {
     methods: {
         selectUser(id, name) {
             $(".btnUserListActive").attr("disabled", false)
-            $(".btnUserListActive").attr("class", "btnUserListInactive")
+            $(".btnUserListActive").attr("class", "btnUserListInactive main_bg_wHover main_color")
             this.emitter.emit("selectUser", id)
             if (window.matchMedia("(orientation: portrait)").matches) {
                 $(".message_list_div").hide()
@@ -38,7 +38,7 @@ export default {
             $(".message_form_div").show()
             this.emitter.emit("selectUserName", name)
 
-            $("#btnUserList-" + id).attr("class", "btnUserListActive")
+            $("#btnUserList-" + id).attr("class", "btnUserListActive main_color active_bg")
             $("#btnUserList-" + id).attr("disabled", true)
         }
     },
@@ -86,13 +86,11 @@ async function getListOfUser(url, id) {
     float: left;
     width: 80%;
     height: 80%;
-    background: inherit;
     border: none;
     text-align: left;
     padding-left: 10px;
     margin-left: 10%;
     border-radius: 5px;
-    background: rgba(38, 71, 78, 1);
     box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
 }
 
@@ -100,25 +98,12 @@ async function getListOfUser(url, id) {
     float: left;
     width: 80%;
     height: 80%;
-    background: inherit;
     border: none;
     text-align: left;
     padding-left: 10px;
     margin-left: 10%;
     border-radius: 5px;
-    background: rgb(52, 73, 94);
-    color: white;
     box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
-}
-
-.btnUserListInactive:hover {
-    background: rgb(52, 73, 94);
-    color: white;
-}
-
-.btnUserListActive:hover {
-    background: rgb(52, 73, 94);
-    color: white;
 }
 
 p {

@@ -1,12 +1,12 @@
 <template>
     <div class="home_info_area">
-        <div class="profile-picture">
-            <img v-bind:src="user.profile_picture" />
+        <div class="profile-picture border_bottom_only">
+            <img v-bind:src="user.profile_picture" class="main_bg" />
         </div>
         
         <div class="profile-details">
-            <button>{{ displayName() }}</button>
-            <button>{{ displayBirthday() }}</button>
+            <button class="main_color">{{ displayName() }}</button>
+            <button class="main_color">{{ displayBirthday() }}</button>
         </div>
     </div>
 </template>
@@ -67,9 +67,8 @@ export default {
 .profile-picture {
     display: block;
     float: left;
-    width: 250px;
+    width: 240px;
     height: 30vh;
-    border-bottom: 2px solid gray;
 }
 
 img {
@@ -79,8 +78,6 @@ img {
     max-height: 250px;
     margin-left: 5px;
     margin-top: 5%;
-    background: rgba(250, 250, 250, 1);
-    border-radius: 100%;
 }
 
 .profile-details {

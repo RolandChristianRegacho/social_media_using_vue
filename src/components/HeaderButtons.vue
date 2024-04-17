@@ -1,90 +1,97 @@
 <template>
     <div>
-        <button @click="goHome" class="header_icon"></button>
-        <router-link to="/" id="web_title">Social Crowd</router-link>
+        <button @click="goHome" class="header_icon main_bg main_border"></button>
+        <router-link class="main_bg_wHover" to="/" id="web_title">Social Crowd</router-link>
         <!--<a>{{ name }}</a>-->
         <form @submit.prevent="submit">
             <input type="search" id="search_txt" v-model="this.search.name" placeholder="Search a friend" />
             <button @click="searchPeople()" class="hiddenEnter">Search</button>
         </form>
-        <button @click="showProfile" class="header_button">
+        <button @click="showProfile" class="header_button tertiary_bg_wHover main_color_wHover">
             <AnOutlinedUser class="icon" />
         </button>
-        <button @click="showNotifications" class="header_button notification" data-status="hidden">
+        <button @click="showNotifications" class="header_button tertiary_bg_wHover main_color_wHover notification" data-status="hidden">
             <AnOutlinedNotification class="icon" style="font-size: 2em; text-align: left;" />
             <p></p>
         </button>
-        <button @click="showMessage" class="header_button message">
+        <button @click="showMessage" class="header_button tertiary_bg_wHover main_color_wHover message">
             <AnOutlinedMessage class="icon" style="font-size: 2em; text-align: left;" />
             <p></p>
         </button>
-        <button @click="showMenu" class="header_button_mobile">
+        <button @click="showMenu" class="header_button_mobile tertiary_bg_wHover main_color_wHover">
             <AnOutlinedMenuFold class="icon_mobile" style="font-size: 2em; text-align: left;" />
         </button>
-        <button @click="hideMenu" class="header_button_mobile_hide">
+        <button @click="hideMenu" class="header_button_mobile_hide tertiary_bg_wHover main_color_wHover">
             <AnOutlinedMenuUnfold class="icon_mobile" style="font-size: 2em; text-align: left;" />
         </button>
     </div>
     <div class="menu_div">
-        <button @click="showMessage">Messages</button>
-        <button @click="showNotifications">Notifications</button>
-        <button @click="goToProfile">Profile</button>
-        <button @click="goToProfile">Change Password</button>
-        <button @click="logout">Logout</button>
+        <button class="main_bg_wHover main_color border_none" @click="showMessage">Messages</button>
+        <button class="main_bg_wHover main_color border_none" @click="showNotifications">Notifications</button>
+        <button class="main_bg_wHover main_color border_none" @click="goToProfile">Profile</button>
+        <button class="main_bg_wHover main_color border_none" @click="goToProfile">Change Password</button>
+        <button class="main_bg_wHover main_color border_none" @click="logout">Logout</button>
     </div>
-    <div class="search_div">
-        <div class='search_result_div' v-for="item in search_result" :key="item.id">
+    <div class="search_div main_bg main_color_wHover">
+        <div class='search_result_div main_bg_wHover border_bottom_only_post' v-for="item in search_result" :key="item.id">
             <div class='search_result_name'>
-                <button @click='viewUser(item.id);'>{{ item.first_name }} {{ item.middle_name }} {{ item.last_name
+                <button @click='viewUser(item.id);' class="inherit_bg main_color border_none">{{ item.first_name }} {{ item.middle_name }} {{ item.last_name
                     }}</button>
             </div>
             <div class='search_result_action' v-if="item.request_type == null">
-                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept'>Add</button>
+                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color border_none'>Add</button>
             </div>
             <div class='search_result_action' v-else-if="item.request_type == 'sender'">
-                <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept'>Cancel</button>
+                <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept  inherit_bg_wHover main_color border_none'>Cancel</button>
             </div>
             <div class='search_result_action' v-else-if="item.request_type == 'friend'">
             </div>
             <div class='search_result_actions' v-else>
-                <button @click="acceptFriendRequest(item.id);" class='search_result_action_accept'>Accept</button>
-                <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
+                <button @click="acceptFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color border_none'>Accept</button>
+                <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color border_none'>Reject</button>
             </div>
         </div>
     </div>
-    <div class="search_div_not_found">
+    <div class="search_div_not_found main_bg main_color">
         <h1>Not Found</h1>
     </div>
-    <div class="notifications_div">
-        <div class="notifications_result_div" v-for="item in notifications" :key="item.id">
+    <div class="notifications_div main_bg main_color">
+        <div class="notifications_result_div main_bg_wHover main_color border_bottom_only_post" v-for="item in notifications" :key="item.id">
             <div class="notification_result_div_for_full_height" v-if="item.context == 'Reply'">
                 <div class="notifications_content_post">
-                    <button @click='goToPost(item.post_id);'>{{ item.first_name }} replied in your
+                    <button class="inherit_bg_wHover main_color_wHover border_none" @click='goToPost(item.post_id);'>{{ item.first_name }} replied in your
                         post</button>
                 </div>
             </div>
-            <div v-else>
+            <div v-else class="main_bg_wHover main_color">
                 <div @click="goToProfileInNotif(item.sender)" class="notifications_content">
-                    <button>{{ item.first_name }} sent you a friend
+                    <button class="inherit_bg_wHover main_color border_none">{{ item.first_name }} sent you a friend
                         request</button>
                 </div>
                 <div class='notifications_action'>
                     <button @click="acceptFriendRequest(item.sender);"
-                        class='search_result_action_accept'>Accept</button>
-                    <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept'>Reject</button>
+                        class='search_result_action_accept inherit_bg_wHover main_color_wHover border_none'>Accept</button>
+                    <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color_wHover border_none'>Reject</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="profile_div">
-        <button @click="goToProfile">Profile</button>
-        <button @click="goToProfile">Change Password</button>
-        <button @click="logout">Logout</button>
+    <div class="profile_div main_bg main_color">
+        <button class="inherit_bg_wHover main_color_wHover border_none" @click="goToProfile">Profile</button>
+        <button class="inherit_bg_wHover main_color_wHover border_none" @click="goToProfile">Change Password</button>
+        <button class="secondary_bg border_none">
+            <AkSquareFill class="color_theme_1" @click="changeColorTheme('default')"/>
+            <AkSquareFill class="color_theme_2" @click="changeColorTheme('red')"/>
+            <AkSquareFill class="color_theme_3" @click="changeColorTheme('blue')"/>
+            <AkSquareFill class="color_theme_4" @click="changeColorTheme('violet')"/>
+            <AkSquareFill class="color_theme_5" @click="changeColorTheme('pink')"/>
+        </button>
+        <button class="inherit_bg_wHover main_color_wHover border_none" @click="logout">Logout</button>
     </div>
 </template>
 
 <script>
-import { AnOutlinedUser, AnOutlinedNotification, AnOutlinedMessage, AnOutlinedMenuFold, AnOutlinedMenuUnfold } from "@kalimahapps/vue-icons";
+import { AnOutlinedUser, AnOutlinedNotification, AnOutlinedMessage, AnOutlinedMenuFold, AnOutlinedMenuUnfold, AkSquareFill } from "@kalimahapps/vue-icons";
 import $ from "jquery";
 import { getAxiosData, postAxiosData, updateAxiosData, deleteAxiosData } from "@/additional_scripts/fetch-script";
 import logout from "@/additional_scripts/logout";
@@ -107,7 +114,8 @@ export default {
         AnOutlinedNotification,
         AnOutlinedMessage,
         AnOutlinedMenuFold,
-        AnOutlinedMenuUnfold
+        AnOutlinedMenuUnfold,
+        AkSquareFill
     },
     methods: {
         logout() {
@@ -397,6 +405,37 @@ export default {
         },
         goToProfileInNotif(id) {
             this.$router.push(`/profile=${id}`)
+        },
+        async changeColorTheme(color) {
+            let user = this.getCookie("user")
+            let user_id = ""
+
+            if (user == "") {
+                logout(this.$swal)
+            }
+            else {
+                user_id = JSON.parse(user).id
+            }
+
+            let data = {
+                user_id: user_id,
+                color: color
+            }
+
+            postAxiosData(`${this.BASE_URL}/home/theme.php`, data)
+            .then(result => {
+                this.$swal({
+                    icon: result.type,
+                    text: result.message,
+                })
+                .then(response => {
+                    if(response) {
+                        if(result.type == "success") {
+                            window.location.href = "/"
+                        }
+                    }
+                })
+            })
         }
     },
     async mounted() {
@@ -485,28 +524,17 @@ a {
     margin-right: 5px;
 }
 
-a:hover {
-    background: rgb(52, 73, 94);
-    color: white;
-}
-
 .header_button {
     float: right;
     height: 50px;
     width: 75px;
     margin-top: 5px;
     margin-right: 10px;
-    background: rgba(58, 91, 98, 1);
-    color: rgba(250, 250, 250, 1);
     font-size: 1em;
     border: none;
     cursor: pointer;
     padding: 10px;
     border-radius: 100%;
-}
-
-.header_button:hover {
-    background: rgba(78, 111, 118, 1);
 }
 
 .header_button_mobile {
@@ -515,8 +543,6 @@ a:hover {
     width: 50px;
     margin-top: 5px;
     margin-right: 10px;
-    background: rgba(58, 91, 98, 1);
-    color: rgba(250, 250, 250, 1);
     font-size: 1em;
     border: none;
     cursor: pointer;
@@ -531,8 +557,6 @@ a:hover {
     width: 50px;
     margin-top: 5px;
     margin-right: 10px;
-    background: rgba(58, 91, 98, 1);
-    color: rgba(250, 250, 250, 1);
     font-size: 1em;
     border: none;
     cursor: pointer;
@@ -580,7 +604,6 @@ a:hover {
 }
 
 .icon {
-    color: white;
     font-size: 2em;
     vertical-align: middle;
 }
@@ -616,7 +639,6 @@ input[type="search"]:focus {
     left: 180px;
     width: 308px;
     height: 400px;
-    background: rgba(38, 71, 78, 1);
     display: none;
 }
 
@@ -627,7 +649,6 @@ input[type="search"]:focus {
     left: 180px;
     width: 308px;
     height: 400px;
-    background: rgba(38, 71, 78, 1);
     display: none;
 }
 
@@ -639,7 +660,6 @@ input[type="search"]:focus {
     width: 268px;
     height: auto;
     min-height: 400px;
-    background: rgba(38, 71, 78, 1);
     display: none;
 }
 
@@ -651,7 +671,6 @@ input[type="search"]:focus {
     width: 268px;
     height: auto;
     min-height: 80px;
-    background: rgba(38, 71, 78, 1);
     display: none;
 }
 
@@ -667,7 +686,6 @@ input[type="search"]:focus {
     width: 268px;
     height: auto;
     min-height: 80px;
-    background: rgba(38, 71, 78, 1);
     display: none;
 }
 
@@ -690,7 +708,6 @@ input[type="search"]:focus {
     }
 
     .icon {
-        color: white;
         font-size: 2em;
         vertical-align: middle;
     }

@@ -5,7 +5,7 @@
     </div>
     <div v-for="item in messages" :key="item.id">
       <div class="speech" v-if="item.sender_id == owner">
-        <div class="owner">
+        <div class="owner secondary_bg secondary_color">
           <div class="speech_content">
             {{ item.content }}
           </div>
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="speech" v-else>
-        <div class="receiver">
+        <div class="receiver main_bg main_color">
           <div class="speech_content">
             {{ item.content }}
           </div>
@@ -174,8 +174,6 @@ function readMessages(url, data) {
   max-width: 90%;
   height: 100%;
   min-height: 80px;
-  background: white;
-  color: rgba(38, 71, 78, 1);
   margin-right: 50px;
   border-radius: 8px;
   box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
@@ -189,8 +187,6 @@ function readMessages(url, data) {
   max-width: 90%;
   height: 100%;
   min-height: 80px;
-  background: rgba(38, 71, 78, 1);
-  color: white;
   margin-left: 50px;
   border-radius: 8px;
   box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);

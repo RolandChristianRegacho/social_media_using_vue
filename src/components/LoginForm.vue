@@ -1,7 +1,7 @@
 <template>
     <div class="login_form">
         <br>
-        <h1>
+        <h1 class="secondary_color">
             Welcome to login page!
         </h1>
         <br>
@@ -11,12 +11,12 @@
             <form @submit.prevent="submit">
                 <input type="text" v-model="user.username" placeholder="Username">
                 <input type="password" v-model="user.password" placeholder="Password">
-                <button @click="login()">Login
+                <button class="main_bg_wHover main_color main_border" @click="login()">Login
                     <CaLogin class="icon" />
                 </button>
             </form>
             <br>
-            <router-link to="/signup">Don't have an account?</router-link>
+            <router-link to="/signup" class="secondary_color">Don't have an account?</router-link>
         </div>
     </div>
 </template>
@@ -94,8 +94,4 @@ export default {
     font-size: 2em;
     vertical-align: middle;
 }
-
-a {
-    color: rgb(52, 73, 94);
-}
-</style>@/additional_scripts/fetch-script
+</style>

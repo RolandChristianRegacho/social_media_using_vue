@@ -1,21 +1,21 @@
 <template>
-    <div @click="hideZoom($event)" id="grayBgDiv">
-        <div class="editProfileDiv">
+    <div @click="hideZoom($event)" id="grayBgDiv" class="secondary_color">
+        <div class="editProfileDiv secondary_bg">
             <br>
             <br>
             <h1>Profile Information</h1>
             <br>
             <form @submit.prevent="submit">
-                <img v-bind:src="user_info.profile_picture" id="imgProfile" width="200" height="200" />
-                <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile" />
-                <label for="file">
-                    <AnFilledEdit  class="icon" />
+                <img v-bind:src="user_info.profile_picture" id="imgProfile" width="200" height="200" class="main_border_2x" />
+                <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile main_bg_wHover main_color" />
+                <label for="file" class="main_bg_wHover main_color">
+                    <AnFilledEdit  class="icon main_color" />
                 </label>
                 <input type="text" class="input-checker" id="profile_fname" placeholder="First Name" v-model="user_info.first_name" />
                 <input type="text" class="input-checker" id="profile_mname" placeholder="Middle Name" v-model="user_info.middle_name" />
                 <input type="text" class="input-checker" id="profile_lname" placeholder="Last Name" v-model="user_info.last_name" />
                 <input type="date" class="input-checker" id="profile_bdate" placeholder="" v-model="user_info.birthday" />
-                <button @click="updateInformation()">Save</button>
+                <button @click="updateInformation()" class="main_bg_wHover main_color main_border_wHover">Save</button>
             </form>
         </div>
     </div>
@@ -78,12 +78,12 @@ export default {
                         switch(form_ver.data.form) {
                             case "first_name": {
                                 $("#profile_fname").focus()
-                                $("#profile_fname").attr("class", "input-checker-fail")
+                                $("#profile_fname").attr("class", "main_border input-checker-fail")
                                 break
                             }
                             case "last_name": {
                                 $("#profile_lname").focus()
-                                $("#profile_lname").attr("class", "input-checker-fail")
+                                $("#profile_lname").attr("class", "main_border input-checker-fail")
                                 break
                             }
                         }
@@ -154,8 +154,8 @@ export default {
 
 function clearForm(form) {
     if(form == "profile") {
-        $("#profile_fname").attr("class", "input-checker")
-        $("#profile_lname").attr("class", "input-checker")
+        $("#profile_fname").attr("class", "main_border input-checker")
+        $("#profile_lname").attr("class", "main_border input-checker")
     }
 }
 </script>
@@ -170,17 +170,11 @@ function clearForm(form) {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: rgba(38, 71, 78, 1);
-}
-
-img {
-    border: 2px solid rgba(38, 71, 78, 1);
 }
 
 .editProfileDiv {
     width: 400px;
     height: 700px;
-    background: rgba(200, 200, 200, 1);
 }
 
 .inputfile {
@@ -198,8 +192,6 @@ img {
     position: relative;
     margin-left: -43px;
     top: -9px;
-    color: white;
-    background: rgba(38, 71, 78, 1);
     display: inline-block;
     cursor: pointer;
     height: 35px;
@@ -208,13 +200,7 @@ img {
     padding-top: 5px;
 }
 
-.inputfile:focus+label,
-.inputfile+label:hover {
-    background: rgba(58, 91, 98, 1);
-}
-
 .icon {
-    color: rgba(250, 250, 250, 1);
     font-size: 1.5em;
 }
 </style>

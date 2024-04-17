@@ -1,12 +1,12 @@
 <template>
     <div class="message_form">
         <form @submit.prevent="submit">
-            <textarea placeholder="Message" id="message_text" disabled @input="checkCharacter"
+            <textarea class="main_color" placeholder="Message" id="message_text" disabled @input="checkCharacter"
                 v-model="message.text"></textarea>
-            <button id="postBtn" disabled @click="postMessage()">
+            <button class="main_bg_wHover main_color main_border" id="postBtn" disabled @click="postMessage()">
                 <AnOutlinedSend class="icon" />
             </button>
-            <label id="character">255</label>
+            <label class="main_color" id="character">255</label>
         </form>
     </div>
 </template>
@@ -96,7 +96,6 @@ export default {
 
 <style scoped>
 .icon {
-    color: white;
     font-size: 2em;
     vertical-align: middle;
 }
@@ -118,7 +117,6 @@ export default {
     border: 2px solid white;
     border-radius: 8px;
     background: rgba(0, 0, 0, 0);
-    color: rgba(235, 235, 235, 0.64);
     resize: none;
     font-size: 25px;
     outline: none;
@@ -141,10 +139,6 @@ export default {
 .message_form button:disabled {
     color: gray !important;
     cursor: not-allowed;
-}
-
-.message_form button:disabled:hover {
-    background: rgba(38, 71, 78, 1);
 }
 
 .message_form label {

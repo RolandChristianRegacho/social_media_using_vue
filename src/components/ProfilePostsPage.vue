@@ -1,15 +1,15 @@
 <template>
-    <div class="post_container" v-if="posts.length == 0">
+    <div class="post_container main_color" v-if="posts.length == 0">
         <br>
         <br>
         No Posts To Show
     </div>
-    <div class="post_container" v-else>
-        <div v-for="item in posts" class="user_post" :key="item.posts">
-            <div @click="goToProfile(item.user.id)" class="user_post_sender">
+    <div class="post_container main_color" v-else>
+        <div v-for="item in posts" class="user_post post_bg" :key="item.posts">
+            <div @click="goToProfile(item.user.id)" class="user_post_sender border_bottom_only_post">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
-            <div @click="goToPost(item.posts.id, $event)" class="user_post_content">
+            <div @click="goToPost(item.posts.id, $event)" class="user_post_content border_bottom_only_post">
                 <span>{{ item.posts.content }}</span>
                 <br>
                 <br>
@@ -21,46 +21,46 @@
                 {{ item.posts.date }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button icon_show" @click="showReply(item.posts.id)"
+                <button class="post_button persist_button icon_show main_bg_wHover main_color main_border" @click="showReply(item.posts.id)"
                     data-status="active" :id="'rp-btn-shw-' + item.posts.id">
                     <BxShow />
                 </button>
-                <button class="post_button persist_button icon_hide" @click="hideReply(item.posts.id)"
+                <button class="post_button persist_button icon_hide main_bg_wHover main_color main_border" @click="hideReply(item.posts.id)"
                     data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
                     <BxHide />
                 </button>
-                <button class="post_button persist_button rp-btn-shw-wrd" @click="showReply(item.posts.id)"
+                <button class="post_button persist_button rp-btn-shw-wrd main_bg_wHover main_color main_border" @click="showReply(item.posts.id)"
                     data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
                     Show Replies
                 </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd" @click="hideReply(item.posts.id)"
+                <button class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border" @click="hideReply(item.posts.id)"
                     data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
                     Hide Replies
                 </button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
-                    <button class="post_button" @click="postReply(item.posts.id)">Reply</button>
+                    <button class="post_button main_bg_wHover main_color main_border" @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
             <div class="user_post_right" v-if="item.user.id == this.owner">
-                <button class="post_button_right" @click="deletePost(item.posts.id)">
+                <button class="post_button_right main_bg_wHover main_color main_border" @click="deletePost(item.posts.id)">
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
                 </button>
-                <button class="post_button_right">
+                <button class="post_button_right main_bg_wHover main_color main_border">
                     <AnOutlinedEdit class="icon" />
                     <p>Edit</p>
                 </button>
             </div>
             <div class="user_reply" :id="'reply-' + item.posts.id">
                 <div v-for="replies, id in item.reply" class="user_reply_content" :key="id">
-                    <div class="user_reply_pic">
+                    <div class="user_reply_pic border_bottom_only_post border_right_only_post">
                         <img :src="getReply(replies.sender, 'picture')" />
                     </div>
                     <div @click="goToProfile(replies.sender.id)" class="user_reply_sender">
                         {{ getReply(replies.sender, "sender") }}
                     </div>
-                    <div class="user_reply_message">
+                    <div class="user_reply_message border_bottom_only_post">
                         {{ getReply(replies.reply, "content") }}
                     </div>
                 </div>
@@ -249,7 +249,7 @@ export default {
         },
         goToPost(id, event) {
             //this.$router.push(`/post=${id}`)
-            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content") {
+            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post") {
                 this.$router.push(`/post=${id}`)
             }
             else {

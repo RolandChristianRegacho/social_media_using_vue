@@ -2,7 +2,6 @@
 
 nav {
   text-align: center;
-  background: rgba(38, 71, 78, 1);
   overflow: hidden;
   position: fixed;
   width: 100%;
@@ -53,25 +52,17 @@ input {
   margin-bottom: 30px;
   margin-right: auto;
   margin-left: auto;
-  border: 1px solid rgba(38, 71, 78, 1);
 }
 
 button {
   width: 300px;
   height: 40px;
-  border: 1px solid rgba(38, 71, 78, 1);
-  background: rgba(38, 71, 78, 1);
   color: white;
   cursor: pointer;
   display: block;
   margin-right: auto;
   margin-left: auto;
   padding-top: 3px;
-}
-
-button:hover {
-  border: 1px solid rgb(52, 73, 94);
-  background: rgb(52, 73, 94);
 }
 
 .form_div {
@@ -108,7 +99,6 @@ button:hover {
   float: left;
   width: 100%;
   min-height: 100px;
-  border-bottom: 2px solid white;
   color: white;
   padding: 10px;
   cursor: pointer;
@@ -121,7 +111,6 @@ button:hover {
   color: rgba(250, 250, 250, 1);
   padding: 10px;
   font-size: 1em;
-  border-bottom: 2px solid white;
   cursor: pointer;
 }
 
@@ -129,7 +118,6 @@ button:hover {
   float: left;
   width: 100%;
   height: 20px;
-  color: rgba(250, 250, 250, 1);
   padding: 5px;
 }
 
@@ -219,8 +207,6 @@ button:hover {
   width: 20%;
   max-width: 80px;
   height: 100%;
-  border-right: 2px solid white;
-  border-bottom: 2px solid white;
 }
 
 .user_reply_pic img {
@@ -241,14 +227,12 @@ button:hover {
   width: 75%;
   height: 50%;
   padding-left: 10px;
-  border-bottom: 2px solid white;
 }
 
 .search_result_div {
   float: left;
   width: 100%;
   height: 89px;
-  border-bottom: 1px solid white;
   text-align: left;
 }
 
@@ -305,18 +289,6 @@ button:hover {
   cursor: pointer;
 }
 
-.search_result_actions button:hover {
-  background: rgba(78, 111, 118, 1);
-}
-
-.search_result_action_accept {
-  background: inherit;
-}
-
-.search_result_action button:hover {
-  background: rgba(78, 111, 118, 1);
-}
-
 .search_result_action_reject {
   background: rgba(150, 50, 50, 1);
 }
@@ -329,7 +301,6 @@ button:hover {
   float: left;
   width: 100%;
   height: 89px;
-  border-bottom: 1px solid white;
   text-align: left;
 }
 
@@ -430,4 +401,29 @@ button:hover {
     border-radius: 10px 10px 10px 10px;
     padding-left: 5px;
   }
+}
+
+.color_theme_1 {
+    color: rgba(38, 71, 78, 1);
+    font-size: 2em;
+}
+
+.color_theme_2 {
+    color: rgba(200, 50, 50, 1);
+    font-size: 2em;
+}
+
+.color_theme_3 {
+    color: rgba(50, 50, 200, 1);
+    font-size: 2em;
+}
+
+.color_theme_4 {
+    color: rgba(93, 63, 211, 1);
+    font-size: 2em;
+}
+
+.color_theme_5 {
+    color: rgba(255, 105, 180);
+    font-size: 2em;
 }

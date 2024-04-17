@@ -1,0 +1,107 @@
+body {
+    background: rgba(50, 50, 50, 1);
+}
+
+.main_bg {
+    background: rgba(200, 50, 50, 1);
+}
+
+.secondary_bg {
+    background: rgba(250, 250, 250, 1);
+}
+
+.tertiary_bg {
+    background: rgba(250, 100, 100, 1);
+}
+
+.post_bg {
+    background: rgba(50, 50, 50, 1);
+}
+
+.active_bg {
+    background: rgba(250, 100, 100, 1);
+}
+
+.main_bg_wHover {
+    background: rgba(200, 50, 50, 1);
+}
+
+.main_bg_wHover:hover {
+    background: rgba(250, 100, 100, 1);
+}
+
+.tertiary_bg_wHover {
+    background: rgba(250, 100, 100, 1);
+}
+
+.tertiary_bg_wHover:hover {
+    background: rgba(250, 250, 250, 1);
+}
+
+.main_bg_w2Hover {
+    background: rgba(200, 50, 50, 1);
+}
+
+.main_bg_w2Hover:hover {
+    background: rgba(250, 250, 250, 1);
+}
+
+.main_color {
+    color: white;
+}
+
+.secondary_color {
+    color: rgba(200, 50, 50, 1);
+}
+
+.main_color_wHover {
+    color: white;
+}
+
+.main_color_wHover:hover {
+    color: rgba(200, 50, 50, 1) !important;
+}
+
+.main_border {
+    border: 1px solid rgba(200, 50, 50, 1);
+}
+
+.main_border_2x {
+    border: 2px solid rgba(200, 50, 50, 1);
+}
+
+.main_border_wHover {
+    border: 1px solid rgba(250, 100, 100, 1);
+}
+
+.secondary_border {
+    border: 1px solid gray;
+}
+
+.border_bottom_only {
+    border-bottom: 2px solid gray;
+}
+
+.border_right_only_post {
+    border-right: 2px solid white;
+}
+
+.border_bottom_only_post {
+    border-bottom: 2px solid white !important;
+}
+
+.inherit_bg {
+    background: inherit;
+}
+
+.inherit_bg_wHover {
+    background: inherit;
+}
+
+.inherit_bg_wHover:hover {
+    background: rgba(250, 250, 250, 1);
+}
+
+.border_none {
+    border: none;
+}

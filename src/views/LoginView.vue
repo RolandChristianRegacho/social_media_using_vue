@@ -3,6 +3,8 @@ import LoginForm from '../components/LoginForm.vue'
 import $ from "jquery"
 
 $(() => {
+  import(`../assets/color/default.css`)
+
   if($(document).width() > 1200) {
     let document_width = $(document).width()
 

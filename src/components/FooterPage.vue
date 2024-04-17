@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div color="main_color">
         <span>Made by Nase</span>
         <br>
         <span>Powered by HTML, CSS, Javascript, Jquery, Vue.js and PHP</span>

@@ -1,7 +1,7 @@
 <template>
     <div class="signup_form">
         <br>
-        <h1>
+        <h1 class="secondary_color">
             Welcome to Signup page!
         </h1>
         <br>
@@ -16,10 +16,10 @@
                 <input type="text" v-model="user.middle_name" placeholder="Middle Name">
                 <input type="text" id="signup_lname" v-model="user.last_name" placeholder="Last Name">
                 <input type="date" id="signup_bdate" v-model="user.birthday">
-                <button @click="signup()">Sign up</button>
+                <button class="main_bg_wHover main_color main_border" @click="signup()">Sign up</button>
             </form>
             <br>
-            <router-link to="/login">Have an account?</router-link>
+            <router-link class="secondary_color" to="/login">Have an account?</router-link>
         </div>
     </div>
 </template>
@@ -123,9 +123,5 @@ export default {
     background: rgb(200, 200, 200) !important;
     color: rgb(52, 73, 94);
     border-radius: 5px;
-}
-
-a {
-    color: rgb(52, 73, 94);
 }
 </style>@/additional_scripts/fetch-script

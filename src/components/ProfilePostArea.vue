@@ -1,20 +1,20 @@
 <template>
     <div class="post_form" v-if="owner == profile_id">
         <form @submit.prevent="submit">
-            <div class="border_white">
-                <textarea placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
+            <div class="border_white border_bottom_only_post">
+                <textarea class="main_color" placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
                     v-model="message.text"></textarea>
                 <div v-if="message.image != ''">
                     <img id="pstImg" @src=message.img />
                 </div>
             </div>
             <label id="character">255</label>
-            <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile" />
-            <label for="file">
+            <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile main_bg_wHover main_color border_none" />
+            <label for="file" class="main_bg_wHover main_color border_none">
                 <AnOutlinedCloudUpload class="icon" />
             </label>
-            <button id="postBtn" disabled @click="postMessage()">Post</button>
-            <button id="cancelPst" @click="cancelMessage()" v-if="message.text.length > 0">Cancel</button>
+            <button id="postBtn" class="main_bg_wHover main_color border_none" disabled @click="postMessage()">Post</button>
+            <button id="cancelPst" class="main_bg_wHover main_color border_none" @click="cancelMessage()" v-if="message.text.length > 0">Cancel</button>
         </form>
     </div>
 </template>
@@ -158,7 +158,6 @@ export default {
     min-height: 200px;
     height: auto;
     margin-top: 10px;
-    color: rgba(235, 235, 235, 0.64);
     border-radius: 5px;
     box-shadow: 3px 7px 5px 3px rgba(20, 20, 20, 1);
 }
@@ -169,7 +168,6 @@ export default {
     height: auto;
     border: none;
     background: rgba(0, 0, 0, 0);
-    color: rgba(235, 235, 235, 0.64);
     resize: none;
     margin: auto;
     font-size: 25px;
@@ -192,10 +190,6 @@ export default {
     cursor: not-allowed;
 }
 
-.post_form button:disabled:hover {
-    background: rgba(38, 71, 78, 1);
-}
-
 .post_form label {
     float: left;
     font-size: 1.5em;
@@ -207,7 +201,6 @@ export default {
     min-height: 150px;
     height: auto;
     border: none;
-    border-bottom: 2px solid white;
 }
 
 .post_form input[type="file"] {
@@ -249,9 +242,7 @@ export default {
 
 
 .inputfile+label {
-    margin-left: 10px;
-    color: white;
-    background: rgba(38, 71, 78, 1);
+    margin-left: 10px;  
     display: inline-block;
     cursor: pointer;
     height: 35px;
@@ -260,17 +251,7 @@ export default {
     padding-top: 0;
 }
 
-.inputfile:focus+label,
-.inputfile+label:hover {
-    background: rgba(58, 91, 98, 1);
-}
-
 .icon {
-    color: white;
     font-size: 1.5em;
-}
-
-#cancelPst {
-    background: rgba(200, 50, 50, 1);
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="convo_nav">
-        <button class="convo_nav_back" @click="backToList">Back</button>
-        <button class="convo_nav_name" disabled>{{ name }}</button>
+        <button class="convo_nav_back tertiary_bg main_color main_border" @click="backToList">Back</button>
+        <button class="convo_nav_name main_bg main_color main_border" disabled>{{ name }}</button>
     </div>
 </template>
 
@@ -47,7 +47,6 @@ export default {
     height: 100%;
     text-align: left;
     padding-left: 20px;
-    background: inherit;
 }
 
 .convo_nav_back {
@@ -55,13 +54,7 @@ export default {
     width: 20%;
     height: 100%;
     text-align: center;
-    background: inherit;
     display: none;
-}
-
-.convo_nav_back:hover {
-    background: white;
-    color: rgba(38, 71, 78, 1);
 }
 
 @media only screen and (orientation: portrait) {
