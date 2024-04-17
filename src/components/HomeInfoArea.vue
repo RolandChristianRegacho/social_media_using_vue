@@ -6,7 +6,7 @@
         
         <div class="profile-details">
             <button>{{ displayName() }}</button>
-            <button>{{ user.birthday }}</button>
+            <button>{{ displayBirthday() }}</button>
         </div>
     </div>
 </template>
@@ -24,22 +24,28 @@ export default {
     },
     methods: {
         displayName() {
-            let user = this.getCookie("user")
+            return `${this.user.first_name}  ${this.user.middle_name}  ${this.user.last_name}`
+        },
+        displayBirthday() {
+            let birthday = new Date(this.user.birthday)
+            const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-            if (user == "") {
-                logout(this.$swal, this.$router)
-            }
-            else {
-                let user_id = JSON.parse(user).id
+            return `${month[birthday.getMonth()]} ${birthday.getDate()}, ${birthday.getFullYear()}`
+        },
+    },
+    async mounted() {
+        let user = this.getCookie("user")
 
-                getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${user_id}`)
-                .then(result => {
-                    this.user = result.data
-                })
-
-                return `${this.user.first_name}  ${this.user.middle_name}  ${this.user.last_name}`
-            }
+        if (user == "") {
+            logout(this.$swal)
         }
+
+        let user_id = JSON.parse(user).id
+
+        getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${user_id}`)
+        .then(result => {
+            this.user = result.data
+        })
     }
 }
 </script>

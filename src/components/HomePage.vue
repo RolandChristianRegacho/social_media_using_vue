@@ -102,7 +102,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout(this.$router, this.$swal)
+            logout(this.$swal)
         }
         this.owner = JSON.parse(user).id
 
@@ -190,7 +190,7 @@ export default {
             let user = this.getCookie("user")
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 this.replies.reply_user_id = JSON.parse(user).id
@@ -281,7 +281,7 @@ export default {
 
 async function getPosts(BASE_URL, user) {
     if (user == "") {
-        logout(this.$swal, this.$router)
+        logout(this.$swal)
     }
 
     return getAxiosData(`${BASE_URL}/home/post.php?user_id=${JSON.parse(user).id}`)

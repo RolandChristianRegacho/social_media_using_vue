@@ -48,7 +48,7 @@ export default {
     this.owner = JSON.parse(user).id
 
     if (user == "") {
-      logout(this.$swal, this.$router)
+      logout(this.$swal)
     }
 
     this.emitter.on("selectUser", (id) => {

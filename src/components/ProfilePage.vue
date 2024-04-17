@@ -38,7 +38,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         }
         this.owner_id = JSON.parse(user).id
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]

@@ -55,7 +55,7 @@ export default {
                 let user = this.getCookie("user")
 
                 if (user == "") {
-                    logout(this.$swal, this.$router)
+                    logout(this.$swal)
                 }
                 else {
                     this.user_info.id = JSON.parse(user).id
@@ -138,7 +138,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         }
         let profile_bdate = document.getElementById("profile_bdate")
         profile_bdate.max = date_setter()

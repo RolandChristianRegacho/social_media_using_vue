@@ -104,7 +104,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         }
         this.owner = JSON.parse(user).id
         let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
@@ -193,7 +193,7 @@ export default {
             let user = this.getCookie("user")
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 this.replies.reply_user_id = JSON.parse(user).id
@@ -278,7 +278,7 @@ function deletePost(id, url) {
 
 function getPosts(BASE_URL, user) {
     if (user == "") {
-        logout(this.$swal, this.$router)
+        logout(this.$swal)
     }
 
     return getAxiosData(`${BASE_URL}/home/post.php?user_id=${user}&context=profile`)

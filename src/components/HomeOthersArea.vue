@@ -24,7 +24,7 @@ export default {
             let user = this.getCookie("user")
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 this.user = JSON.parse(user)

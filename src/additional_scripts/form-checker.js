@@ -25,5 +25,5 @@ export function date_setter() {
     let current_date = new Date().toISOString().split("T")[0]
     let splitted_date = current_date.split("-")
     
-    return `${splitted_date[0]}-${splitted_date[1]}-${splitted_date[2]-1}`
+    return `${splitted_date[0]-13}-${splitted_date[1]}-${splitted_date[2]}`
 }

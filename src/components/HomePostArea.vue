@@ -44,7 +44,7 @@ export default {
                 let user = this.getCookie("user")
 
                 if (user == "") {
-                    logout(this.$swal, this.$router)
+                    logout(this.$swal)
                 }
                 else {
                     this.message.id = JSON.parse(user).id

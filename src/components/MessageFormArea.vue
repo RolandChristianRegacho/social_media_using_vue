@@ -82,7 +82,7 @@ export default {
         }
 
         if (user == "") {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         }
 
         this.emitter.on("selectUser", (id) => {

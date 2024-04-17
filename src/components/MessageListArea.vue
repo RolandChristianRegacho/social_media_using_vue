@@ -46,7 +46,7 @@ export default {
         let user = this.getCookie("user")
 
         if (user == "") {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         }
 
         getListOfUser(this.BASE_URL, JSON.parse(user).id)

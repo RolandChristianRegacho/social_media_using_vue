@@ -111,7 +111,7 @@ export default {
     },
     methods: {
         logout() {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         },
         goHome() {
             this.$router.push({ name: "HomePage" })
@@ -121,7 +121,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -146,7 +146,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -178,7 +178,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -228,7 +228,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -259,7 +259,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -313,7 +313,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -387,7 +387,7 @@ export default {
             let user_id = ""
 
             if (user == "") {
-                logout(this.$swal, this.$router)
+                logout(this.$swal)
             }
             else {
                 user_id = JSON.parse(user).id
@@ -404,7 +404,7 @@ export default {
         let user_id = ""
 
         if (user == "") {
-            logout(this.$swal, this.$router)
+            logout(this.$swal)
         }
         else {
             this.name = JSON.parse(user).first_name
