@@ -47,7 +47,7 @@ body {
 }
 
 .main_color {
-    color: rgba(200, 200, 200, 1);
+    color: white;
 }
 
 .secondary_color {
@@ -56,6 +56,10 @@ body {
 
 .main_color_wHover {
     color: white;
+}
+
+.main_color_wHover:hover {
+    color: rgba(38, 71, 78, 1);
 }
 
 .main_border {
@@ -76,10 +80,6 @@ body {
 
 .border_bottom_only {
     border-bottom: 2px solid gray;
-}
-
-.border_right_only {
-    border-right: 2px solid gray;
 }
 
 .border_right_only_post {

@@ -39,16 +39,16 @@
                     }}</button>
             </div>
             <div class='search_result_action' v-if="item.request_type == null">
-                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color border_none'>Add</button>
+                <button @click="sendFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color_wHover border_none'>Add</button>
             </div>
             <div class='search_result_action' v-else-if="item.request_type == 'sender'">
-                <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept  inherit_bg_wHover main_color border_none'>Cancel</button>
+                <button @click="cancelSendFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color_wHover border_none'>Cancel</button>
             </div>
             <div class='search_result_action' v-else-if="item.request_type == 'friend'">
             </div>
             <div class='search_result_actions' v-else>
-                <button @click="acceptFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color border_none'>Accept</button>
-                <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color border_none'>Reject</button>
+                <button @click="acceptFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color_wHover border_none'>Accept</button>
+                <button @click="deleteFriendRequest(item.id);" class='search_result_action_accept inherit_bg_wHover main_color_wHover border_none'>Reject</button>
             </div>
         </div>
     </div>
@@ -59,13 +59,13 @@
         <div class="notifications_result_div main_bg_wHover main_color border_bottom_only_post" v-for="item in notifications" :key="item.id">
             <div class="notification_result_div_for_full_height" v-if="item.context == 'Reply'">
                 <div class="notifications_content_post">
-                    <button class="inherit_bg_wHover main_color_wHover border_none" @click='goToPost(item.post_id);'>{{ item.first_name }} replied in your
+                    <button class="main_bg_wHover main_color border_none" @click='goToPost(item.post_id);'>{{ item.first_name }} replied in your
                         post</button>
                 </div>
             </div>
             <div v-else class="main_bg_wHover main_color">
                 <div @click="goToProfileInNotif(item.sender)" class="notifications_content">
-                    <button class="inherit_bg_wHover main_color border_none">{{ item.first_name }} sent you a friend
+                    <button class="main_bg_wHover main_color border_none">{{ item.first_name }} sent you a friend
                         request</button>
                 </div>
                 <div class='notifications_action'>
