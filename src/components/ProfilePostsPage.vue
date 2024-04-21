@@ -10,7 +10,9 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id, $event)" class="user_post_content border_bottom_only_post">
-                <span>{{ item.posts.content }}</span>
+                <textarea v-model="item.posts.content" :id="'post-' + item.posts.id"
+                    class="inherit_bg main_color border_none" readonly
+                    @click="goToPost(item.posts.id, $event)"></textarea>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"
@@ -21,29 +23,33 @@
                 {{ item.posts.date }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button icon_show main_bg_wHover main_color main_border" @click="showReply(item.posts.id)"
-                    data-status="active" :id="'rp-btn-shw-' + item.posts.id">
+                <button class="post_button persist_button icon_show main_bg_wHover main_color main_border"
+                    @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-' + item.posts.id">
                     <BxShow />
                 </button>
-                <button class="post_button persist_button icon_hide main_bg_wHover main_color main_border" @click="hideReply(item.posts.id)"
-                    data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id" style="display: none;">
+                <button class="post_button persist_button icon_hide main_bg_wHover main_color main_border"
+                    @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id"
+                    style="display: none;">
                     <BxHide />
                 </button>
-                <button class="post_button persist_button rp-btn-shw-wrd main_bg_wHover main_color main_border" @click="showReply(item.posts.id)"
-                    data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
+                <button class="post_button persist_button rp-btn-shw-wrd main_bg_wHover main_color main_border"
+                    @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
                     Show Replies
                 </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border" @click="hideReply(item.posts.id)"
-                    data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id" style="display: none;">
+                <button class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border"
+                    @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id"
+                    style="display: none;">
                     Hide Replies
                 </button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
-                    <button class="post_button main_bg_wHover main_color main_border" @click="postReply(item.posts.id)">Reply</button>
+                    <button class="post_button main_bg_wHover main_color main_border"
+                        @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
             <div class="user_post_right" v-if="item.user.id == this.owner">
-                <button class="post_button_right main_bg_wHover main_color main_border" @click="deletePost(item.posts.id)">
+                <button class="post_button_right main_bg_wHover main_color main_border"
+                    @click="deletePost(item.posts.id)">
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
                 </button>
@@ -249,7 +255,7 @@ export default {
         },
         goToPost(id, event) {
             //this.$router.push(`/post=${id}`)
-            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post") {
+            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post" || event.target.nodeName == "TEXTAREA") {
                 this.$router.push(`/post=${id}`)
             }
             else {

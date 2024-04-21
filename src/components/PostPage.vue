@@ -5,7 +5,8 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div class="user_post_content border_bottom_only_post">
-                <span>{{ item.posts.content }}</span>
+                <textarea v-model="item.posts.content" :id="'post-' + item.posts.id"
+                    class="inherit_bg main_color border_none" readonly></textarea>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"
@@ -18,7 +19,8 @@
             <div class="user_post_left">
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
-                    <button class="post_button main_bg_wHover main_color" @click="postReply(item.posts.id)">Reply</button>
+                    <button class="post_button main_bg_wHover main_color"
+                        @click="postReply(item.posts.id)">Reply</button>
                 </form>
             </div>
             <div class="user_post_right" v-if="item.user.id == this.owner">

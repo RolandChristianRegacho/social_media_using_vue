@@ -104,6 +104,15 @@ button {
   cursor: pointer;
 }
 
+.user_post_content textarea {
+  resize: none;
+  outline: none;
+}
+
+.user_post_content textarea:read-only {
+  cursor: pointer;
+}
+
 .user_post_sender {
   float: left;
   width: 100%;
@@ -363,13 +372,13 @@ button {
 }
 
 .input-checker {
-    border: 1px solid rgba(38, 71, 78, 1);
-    outline-color: black;
+  border: 1px solid rgba(38, 71, 78, 1);
+  outline-color: black;
 }
 
 .input-checker-fail {
-    border: 1px solid red;
-    outline-color: red;
+  border: 1px solid red;
+  outline-color: red;
 }
 
 @media only screen and (orientation: portrait) {
@@ -393,26 +402,26 @@ button {
 }
 
 .color_theme_1 {
-    color: rgba(38, 71, 78, 1);
-    font-size: 2em;
+  color: rgba(38, 71, 78, 1);
+  font-size: 2em;
 }
 
 .color_theme_2 {
-    color: rgba(200, 50, 50, 1);
-    font-size: 2em;
+  color: rgba(200, 50, 50, 1);
+  font-size: 2em;
 }
 
 .color_theme_3 {
-    color: rgba(50, 50, 200, 1);
-    font-size: 2em;
+  color: rgba(50, 50, 200, 1);
+  font-size: 2em;
 }
 
 .color_theme_4 {
-    color: rgba(93, 63, 211, 1);
-    font-size: 2em;
+  color: rgba(93, 63, 211, 1);
+  font-size: 2em;
 }
 
 .color_theme_5 {
-    color: rgba(255, 105, 180);
-    font-size: 2em;
+  color: rgba(255, 105, 180);
+  font-size: 2em;
 }
