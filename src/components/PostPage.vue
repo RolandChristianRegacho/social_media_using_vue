@@ -5,8 +5,7 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div class="user_post_content border_bottom_only_post">
-                <textarea v-model="item.posts.content" :id="'post-' + item.posts.id"
-                    class="inherit_bg main_color border_none" readonly></textarea>
+                <p contenteditable="false" :id="'post-' + item.posts.id" >{{ item.posts.content }}</p>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"

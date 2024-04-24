@@ -2,7 +2,7 @@
     <div class="post_form">
         <form @submit.prevent="submit">
             <div class="border_white border_bottom_only_post">
-                <textarea class="main_color" placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
+                <textarea class="inherit_bg main_color" placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
                     v-model="message.text"></textarea>
                 <div v-if="message.image != ''">
                     <img id="pstImg" @src=message.img />
@@ -170,7 +170,6 @@ export default {
     min-height: 150px;
     height: auto;
     border: none;
-    background: rgba(0, 0, 0, 0);
     resize: none;
     margin: auto;
     font-size: 25px;

@@ -10,9 +10,7 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id, $event)" class="user_post_content border_bottom_only_post">
-                <textarea v-model="item.posts.content" :id="'post-' + item.posts.id"
-                    class="inherit_bg main_color border_none" readonly
-                    @click="goToPost(item.posts.id, $event)"></textarea>
+                <p>{{ item.posts.content }}</p>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"
@@ -53,10 +51,14 @@
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
                 </button>
-                <button class="post_button_right main_bg_wHover main_color main_border"
+                <button :id="'edit-' + item.posts.id" class="post_button_right main_bg_wHover main_color main_border"
                     @click="editPost(item.posts.id)">
                     <AnOutlinedEdit class="icon" />
                     <p>Edit</p>
+                </button>
+                <button :id="'cancel-' + item.posts.id" class="cncl_button post_button_right main_bg_wHover main_color main_border"
+                    @click="cancel(item.posts.id)">
+                    <p>Cancel</p>
                 </button>
             </div>
             <div class="user_reply" :id="'reply-' + item.posts.id">
@@ -261,8 +263,16 @@ export default {
             })
         },
         goToPost(id, event) {
-            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post" || event.target.nodeName == "TEXTAREA") {
+            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post") {
                 this.$router.push(`/post=${id}`)
+            }
+            else if(event.target.nodeName == "P") {
+                if(event.target.contentEditable == "true") {
+                    return
+                }
+                else {
+                    this.$router.push(`/post=${id}`)
+                }
             }
             else {
                 for (let i in this.posts) {
@@ -283,9 +293,9 @@ export default {
             return splitted_content.join(" <br>")
         },
         async editPost(id) {
-            $("#post-" + id).attr("readonly", false)
-            $("#post-" + id).focus()
-            $("#post-" + id).attr("class", "secondary_bg secondary_color border_none")
+            $("#grayEditPg").attr("style", "display: flex;")
+
+            this.emitter.emit("onEditPost", id);
         }
     }
 }
@@ -353,5 +363,15 @@ span {
         min-width: 300px;
         min-height: 200px;
     }
+}
+
+.cncl_button {
+    display: none;
+}
+
+.lblchr {
+    float: left;
+    margin-top: 1vh;
+    width: fit-content;
 }
 </style>

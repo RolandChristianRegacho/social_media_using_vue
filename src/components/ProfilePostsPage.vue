@@ -10,9 +10,7 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id, $event)" class="user_post_content border_bottom_only_post">
-                <textarea v-model="item.posts.content" :id="'post-' + item.posts.id"
-                    class="inherit_bg main_color border_none" readonly
-                    @click="goToPost(item.posts.id, $event)"></textarea>
+                <p contenteditable="false" :id="'post-' + item.posts.id" >{{ item.posts.content }}</p>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"
@@ -255,8 +253,16 @@ export default {
         },
         goToPost(id, event) {
             //this.$router.push(`/post=${id}`)
-            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post" || event.target.nodeName == "TEXTAREA") {
+            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post") {
                 this.$router.push(`/post=${id}`)
+            }
+            else if(event.target.nodeName == "P") {
+                if(event.target.contentEditable == "true") {
+                    return
+                }
+                else {
+                    this.$router.push(`/post=${id}`)
+                }
             }
             else {
                 for (let i in this.posts) {

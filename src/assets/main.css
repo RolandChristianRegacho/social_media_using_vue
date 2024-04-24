@@ -85,6 +85,16 @@ button {
   scrollbar-width: none;
 }
 
+.post_container_edit {
+  float: left;
+  width: 40%;
+  min-height: 400px;
+  padding-bottom: 5px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
+
 .user_post {
   float: left;
   width: 98%;
@@ -104,13 +114,21 @@ button {
   cursor: pointer;
 }
 
-.user_post_content textarea {
-  resize: none;
-  outline: none;
+.user_post_content p {
+  float: left;
+  width: auto;
+  min-height: 40px;
+  line-height: 20px;
+  height: fit-content;
+  word-break: break-all;
 }
 
-.user_post_content textarea:read-only {
-  cursor: pointer;
+.user_post_content label {
+  display: none;
+}
+
+.user_post_content button {
+  display: none;
 }
 
 .user_post_sender {
@@ -156,6 +174,20 @@ button {
   outline: none;
   border-radius: 10px 10px 10px 10px;
   padding-left: 5px;
+}
+
+.post_button_edit {
+  float: right;
+  height: 40px;
+  width: auto;
+  margin-top: 1vh;
+  margin-right: 5px;
+  background: rgba(38, 71, 78, 1);
+  color: rgba(250, 250, 250, 1);
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .post_button {
@@ -362,6 +394,16 @@ button {
 }
 
 .zoomImageDiv {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(50, 50, 50, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.editPostPageDiv {
   position: absolute;
   width: 100vw;
   height: 100vh;

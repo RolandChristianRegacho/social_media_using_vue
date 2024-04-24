@@ -5,6 +5,7 @@ import HomePostArea from '../components/HomePostArea.vue'
 //import HomeOthersArea from '../components/HomeOthersArea.vue'
 import HomePage from '../components/HomePage.vue'
 import zoomImagePage from '../components/zoomImagePage.vue'
+import EditPostPage from '@/components/EditPostPage.vue'
 
 import $ from "jquery"
 import { getAxiosData } from '@/additional_scripts/fetch-script'
@@ -119,6 +120,7 @@ $(() => {
 
 <template>
   <zoomImagePage class="zoomImageDiv" />
+  <EditPostPage class="editPostPageDiv"/>
   <nav @click="hideSearch()" class="main_bg">
     <HeaderButtons />
   </nav>
