@@ -5,6 +5,7 @@ import ProfilePostArea from '../components/ProfilePostArea.vue'
 import ProfilePostsPage from '../components/ProfilePostsPage.vue'
 import zoomImagePage from '@/components/zoomImagePage.vue'
 import EditProfilePage from '../components/EditProfilePage.vue'
+import EditPostPage from '@/components/EditPostPage.vue'
 
 import $ from "jquery"
 import { getAxiosData } from '@/additional_scripts/fetch-script'
@@ -127,6 +128,7 @@ $(() => {
 
 <template>
     <EditProfilePage />
+    <EditPostPage class="editPostPageDiv"/>
     <zoomImagePage class="zoomImageDiv" />
     <nav @click="hideSearch()" class="main_bg">
         <HeaderButtons />

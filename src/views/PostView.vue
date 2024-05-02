@@ -4,6 +4,7 @@ import HeaderButtons from '../components/HeaderButtons.vue'
 import PostPage from '../components/PostPage.vue'
 import $ from "jquery"
 import URL from '@/additional_scripts/environment';
+import EditPostPage from '@/components/EditPostPage.vue'
 
 function hideSearch() {
     $(".search_div").hide()
@@ -114,6 +115,7 @@ $(() => {
 </script>
 
 <template>
+    <EditPostPage class="editPostPageDiv"/>
     <nav @click="hideSearch()" class="main_bg">
         <HeaderButtons />
     </nav>

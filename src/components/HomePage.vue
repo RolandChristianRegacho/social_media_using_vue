@@ -292,7 +292,7 @@ export default {
 
             return splitted_content.join(" <br>")
         },
-        async editPost(id) {
+        editPost(id) {
             $("#grayEditPg").attr("style", "display: flex;")
 
             this.emitter.emit("onEditPost", id);

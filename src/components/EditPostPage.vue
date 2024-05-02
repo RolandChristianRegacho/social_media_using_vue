@@ -5,13 +5,13 @@
                 <form @submit.prevent="submit">
                     <div class="border_white border_bottom_only_post">
                         <textarea class="inherit_bg main_color" placeholder="Open up a discussion" id="post_text_edit" v-model="posts.content" @input="checkCharacter"></textarea>
-                        <div>
-                            <img id="pstImgEdit" @src="posts.image"/>
+                        <div id="imgDivEdit">
+                            <img id="pstImgEdit"/>
                         </div>
                     </div>
                     <label class="main_color" id="character_edit">255</label>
                     <input type="file" name="fileEdit" id="fileEdit" accept="image/*" @change="previewImageForEdit()" class="inputfile main_bg_wHover main_color border_none" />
-                    <label for="file" class="main_bg_wHover main_color border_none">
+                    <label for="fileEdit" class="main_bg_wHover main_color border_none">
                         <AnOutlinedCloudUpload class="icon" />
                     </label>
                     <button id="postBtnEdit" class="main_bg_wHover main_color border_none" disabled @click="editPost(posts.id)">Save</button>
@@ -23,7 +23,7 @@
 
 <script>
 import { AnOutlinedCloudUpload } from "@kalimahapps/vue-icons";
-import { getAxiosData } from '@/additional_scripts/fetch-script';
+import { getAxiosData, updateAxiosData } from '@/additional_scripts/fetch-script';
 import logout from '@/additional_scripts/logout';
 import $ from 'jquery';
 export default {
@@ -48,14 +48,14 @@ export default {
             if (this.posts.content.length > 0) {
                 if (this.posts.content.length > 255) {
                     let remaining_char = 255
-                    $("#postBtn").attr("disabled", true)
+                    $("#postBtnEdit").attr("disabled", true)
                     remaining_char -= this.message.text.length
                     $("#character_edit").html(remaining_char)
                     $("#character_edit").attr("style", "color: red;")
                 }
                 else {
                     let remaining_char = 255
-                    $("#postBtn").attr("disabled", false)
+                    $("#postBtnEdit").attr("disabled", false)
                     remaining_char -= this.posts.content.length
                     $("#character_edit").html(remaining_char)
                     $("#character_edit").attr("style", "color: rgba(235, 235, 235, 0.64);")
@@ -65,7 +65,7 @@ export default {
                 element.style.height = (element.scrollHeight) + "px";
             }
             else {
-                $("#postBtn").attr("disabled", true)
+                $("#postBtnEdit").attr("disabled", true)
                 $("#character_edit").html("255")
                 $("#character_edit").attr("style", "color: rgba(235, 235, 235, 0.64);")
                 let element = document.getElementById("post_text_edit")
@@ -74,17 +74,54 @@ export default {
         },
         previewImageForEdit() {
             var reader = new FileReader();
-            console.log("?")
             reader.onload = function () {
                 $("#pstImgEdit").attr("src", reader.result)
+                $("#postBtnEdit").attr("disabled", false)
+                let element = document.getElementById("post_text_edit")
+                element.style.height = "320px";
+                element.style.height = (element.scrollHeight) + "px";
             };
             reader.readAsDataURL($("#fileEdit")[0].files[0])
-            this.post.image = reader.result
         },
+        editPost(id) {
+            let data = {
+                post_id: id,
+                content: this.posts.content
+            }
+
+            updateAxiosData(`${this.BASE_URL}/home/post.php`, data)
+            .then(result => {
+                this.$swal({
+                    icon: result.type,
+                    text: result.text,
+                })
+                .then(() => {
+                    switch(this.$router.currentRoute._value.name) {
+                        case "HomePage": {
+                            this.emitter.emit("onPost")
+                            break
+                        }
+                        case "PostPage": {
+                            //will fix this
+                            //this.emitter.emit("onChangePost")
+                            window.location.href = this.$router.currentRoute._value.fullPath
+                            break
+                        }
+                        case "ProfilePage": {
+                            this.emitter.emit("onPostInProfile")
+                            break
+                        }
+                    }
+                })
+                $("#grayEditPg").hide()
+            })
+        }
     },
     async mounted() {
         let user = this.getCookie("user")
         this.owner = JSON.parse(user).id
+
+        console.log(this.$router.currentRoute._value.name)
 
         if (user == "") {
             logout(this.$swal)
@@ -102,7 +139,7 @@ export default {
                     $("#character_edit").html(remaining_char)
 
                     if(remaining_char < 255) {
-                        $("#postBtnEdit").attr("disabled", false)
+                        //$("#postBtnEdit").attr("disabled", false)
                         $("#pstImgEdit").attr("src", result.post.image)
                     }
                 })
@@ -120,7 +157,7 @@ function getPosts(BASE_URL, id, user) {
 </script>
 
 <style scoped>
-#grayBgDiv {
+#grayEditPg {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -179,6 +216,7 @@ function getPosts(BASE_URL, id, user) {
 .post_form img {
     max-width: 600px;
     max-height: 400px;
+    margin: auto;
 }
 
 #postBtnEdit {

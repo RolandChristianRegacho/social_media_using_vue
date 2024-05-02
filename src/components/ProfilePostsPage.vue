@@ -51,7 +51,8 @@
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
                 </button>
-                <button class="post_button_right main_bg_wHover main_color main_border">
+                <button class="post_button_right main_bg_wHover main_color main_border"
+                    @click="editPost(item.posts.id)">
                     <AnOutlinedEdit class="icon" />
                     <p>Edit</p>
                 </button>
@@ -276,6 +277,11 @@ export default {
         },
         goToProfile(id) {
             this.$router.push(`/profile=${id}`)
+        },
+        editPost(id) {
+            $("#grayEditPg").attr("style", "display: flex;")
+
+            this.emitter.emit("onEditPost", id);
         }
     }
 }
