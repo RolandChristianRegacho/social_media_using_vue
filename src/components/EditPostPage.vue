@@ -121,8 +121,6 @@ export default {
         let user = this.getCookie("user")
         this.owner = JSON.parse(user).id
 
-        console.log(this.$router.currentRoute._value.name)
-
         if (user == "") {
             logout(this.$swal)
         }

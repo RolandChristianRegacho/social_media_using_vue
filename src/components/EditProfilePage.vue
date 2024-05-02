@@ -11,10 +11,10 @@
                 <label for="file" class="main_bg_wHover main_color">
                     <AnFilledEdit  class="icon main_color" />
                 </label>
-                <input type="text" class="input-checker" id="profile_fname" placeholder="First Name" v-model="user_info.first_name" />
-                <input type="text" class="input-checker" id="profile_mname" placeholder="Middle Name" v-model="user_info.middle_name" />
-                <input type="text" class="input-checker" id="profile_lname" placeholder="Last Name" v-model="user_info.last_name" />
-                <input type="date" class="input-checker" id="profile_bdate" placeholder="" v-model="user_info.birthday" />
+                <input type="text" class="input-checker secondary_border" id="profile_fname" placeholder="First Name" v-model="user_info.first_name" />
+                <input type="text" class="input-checker secondary_border" id="profile_mname" placeholder="Middle Name" v-model="user_info.middle_name" />
+                <input type="text" class="input-checker secondary_border" id="profile_lname" placeholder="Last Name" v-model="user_info.last_name" />
+                <input type="date" class="input-checker secondary_border" id="profile_bdate" placeholder="" v-model="user_info.birthday" />
                 <button @click="updateInformation()" class="main_bg_wHover main_color main_border_wHover">Save</button>
             </form>
         </div>
@@ -78,12 +78,12 @@ export default {
                         switch(form_ver.data.form) {
                             case "first_name": {
                                 $("#profile_fname").focus()
-                                $("#profile_fname").attr("class", "main_border input-checker-fail")
+                                $("#profile_fname").attr("class", "input-checker-fail")
                                 break
                             }
                             case "last_name": {
                                 $("#profile_lname").focus()
-                                $("#profile_lname").attr("class", "main_border input-checker-fail")
+                                $("#profile_lname").attr("class", "input-checker-fail")
                                 break
                             }
                         }
@@ -154,8 +154,8 @@ export default {
 
 function clearForm(form) {
     if(form == "profile") {
-        $("#profile_fname").attr("class", "main_border input-checker")
-        $("#profile_lname").attr("class", "main_border input-checker")
+        $("#profile_fname").attr("class", "input-checker secondary_border")
+        $("#profile_lname").attr("class", "input-checker secondary_border")
     }
 }
 </script>
