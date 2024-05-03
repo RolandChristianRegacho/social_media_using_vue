@@ -17,9 +17,9 @@
             </div>
             <div class="user_post_left">
                 <form @submit.prevent="submit">
-                    <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
+                    <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" @input="checkReplyLength(item.posts.id)" />
                     <button class="post_button main_bg_wHover main_color"
-                        @click="postReply(item.posts.id)">Reply</button>
+                        @click="postReply(item.posts.id)" :id="'reply-btn-' + item.posts.id" disabled>Reply</button>
                 </form>
             </div>
             <div class="user_post_right" v-if="item.user.id == this.owner">
@@ -229,6 +229,14 @@ export default {
             $("#grayEditPg").attr("style", "display: flex;")
 
             this.emitter.emit("onEditPost", id);
+        },
+        checkReplyLength(id) {
+            if($("#rp-frm-" + id).val().length > 0) {
+                $("#reply-btn-" + id).attr("disabled", false)
+            }
+            else {
+                $("#reply-btn-" + id).attr("disabled", true)
+            }
         }
     }
 }

@@ -21,28 +21,28 @@
                 {{ item.posts.date }}
             </div>
             <div class="user_post_left">
-                <button class="post_button persist_button icon_show main_bg_wHover main_color main_border"
+                <button v-if="item.reply.length > 0" class="post_button persist_button icon_show main_bg_wHover main_color main_border"
                     @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-' + item.posts.id">
                     <BxShow />
                 </button>
-                <button class="post_button persist_button icon_hide main_bg_wHover main_color main_border"
+                <button v-if="item.reply.length > 0" class="post_button persist_button icon_hide main_bg_wHover main_color main_border"
                     @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id"
                     style="display: none;">
                     <BxHide />
                 </button>
-                <button class="post_button persist_button rp-btn-shw-wrd main_bg_wHover main_color main_border"
+                <button v-if="item.reply.length > 0" class="post_button persist_button rp-btn-shw-wrd main_bg_wHover main_color main_border"
                     @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
                     Show Replies
                 </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border"
+                <button v-if="item.reply.length > 0" class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border"
                     @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id"
                     style="display: none;">
                     Hide Replies
                 </button>
                 <form @submit.prevent="submit">
-                    <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" />
+                    <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" @input="checkReplyLength(item.posts.id)" />
                     <button class="post_button main_bg_wHover main_color main_border"
-                        @click="postReply(item.posts.id)">Reply</button>
+                        @click="postReply(item.posts.id)" :id="'reply-btn-' + item.posts.id" disabled>Reply</button>
                 </form>
             </div>
             <div class="user_post_right" v-if="item.user.id == this.owner">
@@ -55,10 +55,6 @@
                     @click="editPost(item.posts.id)">
                     <AnOutlinedEdit class="icon" />
                     <p>Edit</p>
-                </button>
-                <button :id="'cancel-' + item.posts.id" class="cncl_button post_button_right main_bg_wHover main_color main_border"
-                    @click="cancel(item.posts.id)">
-                    <p>Cancel</p>
                 </button>
             </div>
             <div class="user_reply" :id="'reply-' + item.posts.id">
@@ -205,6 +201,10 @@ export default {
                 this.replies.reply = $("#rp-frm-" + post_id).val()
             }
 
+            if(this.replies.reply == "") {
+                return
+            }
+
             let data = {
                 "reply": {
                     "post_id": post_id,
@@ -296,6 +296,14 @@ export default {
             $("#grayEditPg").attr("style", "display: flex;")
 
             this.emitter.emit("onEditPost", id);
+        },
+        checkReplyLength(id) {
+            if($("#rp-frm-" + id).val().length > 0) {
+                $("#reply-btn-" + id).attr("disabled", false)
+            }
+            else {
+                $("#reply-btn-" + id).attr("disabled", true)
+            }
         }
     }
 }
