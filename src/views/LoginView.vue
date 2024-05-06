@@ -1,5 +1,11 @@
 <script setup>
 import LoginForm from '../components/LoginForm.vue'
+import $ from "jquery"
+import calculateSize from '@/additional_scripts/calculate-width'
+
+$(() => {
+  calculateSize()
+})
 </script>
 
 <template>

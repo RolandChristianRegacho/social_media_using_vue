@@ -43,7 +43,7 @@ export default {
         let user = getCookie("user")
 
         if (user) {
-            this.$router.push({ name: "HomePage" });
+            window.location.href = "/"
         }
     },
     methods: {
@@ -63,7 +63,7 @@ export default {
                     })
                     this.$swal.showLoading()
                     setTimeout(() => {
-                        this.$router.push({ name: "HomePage" });
+                        window.location.href = "/"
                         this.$swal.close()
                     }, 1000)
                 }
