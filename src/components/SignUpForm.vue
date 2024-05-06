@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { getCookie } from "@/additional_scripts/cookie-handler";
 import { postAxiosData } from "@/additional_scripts/fetch-script";
 import form_check, { date_setter } from "@/additional_scripts/form-checker";
 import $ from "jquery"
@@ -45,7 +46,7 @@ export default {
         }
     },
     mounted() {
-        let user = this.getCookie("user")
+        let user = getCookie("user")
 
         if (user) {
             this.$router.push({ name: "HomePage" });

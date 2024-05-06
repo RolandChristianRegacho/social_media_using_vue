@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { getCookie } from '@/additional_scripts/cookie-handler';
 import { getAxiosData, postImageData, updateAxiosData } from '@/additional_scripts/fetch-script';
 import form_check, { date_setter } from '@/additional_scripts/form-checker';
 import logout from '@/additional_scripts/logout';
@@ -52,7 +53,7 @@ export default {
             $("#grayBgDiv").hide()
         },
         updateInformation() {
-                let user = this.getCookie("user")
+                let user = getCookie("user")
 
                 if (user == "") {
                     logout(this.$swal)
@@ -135,7 +136,7 @@ export default {
     },
     async mounted() {
         clearForm("profile")
-        let user = this.getCookie("user")
+        let user = getCookie("user")
 
         if (user == "") {
             logout(this.$swal)

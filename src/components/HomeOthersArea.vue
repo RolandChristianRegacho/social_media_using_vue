@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { getCookie } from '@/additional_scripts/cookie-handler'
 import logout from '@/additional_scripts/logout'
 
 export default {
@@ -21,7 +22,7 @@ export default {
     },
     methods: {
         displayName() {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
 
             if (user == "") {
                 logout(this.$swal)

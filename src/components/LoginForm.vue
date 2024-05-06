@@ -24,6 +24,7 @@
 <script>
 import { CaLogin } from "@kalimahapps/vue-icons";
 import { postAxiosData } from "@/additional_scripts/fetch-script";
+import { getCookie, setCookie } from "@/additional_scripts/cookie-handler";
 
 export default {
     name: "LoginForm",
@@ -39,7 +40,7 @@ export default {
         }
     },
     mounted() {
-        let user = this.getCookie("user")
+        let user = getCookie("user")
 
         if (user) {
             this.$router.push({ name: "HomePage" });
@@ -55,7 +56,7 @@ export default {
             postAxiosData(`${this.BASE_URL}/login/auth.php`, data)
             .then(result => {
                 if (result.type == "success") {
-                    this.setCookie("user", JSON.stringify(result.data), 5)
+                    setCookie("user", JSON.stringify(result.data), 5)
                     this.$swal({
                         icon: result.type,
                         title: "Login Success!",

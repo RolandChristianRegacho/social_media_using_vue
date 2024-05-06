@@ -54,6 +54,7 @@ import $ from "jquery";
 import { AnOutlinedEdit, AnTwotoneDelete } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 import logout from "@/additional_scripts/logout";
+import { getCookie } from "@/additional_scripts/cookie-handler";
 
 export default {
     name: "HomePage",
@@ -73,7 +74,7 @@ export default {
         AnTwotoneDelete
     },
     async mounted() {
-        let user = this.getCookie("user")
+        let user = getCookie("user")
         this.owner = JSON.parse(user).id
 
         if (user == "") {
@@ -163,7 +164,7 @@ export default {
             }
         },
         async postReply(post_id) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
 
             if (user == "") {
                 logout(this.$swal)

@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { getCookie } from "@/additional_scripts/cookie-handler"
 import { getAxiosData, updateAxiosData } from "@/additional_scripts/fetch-script"
 import logout from "@/additional_scripts/logout"
 import $ from "jquery"
@@ -44,7 +45,7 @@ export default {
     }
   },
   async mounted() {
-    let user = this.getCookie("user")
+    let user = getCookie("user")
     this.owner = JSON.parse(user).id
 
     if (user == "") {

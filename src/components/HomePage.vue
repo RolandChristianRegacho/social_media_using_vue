@@ -25,7 +25,7 @@
                     @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-' + item.posts.id">
                     <BxShow />
                 </button>
-                <button v-if="item.reply.length > 0" class="post_button persist_button icon_hide main_bg_wHover main_color main_border"
+                <button class="post_button persist_button icon_hide main_bg_wHover main_color main_border"
                     @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id"
                     style="display: none;">
                     <BxHide />
@@ -34,7 +34,7 @@
                     @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
                     Show Replies
                 </button>
-                <button v-if="item.reply.length > 0" class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border"
+                <button class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border"
                     @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id"
                     style="display: none;">
                     Hide Replies
@@ -81,6 +81,7 @@ import { AnOutlinedEdit, AnTwotoneDelete, BxShow, BxHide } from "@kalimahapps/vu
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 import FooterPage from '../components/FooterPage.vue'
 import logout from "@/additional_scripts/logout";
+import { getCookie } from "@/additional_scripts/cookie-handler";
 
 export default {
     name: "HomePage",
@@ -103,7 +104,7 @@ export default {
         FooterPage
     },
     async mounted() {
-        let user = this.getCookie("user")
+        let user = getCookie("user")
 
         if (user == "") {
             logout(this.$swal)
@@ -191,7 +192,7 @@ export default {
             }
         },
         async postReply(post_id) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
 
             if (user == "") {
                 logout(this.$swal)

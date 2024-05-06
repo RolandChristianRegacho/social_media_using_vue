@@ -23,6 +23,7 @@ import { AnOutlinedCloudUpload } from "@kalimahapps/vue-icons";
 import { postAxiosData, postImageData } from "@/additional_scripts/fetch-script"
 import $ from "jquery"
 import logout from "@/additional_scripts/logout";
+import { getCookie } from "@/additional_scripts/cookie-handler";
 export default {
     name: "HomePostArea",
     components: {
@@ -41,7 +42,7 @@ export default {
     methods: {
         async postMessage() {
             try {
-                let user = this.getCookie("user")
+                let user = getCookie("user")
 
                 if (user == "") {
                     logout(this.$swal)

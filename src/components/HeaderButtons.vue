@@ -95,6 +95,7 @@ import { AnOutlinedUser, AnOutlinedNotification, AnOutlinedMessage, AnOutlinedMe
 import $ from "jquery";
 import { getAxiosData, postAxiosData, updateAxiosData, deleteAxiosData } from "@/additional_scripts/fetch-script";
 import logout from "@/additional_scripts/logout";
+import { getCookie } from "@/additional_scripts/cookie-handler";
 
 export default {
     name: "HeaderButton",
@@ -125,7 +126,7 @@ export default {
             this.$router.push({ name: "HomePage" })
         },
         async searchPeople() {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -150,7 +151,7 @@ export default {
             this.$router.push(`/profile=${id}`)
         },
         async sendFriendRequest(id) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -182,7 +183,7 @@ export default {
                 })
         },
         async acceptFriendRequest(id) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -232,7 +233,7 @@ export default {
                 })
         },
         async cancelSendFriendRequest(id) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -263,7 +264,7 @@ export default {
                 })
         },
         async deleteFriendRequest(id) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -317,7 +318,7 @@ export default {
         async showNotifications() {
             $(".notifications_div").attr("data-status", "clicked")
             $(".notifications_div").show()
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -391,7 +392,7 @@ export default {
             $(".header_button_mobile").show()
         },
         goToProfile() {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -407,7 +408,7 @@ export default {
             this.$router.push(`/profile=${id}`)
         },
         async changeColorTheme(color) {
-            let user = this.getCookie("user")
+            let user = getCookie("user")
             let user_id = ""
 
             if (user == "") {
@@ -439,7 +440,7 @@ export default {
         }
     },
     async mounted() {
-        let user = this.getCookie("user")
+        let user = getCookie("user")
         let user_id = ""
 
         if (user == "") {

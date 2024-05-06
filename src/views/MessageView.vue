@@ -7,6 +7,7 @@ import MessageFormArea from '../components/MessageFormArea.vue'
 import $ from "jquery"
 import { getAxiosData } from '@/additional_scripts/fetch-script'
 import URL from '@/additional_scripts/environment'
+import { getCookie } from '@/additional_scripts/cookie-handler'
 
 function hideSearch() {
   $(".search_div").hide()
@@ -36,83 +37,13 @@ function hideSearch() {
   $("#search_txt").val("")
 }
 
-function getUser(cname) {
-  let name = cname + '='
-  let decodedCookie = decodeURIComponent(document.cookie)
-  let ca = decodedCookie.split(';')
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i]
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1)
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length)
-    }
-  }
-  return ''
-}
-
 $(() => {
-  let user = getUser("user")
+  let user = getCookie("user")
 
   getAxiosData(`${URL}/home/theme.php?user_id=${JSON.parse(user).id}`)
   .then(result => {
     import(`../assets/color/${result.data.color_theme}.css`)
   })
-
-
-  let value = $(document).height() - 60
-  if ($("#main").height() < value) {
-    $("#main").height(value)
-    $("#main").attr("style", `height: ${value}px !important;`)
-  }
-
-  if ($(document).width() > 1200) {
-    let document_width = $(document).width()
-
-    let margin = document_width - 1200
-    let margin_left = Math.round(margin / 2)
-
-    if ($("#main").height() < value) {
-      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
-    }
-    else if ($("#main").height() == value) {
-      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
-    }
-    else {
-      $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
-    }
-  }
-
-  $(window).resize(function () {
-    if ($(document).width() > 1200) {
-      let document_width = $(document).width()
-
-      let margin = document_width - 1200
-      let margin_left = Math.round(margin / 2)
-
-      if ($("#main").height() < value) {
-        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
-      }
-      else if ($("#main").height() == value) {
-        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray; height: ${value}px;`)
-      }
-      else {
-        $("#main").attr("style", `margin-left: ${margin_left}px; border-left: 2px solid gray; border-right: 2px solid gray;`)
-      }
-    }
-    else {
-      if ($("#main").height() < value) {
-        $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none; height: ${value}px;`)
-      }
-      else if ($("#main").height() == value) {
-        $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none; height: ${value}px;`)
-      }
-      else {
-        $("#main").attr("style", `margin-left: 0px; border-left: none; border-right: none;`)
-      }
-    }
-  });
 })
 </script>
 

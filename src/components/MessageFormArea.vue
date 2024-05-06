@@ -16,6 +16,7 @@ import { AnOutlinedSend } from "@kalimahapps/vue-icons";
 import $ from "jquery"
 import { postAxiosData } from "@/additional_scripts/fetch-script";
 import logout from "@/additional_scripts/logout";
+import { getCookie } from "@/additional_scripts/cookie-handler";
 
 
 export default {
@@ -74,7 +75,7 @@ export default {
         }
     },
     async mounted() {
-        let user = this.getCookie("user")
+        let user = getCookie("user")
         this.message.user_id = JSON.parse(user).id
 
         if (this.message.receiver_id != "") {
