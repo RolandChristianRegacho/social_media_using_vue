@@ -72,6 +72,8 @@ export default {
                         this.message.text = ""
                     }
                 })
+            
+            this.socket.send(JSON.stringify([this.message.receiver_id.toString(), "message"]));
         }
     },
     async mounted() {

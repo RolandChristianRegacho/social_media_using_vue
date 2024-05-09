@@ -61,6 +61,19 @@ export default {
                     this.users = result.data
                 })
         })
+
+        this.socket.onmessage = (event) => {
+            var messageArray = JSON.parse(event.data)
+            
+            if(messageArray[1] == "message") {
+                getListOfUser(this.BASE_URL, JSON.parse(user).id)
+                    .then(result => {
+                        this.users = result.data
+                    })
+            }
+            
+            console.log("test")
+        };
     }
 }
 

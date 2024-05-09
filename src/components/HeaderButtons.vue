@@ -510,6 +510,31 @@ export default {
                     }
                 })
         })
+        
+        this.socket.onmessage = (event) => {
+            var messageArray = JSON.parse(event.data)
+            
+            if(messageArray[1] == "message") {
+                getAxiosData(`${this.BASE_URL}/home/messages.php?user_id=${user_id}`)
+                .then(response => {
+                    if (response.type == "found") {
+                        if (response.unread_count > 9) {
+                            $(".message p").text(" 9+")
+                        }
+                        else if (response.unread_count > 0 && response.unread_count < 10) {
+                            $(".message p").text(`${response.unread_count}`)
+                        }
+                        else {
+                            $(".message p").text("")
+                        }
+                        this.unread_messages = response.unread_count
+                    }
+                    else {
+                        $(".message p").text("")
+                    }
+                })
+            }
+        }
     }
 }
 </script>

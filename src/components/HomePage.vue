@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-    <FooterPage @click="sampleMessage" />
+    <FooterPage />
 </template>
 
 <script>
@@ -124,17 +124,8 @@ export default {
                     this.posts = result.post
                 })
         })
-
-        this.socket = new WebSocket('ws://localhost:3000');
-        this.socket.onmessage = (event) => {
-            this.message.push(event.data);
-            console.log(event)
-        };
     },
     methods: {
-        sampleMessage() {
-            this.socket.send("Test message");
-        },
         showReply(id) {
             const portrait = window.matchMedia("(orientation: portrait)").matches;
 

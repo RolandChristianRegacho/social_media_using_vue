@@ -1,9 +1,9 @@
 <template>
-  <div class=" convo" v-if="receiver != ''">
+  <div class="convo" v-if="receiver != ''">
     <div class="start_of_convo">
       <h3>Start of conversation</h3>
     </div>
-    <div v-for="item in messages" :key="item.id">
+    <div @click="readMessage()" v-for="item in messages" :key="item.id">
       <div class="speech" v-if="item.sender_id == owner">
         <div class="owner secondary_bg secondary_color">
           <div class="speech_content">
@@ -44,16 +44,24 @@ export default {
       receiver: ""
     }
   },
+  methods: {
+    readMessage() {
+      console.log("asd")
+    }
+  },
   async mounted() {
     let user = getCookie("user")
     this.owner = JSON.parse(user).id
 
     if (user == "") {
-      logout(this.$swal)
+      logout(this.$swal)  
     }
+
+    var receiver_id = ""
 
     this.emitter.on("selectUser", (id) => {
       this.receiver = id
+      receiver_id = id
 
       getMessages(this.BASE_URL, this.receiver, this.owner)
         .then(result => {
@@ -83,6 +91,45 @@ export default {
             })
         })
     })
+
+    this.socket.onmessage = (event) => {
+        var messageArray = JSON.parse(event.data)
+        
+        if(messageArray[1] == "message") {
+          getMessages(this.BASE_URL, this.receiver, this.owner)
+          .then(result => {
+            $.when(this.messages = configureTime(result.data))
+              .done(() => {
+                if($(".convo").is(":visible")) {
+                  $(".convo").animate({
+                    scrollTop: $(".convo").offset().top + $(".convo")[0].scrollHeight + 500000000000
+                  }, 500)
+
+                  let data = {
+                    "sender_id": receiver_id,
+                    "receiver_id": this.owner
+                  }
+                    console.log($(".convo").is(":visible"))
+                    console.log(data)
+                    console.log(receiver_id)
+
+                  readMessages(this.BASE_URL, data)
+                    .then(result => {
+                      if (result.type == "success") {
+                        this.emitter.emit("readMessage")
+                      }
+                      else {
+                        this.$swal({
+                          icon: result.type,
+                          text: result.message,
+                        })
+                      }
+                    })
+                }
+              })
+          })
+        }
+    };
 
     setInterval(() => {
       this.messages = configureTime(this.messages)

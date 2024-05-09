@@ -15,7 +15,7 @@ export async function getAxiosData(link) {
   })
 
   if (response.status != 200) {
-    GoToErrorPage(response.status)
+    //GoToErrorPage(response.status)
   } else {
     return response.json()
   }
@@ -81,7 +81,7 @@ export async function updateAxiosData(link, data = {}) {
   })
 
   if (response.status != 200) {
-    GoToErrorPage(response.status)
+    //GoToErrorPage(response.status)
   } else {
     return response.json()
   }
