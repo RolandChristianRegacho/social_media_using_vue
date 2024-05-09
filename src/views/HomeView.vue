@@ -6,6 +6,7 @@ import HomePostArea from '../components/HomePostArea.vue'
 import HomePage from '../components/HomePage.vue'
 import zoomImagePage from '../components/zoomImagePage.vue'
 import EditPostPage from '@/components/EditPostPage.vue'
+import NewMessageNotifPage from '@/components/NewMessageNotifPage.vue'
 import hideSearchForAll from '@/additional_scripts/hide-search'
 import $ from "jquery"
 import calculateSize from '@/additional_scripts/calculate-width'
@@ -22,6 +23,7 @@ $(() => {
 <template>
   <zoomImagePage class="zoomImageDiv" />
   <EditPostPage class="editPostPageDiv"/>
+  <NewMessageNotifPage class="notification-popup" />
   <nav @click="hideSearch()" class="main_bg">
     <HeaderButtons />
   </nav>

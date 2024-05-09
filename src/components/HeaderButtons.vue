@@ -513,6 +513,11 @@ export default {
         
         this.socket.onmessage = (event) => {
             var messageArray = JSON.parse(event.data)
+            getAxiosData(`${this.BASE_URL}/home/users.php?profile_id=${messageArray[0].split("-")[5]}`)
+            .then(response => {
+                $("#msgNotif").html(`${response.data.first_name} messaged you`)
+                $(".notification-popup").show()
+            })
             
             if(messageArray[1] == "message") {
                 getAxiosData(`${this.BASE_URL}/home/messages.php?user_id=${user_id}`)

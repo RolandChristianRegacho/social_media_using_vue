@@ -428,6 +428,14 @@ button {
     cursor: not-allowed;
 }
 
+.notification-popup {
+  position: absolute;
+  width: 200px;
+  height: 50px;
+  box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+  display: none;
+}
+
 @media only screen and (orientation: portrait) {
   .user_post .post_button {
     display: none;
