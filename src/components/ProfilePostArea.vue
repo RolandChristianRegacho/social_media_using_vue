@@ -1,5 +1,5 @@
 <template>
-    <div class="post_form">
+    <div class="post_form" v-if="owner == profile_id">
         <form @submit.prevent="submit">
             <div class="border_white border_bottom_only_post">
                 <textarea class="inherit_bg main_color" placeholder="Open up a discussion" id="post_text" @input="checkCharacter"
@@ -8,7 +8,7 @@
                     <img id="pstImg" @src=message.img />
                 </div>
             </div>
-            <label class="main_color" id="character">255</label>
+            <label id="character">255</label>
             <input type="file" name="file" id="file" accept="image/*" @change="previewImage(this)" class="inputfile main_bg_wHover main_color border_none" />
             <label for="file" class="main_bg_wHover main_color border_none">
                 <AnOutlinedCloudUpload class="icon" />
@@ -25,7 +25,7 @@ import $ from "jquery"
 import logout from "@/additional_scripts/logout";
 import { getCookie } from "@/additional_scripts/cookie-handler";
 export default {
-    name: "HomePostArea",
+    name: "ProfilePostArea",
     components: {
         AnOutlinedCloudUpload
     },
@@ -36,7 +36,9 @@ export default {
                 user_id: "",
                 date: "",
                 image: ""
-            }
+            },
+            profile_id: "",
+            owner: ""
         }
     },
     methods: {
@@ -62,7 +64,7 @@ export default {
                     postAxiosData(`${this.BASE_URL}/home/post.php`, formData)
                         .then(result => {
                             if (result.type == "success") {
-                                this.emitter.emit("onPost");
+                                this.emitter.emit("onPostInProfile");
                                 $("#postBtn").attr("disabled", true)
                                 $("#character").html("255")
                                 $("#post_text").val("")
@@ -86,7 +88,7 @@ export default {
                     postImageData(`${this.BASE_URL}/home/upload.php`, formData)
                         .then(result => {
                             if (result.type == "success") {
-                                this.emitter.emit("onPost");
+                                this.emitter.emit("onPostInProfile");
                                 $("#postBtn").attr("disabled", true)
                                 $("#character").html("255")
                                 $("#post_text").val("")
@@ -113,25 +115,17 @@ export default {
                     $("#postBtn").attr("disabled", true)
                     remaining_char -= this.message.text.length
                     $("#character").html(remaining_char)
-                    $("#character").attr("style", "color: red;")
                 }
                 else {
                     let remaining_char = 255
                     $("#postBtn").attr("disabled", false)
                     remaining_char -= this.message.text.length
                     $("#character").html(remaining_char)
-                    $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
                 }
-                let element = document.getElementById("post_text")
-                element.style.height = "150px";
-                element.style.height = (element.scrollHeight) + "px";
             }
             else {
                 $("#postBtn").attr("disabled", true)
                 $("#character").html("255")
-                $("#character").attr("style", "color: rgba(235, 235, 235, 0.64);")
-                let element = document.getElementById("post_text")
-                element.style.height = "150px";
             }
         },
         previewImage() {
@@ -139,19 +133,22 @@ export default {
             reader.onload = function () {
                 $("#pstImg").attr("src", reader.result)
             };
+            console.log("trigger")
             reader.readAsDataURL($("#file")[0].files[0])
             this.message.image = reader.result
         },
-        cancelMessage() {
-            $("#postBtn").attr("disabled", true)
-            $("#character").html("255")
-            $("#post_text").val("")
-            $("#pstImg").attr("src", "")
-            this.message.text = ""
+    },
+    mounted() {
+        let user = getCookie("user")
+
+        if (user == "") {
+            logout(this.$swal)
         }
+
+        this.profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
+        this.owner = JSON.parse(user).id
     }
 }
-
 </script>
 
 <style scoped>
@@ -179,13 +176,6 @@ export default {
     overflow: hidden;
 }
 
-.border_white {
-    width: 100%;
-    min-height: 150px;
-    height: auto;
-    border: none;
-}
-
 .post_form button {
     float: right;
     width: auto;
@@ -206,6 +196,13 @@ export default {
     padding-left: 10px;
 }
 
+.border_white {
+    width: 100%;
+    min-height: 150px;
+    height: auto;
+    border: none;
+}
+
 .post_form input[type="file"] {
     float: left;
     width: 100px;
@@ -213,7 +210,7 @@ export default {
 }
 
 .post_form img {
-    max-width: 400px;
+    max-width: 800px;
     max-height: 400px;
 }
 
@@ -245,7 +242,7 @@ export default {
 
 
 .inputfile+label {
-    margin-left: 10px;
+    margin-left: 10px;  
     display: inline-block;
     cursor: pointer;
     height: 35px;
@@ -255,7 +252,6 @@ export default {
 }
 
 .icon {
-    color: white;
     font-size: 1.5em;
 }
 </style>

@@ -1,16 +1,11 @@
 <template>
-    <div class="post_container main_color" v-if="posts.length == 0">
-        <br>
-        <br>
-        No Posts To Show
-    </div>
-    <div class="post_container main_color" v-else>
+    <div class="post_container main_color">
         <div v-for="item in posts" class="user_post post_bg" :key="item.posts">
             <div @click="goToProfile(item.user.id)" class="user_post_sender border_bottom_only_post">
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
-            <div @click="goToPost(item.posts.id, $event)" class="user_post_content border_bottom_only_post">
-                <p>{{ item.posts.content }}</p>
+            <div class="user_post_content border_bottom_only_post">
+                <p contenteditable="false" :id="'post-' + item.posts.id" >{{ item.posts.content }}</p>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"
@@ -21,43 +16,23 @@
                 {{ item.posts.date }}
             </div>
             <div class="user_post_left">
-                <button v-if="item.reply.length > 0" class="post_button persist_button icon_show main_bg_wHover main_color main_border"
-                    @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-' + item.posts.id">
-                    <BxShow />
-                </button>
-                <button class="post_button persist_button icon_hide main_bg_wHover main_color main_border"
-                    @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-' + item.posts.id"
-                    style="display: none;">
-                    <BxHide />
-                </button>
-                <button v-if="item.reply.length > 0" class="post_button persist_button rp-btn-shw-wrd main_bg_wHover main_color main_border"
-                    @click="showReply(item.posts.id)" data-status="active" :id="'rp-btn-shw-wrd-' + item.posts.id">
-                    Show Replies
-                </button>
-                <button class="post_button persist_button rp-btn-hdn-wrd main_bg_wHover main_color main_border"
-                    @click="hideReply(item.posts.id)" data-status="inactive" :id="'rp-btn-hdn-wrd-' + item.posts.id"
-                    style="display: none;">
-                    Hide Replies
-                </button>
                 <form @submit.prevent="submit">
                     <input class="post_input" type="text" placeholder="Reply" :id="'rp-frm-' + item.posts.id" @input="checkReplyLength(item.posts.id)" />
-                    <button class="post_button main_bg_wHover main_color main_border"
+                    <button class="post_button main_bg_wHover main_color"
                         @click="postReply(item.posts.id)" :id="'reply-btn-' + item.posts.id" disabled>Reply</button>
                 </form>
             </div>
             <div class="user_post_right" v-if="item.user.id == this.owner">
-                <button class="post_button_right main_bg_wHover main_color main_border"
-                    @click="deletePost(item.posts.id)">
+                <button class="post_button_right main_bg_wHover main_color" @click="deletePost(item.posts.id)">
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
                 </button>
-                <button :id="'edit-' + item.posts.id" class="post_button_right main_bg_wHover main_color main_border"
-                    @click="editPost(item.posts.id)">
+                <button class="post_button_right main_bg_wHover main_color" @click="editPost(item.posts.id)">
                     <AnOutlinedEdit class="icon" />
                     <p>Edit</p>
                 </button>
             </div>
-            <div class="user_reply" :id="'reply-' + item.posts.id">
+            <div class="user_reply_post" :id="'reply-' + item.posts.id">
                 <div v-for="replies, id in item.reply" class="user_reply_content" :key="id">
                     <div class="user_reply_pic border_bottom_only_post border_right_only_post">
                         <img :src="getReply(replies.sender, 'picture')" />
@@ -72,14 +47,12 @@
             </div>
         </div>
     </div>
-    <FooterPage />
 </template>
 
 <script>
 import $ from "jquery";
-import { AnOutlinedEdit, AnTwotoneDelete, BxShow, BxHide } from "@kalimahapps/vue-icons";
+import { AnOutlinedEdit, AnTwotoneDelete } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
-import FooterPage from '../components/FooterPage.vue'
 import logout from "@/additional_scripts/logout";
 import { getCookie } from "@/additional_scripts/cookie-handler";
 
@@ -93,35 +66,32 @@ export default {
                 reply_user_id: "",
                 reply: ""
             },
-            owner: "",
-            socket: null,
-            message: []
+            owner: ""
         }
     },
     components: {
         AnOutlinedEdit,
-        AnTwotoneDelete,
-        BxShow,
-        BxHide,
-        FooterPage
+        AnTwotoneDelete
     },
     async mounted() {
         let user = getCookie("user")
+        this.owner = JSON.parse(user).id
 
         if (user == "") {
             logout(this.$swal)
         }
-        this.owner = JSON.parse(user).id
 
-        getPosts(this.BASE_URL, user)
+        let post_id = this.$router.currentRoute._value.params.id.split("=")[1]
+
+        getPosts(this.BASE_URL, post_id, user)
             .then(result => {
-                this.posts = result.post
+                this.posts = result
             })
 
-        this.emitter.on("onPost", () => {
-            getPosts(this.BASE_URL, user)
+        this.emitter.on("onChangePost", (id) => {
+            getPosts(this.BASE_URL, id, user)
                 .then(result => {
-                    this.posts = result.post
+                    this.posts = result
                 })
         })
     },
@@ -204,10 +174,6 @@ export default {
                 this.replies.reply = $("#rp-frm-" + post_id).val()
             }
 
-            if(this.replies.reply == "") {
-                return
-            }
-
             let data = {
                 "reply": {
                     "post_id": post_id,
@@ -215,25 +181,17 @@ export default {
                 },
                 "user_id": this.replies.reply_user_id
             }
-
             postAxiosData(`${this.BASE_URL}/home/post.php`, data)
                 .then(result => {
                     if (result.type == "success") {
-                        this.$swal({
+                        this.$swal("Reply sent!", {
                             icon: "success",
-                            text: "Reply sent!",
-                        })
+                        });
                         this.replies.reply = ""
-                        getPosts(this.BASE_URL, user)
+                        getPosts(this.BASE_URL, post_id, user)
                             .then(result => {
-                                this.posts = result.post
+                                this.posts = result
                             })
-                    }
-                    else {
-                        this.$swal({
-                            icon: result.type,
-                            text: result.text,
-                        })
                     }
                 })
         },
@@ -265,35 +223,8 @@ export default {
                 }
             })
         },
-        goToPost(id, event) {
-            if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post") {
-                this.$router.push(`/post=${id}`)
-            }
-            else if(event.target.nodeName == "P") {
-                if(event.target.contentEditable == "true") {
-                    return
-                }
-                else {
-                    this.$router.push(`/post=${id}`)
-                }
-            }
-            else {
-                for (let i in this.posts) {
-                    if (this.posts[i].posts.id == id) {
-                        $("#zoomImageImd").attr("src", this.posts[i].posts.image)
-                        $("#zoomImageDiv").attr("style", "display: flex;")
-                        break
-                    }
-                }
-            }
-        },
         goToProfile(id) {
             this.$router.push(`/profile=${id}`)
-        },
-        sanitizeContent(content) {
-            let splitted_content = content.split("\n")
-
-            return splitted_content.join(" <br>")
         },
         editPost(id) {
             $("#grayEditPg").attr("style", "display: flex;")
@@ -311,12 +242,12 @@ export default {
     }
 }
 
-async function getPosts(BASE_URL, user) {
+function getPosts(BASE_URL, id, user) {
     if (user == "") {
         logout(this.$swal)
     }
 
-    return getAxiosData(`${BASE_URL}/home/post.php?user_id=${JSON.parse(user).id}`)
+    return getAxiosData(`${BASE_URL}/home/post.php?post_id=${id}`)
 }
 </script>
 
@@ -329,12 +260,14 @@ async function getPosts(BASE_URL, user) {
 }
 
 .icon_show {
+    color: white;
     font-size: 2em;
     vertical-align: middle;
     display: none;
 }
 
 .icon_hide {
+    color: white;
     font-size: 2em;
     vertical-align: middle;
     display: none;
@@ -374,15 +307,5 @@ span {
         min-width: 300px;
         min-height: 200px;
     }
-}
-
-.cncl_button {
-    display: none;
-}
-
-.lblchr {
-    float: left;
-    margin-top: 1vh;
-    width: fit-content;
 }
 </style>

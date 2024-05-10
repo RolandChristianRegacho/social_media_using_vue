@@ -1,7 +1,7 @@
 <template>
     <div class="login_form">
         <br>
-        <h1>
+        <h1 class="secondary_color">
             Welcome to login page!
         </h1>
         <br>
@@ -11,16 +11,26 @@
             <form @submit.prevent="submit">
                 <input type="text" v-model="user.username" placeholder="Username">
                 <input type="password" v-model="user.password" placeholder="Password">
-                <button @click="login()">Login</button>
+                <button class="main_bg_wHover main_color main_border" @click="login()">Login
+                    <CaLogin class="icon" />
+                </button>
             </form>
+            <br>
+            <router-link to="/signup" class="secondary_color">Don't have an account?</router-link>
         </div>
     </div>
 </template>
 
 <script>
-import axios from "axios"
+import { CaLogin } from "@kalimahapps/vue-icons";
+import { postAxiosData } from "@/additional_scripts/fetch-script";
+import { getCookie, setCookie } from "@/additional_scripts/cookie-handler";
+
 export default {
     name: "LoginForm",
+    components: {
+        CaLogin
+    },
     data() {
         return {
             user: {
@@ -33,52 +43,56 @@ export default {
         let user = getCookie("user")
 
         if (user) {
-            this.$router.push({ name: "HomePage" });
+            window.location.href = "/"
         }
     },
     methods: {
         async login() {
-            const result = await axios.get(`http://localhost:3000/user?email=${this.user.username}&password=${this.user.password}`)
-
-            if (result.status == 200) {
-                setCookie("user", JSON.stringify(result.data), 5)
-                this.$router.push({ name: "HomePage" });
+            let data = {
+                username: this.user.username,
+                password: this.user.password
             }
-        }
-    }
-}
 
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+            postAxiosData(`${this.BASE_URL}/login/auth.php`, data)
+            .then(result => {
+                if (result.type == "success") {
+                    setCookie("user", JSON.stringify(result.data), 5)
+                    this.$swal({
+                        icon: result.type,
+                        title: "Login Success!",
+                    })
+                    this.$swal.showLoading()
+                    setTimeout(() => {
+                        window.location.href = "/"
+                        this.$swal.close()
+                    }, 1000)
+                }
+                else {
+                    this.$swal({
+                        icon: result.type,
+                        title: "Login Failed!",
+                        text: result.message,
+                    })
+                }
+            })
         }
     }
-    return "";
 }
 </script>
 
 <style scoped>
-@media (prefers-color-scheme: dark) {
-    .login_form {
-        width: 500px;
-        height: 400px;
-        margin: auto;
-        background: rgb(200, 200, 200) !important;
-        color: rgb(52, 73, 94);
-    }
+.login_form {
+    width: 500px;
+    height: 400px;
+    margin: auto;
+    background: rgb(200, 200, 200) !important;
+    color: rgb(52, 73, 94);
+    border-radius: 5px;
+}
+
+.icon {
+    color: white;
+    font-size: 2em;
+    vertical-align: middle;
 }
 </style>

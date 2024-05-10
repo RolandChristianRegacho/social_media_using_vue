@@ -2,12 +2,10 @@
 
 nav {
   text-align: center;
-  background: rgba(38, 71, 78, 1);
   overflow: hidden;
-}
-
-main {
-  text-align: center;
+  position: fixed;
+  width: 100%;
+  height: 60px;
 }
 
 @media (min-width: 1024px) {
@@ -54,24 +52,17 @@ input {
   margin-bottom: 30px;
   margin-right: auto;
   margin-left: auto;
-  border: 1px solid rgba(38, 71, 78, 1);
 }
 
 button {
   width: 300px;
   height: 40px;
-  border: 1px solid rgba(38, 71, 78, 1);
-  background: rgba(38, 71, 78, 1);
   color: white;
   cursor: pointer;
   display: block;
   margin-right: auto;
   margin-left: auto;
-}
-
-button:hover {
-  border: 1px solid rgb(52, 73, 94);
-  background: rgb(52, 73, 94);
+  padding-top: 3px;
 }
 
 .form_div {
@@ -83,4 +74,409 @@ button:hover {
   border: 1px solid rgba(38, 71, 78, 1);
   color: var(--color-text);
   background: var(--color-background);
+}
+
+.post_container {
+  float: left;
+  width: 100%;
+  padding-bottom: 5px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.post_container_edit {
+  float: left;
+  width: 40%;
+  min-height: 400px;
+  padding-bottom: 5px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.user_post {
+  float: left;
+  width: 98%;
+  min-height: 220px;
+  margin-top: 20px;
+  margin-left: 1%;
+  box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+  text-align: left;
+}
+
+.user_post_content {
+  float: left;
+  width: 100%;
+  min-height: 100px;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.user_post_content p {
+  float: left;
+  width: auto;
+  min-height: 40px;
+  line-height: 20px;
+  height: fit-content;
+  word-break: break-all;
+}
+
+.user_post_content label {
+  display: none;
+}
+
+.user_post_content button {
+  display: none;
+}
+
+.user_post_sender {
+  float: left;
+  width: 100%;
+  height: 40px;
+  color: rgba(250, 250, 250, 1);
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.user_post_time {
+  float: left;
+  width: 100%;
+  height: 20px;
+  padding: 5px;
+}
+
+.user_post_left {
+  float: left;
+  height: 60px !important;
+  width: 60%;
+  padding-bottom: 5px;
+}
+
+.user_post_right {
+  float: left;
+  height: 60px !important;
+  width: 40%;
+  padding-bottom: 5px;
+}
+
+.post_input {
+  float: left;
+  height: 40px;
+  width: 40%;
+  margin-top: 1vh;
+  margin-left: 10px;
+  background: rgba(250, 250, 250, 1);
+  font-size: 12px;
+  border: none;
+  outline: none;
+  border-radius: 10px 10px 10px 10px;
+  padding-left: 5px;
+}
+
+.post_button_edit {
+  float: right;
+  height: 40px;
+  width: auto;
+  margin-top: 1vh;
+  margin-right: 5px;
+  background: rgba(38, 71, 78, 1);
+  color: rgba(250, 250, 250, 1);
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.post_button {
+  float: left;
+  height: 40px;
+  width: auto !important;
+  margin-top: 1vh;
+  margin-left: 5px;
+  background: rgba(38, 71, 78, 1);
+  color: rgba(250, 250, 250, 1);
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.post_button_right {
+  float: right;
+  height: 40px;
+  width: auto;
+  margin-top: 1vh;
+  margin-right: 5px;
+  background: rgba(38, 71, 78, 1);
+  color: rgba(250, 250, 250, 1);
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.user_reply {
+  float: left;
+  width: 100%;
+  height: auto;
+  color: rgba(250, 250, 250, 1);
+  padding: 10px;
+  display: none;
+}
+
+.user_reply_post {
+  float: left;
+  width: 100%;
+  height: auto;
+  color: rgba(250, 250, 250, 1);
+  padding: 10px;
+}
+
+.user_reply_content {
+  float: left;
+  width: 100%;
+  height: 80px;
+  color: rgba(250, 250, 250, 1);
+  padding: 10px;
+}
+
+.user_reply_pic {
+  float: left;
+  width: 20%;
+  max-width: 80px;
+  height: 100%;
+}
+
+.user_reply_pic img {
+  width: 100%;
+  height: 100%;
+}
+
+.user_reply_sender {
+  float: left;
+  width: 75%;
+  height: 50%;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.user_reply_message {
+  float: left;
+  width: 75%;
+  height: 50%;
+  padding-left: 10px;
+}
+
+.search_result_div {
+  float: left;
+  width: 100%;
+  height: 89px;
+  text-align: left;
+}
+
+.search_result_div button {
+  float: left;
+  width: 100%;
+  height: 100%;
+  cursor: text;
+}
+
+.search_result_name {
+  float: left;
+  width: 70%;
+  height: 85px;
+  margin-top: 1px;
+}
+
+.search_result_name button {
+  cursor: pointer;
+}
+
+.search_result_action {
+  float: left;
+  width: 30%;
+  height: 85px;
+  margin-top: 1px;
+}
+
+.search_result_action button {
+  float: left;
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.search_result_actions {
+  float: left;
+  width: 30%;
+  height: 85px;
+  margin-top: 1px;
+}
+
+.search_result_actions button {
+  float: left;
+  width: 100%;
+  height: 30px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.search_result_action_reject {
+  background: rgba(150, 50, 50, 1);
+}
+
+.search_result_action_reject:hover {
+  background: rgba(200, 50, 50, 1) !important;
+}
+
+.notifications_result_div {
+  float: left;
+  width: 100%;
+  height: 89px;
+  text-align: left;
+}
+
+.notification_result_div_for_full_height {
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+
+.notifications_content {
+  float: left;
+  width: 70%;
+  height: 85px;
+  margin-top: 1px;
+}
+
+.notifications_content_post {
+  float: left;
+  width: 100%;
+  height: 99%;
+  margin-top: 1px;
+}
+
+.notifications_content_post button {
+  float: left;
+  width: 100%;
+  height: 100%;
+  cursor: text;
+}
+
+.notifications_content button {
+  float: left;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.notifications_action {
+  float: left;
+  width: 30%;
+  height: 85px;
+  margin-top: 1px;
+}
+
+.notifications_action button {
+  float: left;
+  width: 100%;
+  height: 40px;
+  margin-top: 1px;
+  cursor: pointer;
+}
+
+.my-actions button {
+  width: auto;
+}
+
+.zoomImageDiv {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(50, 50, 50, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.editPostPageDiv {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(50, 50, 50, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-checker {
+  border: 1px solid rgba(38, 71, 78, 1);
+  outline-color: black;
+}
+
+.input-checker-fail {
+  border: 1px solid red;
+  outline-color: red;
+}
+
+.post_button:disabled {
+    color: gray;
+    cursor: not-allowed;
+}
+
+.notification-popup {
+  position: absolute;
+  width: 200px;
+  height: 50px;
+  box-shadow: 3px 0px 5px 3px rgba(20, 20, 20, 1);
+  display: none;
+}
+
+@media only screen and (orientation: portrait) {
+  .user_post .post_button {
+    display: none;
+  }
+
+  .post_input {
+    float: left;
+    height: 40px;
+    width: 70%;
+    margin-top: 1vh;
+    margin-left: 10px;
+    background: rgba(250, 250, 250, 1);
+    font-size: 12px;
+    border: none;
+    outline: none;
+    border-radius: 10px 10px 10px 10px;
+    padding-left: 5px;
+  }
+}
+
+.color_theme_1 {
+  color: rgba(38, 71, 78, 1);
+  font-size: 2em;
+}
+
+.color_theme_2 {
+  color: rgba(200, 50, 50, 1);
+  font-size: 2em;
+}
+
+.color_theme_3 {
+  color: rgba(50, 50, 200, 1);
+  font-size: 2em;
+}
+
+.color_theme_4 {
+  color: rgba(93, 63, 211, 1);
+  font-size: 2em;
+}
+
+.color_theme_5 {
+  color: rgba(255, 105, 180);
+  font-size: 2em;
 }

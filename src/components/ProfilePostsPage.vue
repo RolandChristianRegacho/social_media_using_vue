@@ -10,7 +10,7 @@
                 {{ item.user.first_name }} {{ item.user.last_name }}
             </div>
             <div @click="goToPost(item.posts.id, $event)" class="user_post_content border_bottom_only_post">
-                <p>{{ item.posts.content }}</p>
+                <p contenteditable="false" :id="'post-' + item.posts.id" >{{ item.posts.content }}</p>
                 <br>
                 <br>
                 <div class="image_in_post" v-if="item.posts.image != null"
@@ -51,7 +51,7 @@
                     <AnTwotoneDelete class="icon" />
                     <p>Delete</p>
                 </button>
-                <button :id="'edit-' + item.posts.id" class="post_button_right main_bg_wHover main_color main_border"
+                <button class="post_button_right main_bg_wHover main_color main_border"
                     @click="editPost(item.posts.id)">
                     <AnOutlinedEdit class="icon" />
                     <p>Edit</p>
@@ -77,14 +77,17 @@
 
 <script>
 import $ from "jquery";
-import { AnOutlinedEdit, AnTwotoneDelete, BxShow, BxHide } from "@kalimahapps/vue-icons";
+import { AnOutlinedEdit } from "@kalimahapps/vue-icons";
+import { AnTwotoneDelete } from "@kalimahapps/vue-icons";
+import { BxShow } from "@kalimahapps/vue-icons";
+import { BxHide } from "@kalimahapps/vue-icons";
 import { deleteAxiosData, getAxiosData, postAxiosData } from "@/additional_scripts/fetch-script";
 import FooterPage from '../components/FooterPage.vue'
 import logout from "@/additional_scripts/logout";
 import { getCookie } from "@/additional_scripts/cookie-handler";
 
 export default {
-    name: "HomePage",
+    name: "ProfilePostsPage",
     data() {
         return {
             posts: [],
@@ -93,9 +96,7 @@ export default {
                 reply_user_id: "",
                 reply: ""
             },
-            owner: "",
-            socket: null,
-            message: []
+            owner: ""
         }
     },
     components: {
@@ -112,14 +113,15 @@ export default {
             logout(this.$swal)
         }
         this.owner = JSON.parse(user).id
+        let profile_id = this.$router.currentRoute._value.params.id.split("=")[1]
 
-        getPosts(this.BASE_URL, user)
+        getPosts(this.BASE_URL, profile_id)
             .then(result => {
                 this.posts = result.post
             })
 
-        this.emitter.on("onPost", () => {
-            getPosts(this.BASE_URL, user)
+        this.emitter.on("onPostInProfile", () => {
+            getPosts(this.BASE_URL, JSON.parse(user).id)
                 .then(result => {
                     this.posts = result.post
                 })
@@ -204,10 +206,6 @@ export default {
                 this.replies.reply = $("#rp-frm-" + post_id).val()
             }
 
-            if(this.replies.reply == "") {
-                return
-            }
-
             let data = {
                 "reply": {
                     "post_id": post_id,
@@ -219,22 +217,16 @@ export default {
             postAxiosData(`${this.BASE_URL}/home/post.php`, data)
                 .then(result => {
                     if (result.type == "success") {
-                        this.$swal({
-                            icon: "success",
-                            text: "Reply sent!",
-                        })
                         this.replies.reply = ""
-                        getPosts(this.BASE_URL, user)
+                        getPosts(this.BASE_URL, JSON.parse(user).id)
                             .then(result => {
                                 this.posts = result.post
                             })
                     }
-                    else {
-                        this.$swal({
-                            icon: result.type,
-                            text: result.text,
-                        })
-                    }
+                    this.$swal({
+                        icon: result.type,
+                        text: result.message,
+                    })
                 })
         },
         async deletePost(id) {
@@ -250,13 +242,9 @@ export default {
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let data = {
-                        post_id: id
-                    }
-
-                    deleteAxiosData(`${this.BASE_URL}/home/post.php`, data)
+                    deletePost(id, this.BASE_URL)
                         .then(result => {
-                            this.emitter.emit("onPost");
+                            this.emitter.emit("onPostInProfile");
                             this.$swal({
                                 icon: result.type,
                                 text: result.text,
@@ -266,6 +254,7 @@ export default {
             })
         },
         goToPost(id, event) {
+            //this.$router.push(`/post=${id}`)
             if (event.target.nodeName == "SPAN" || event.target.className == "user_post_content border_bottom_only_post") {
                 this.$router.push(`/post=${id}`)
             }
@@ -290,11 +279,6 @@ export default {
         goToProfile(id) {
             this.$router.push(`/profile=${id}`)
         },
-        sanitizeContent(content) {
-            let splitted_content = content.split("\n")
-
-            return splitted_content.join(" <br>")
-        },
         editPost(id) {
             $("#grayEditPg").attr("style", "display: flex;")
 
@@ -311,12 +295,20 @@ export default {
     }
 }
 
-async function getPosts(BASE_URL, user) {
+function deletePost(id, url) {
+    let data = {
+        post_id: id
+    }
+
+    return deleteAxiosData(`${url}/home/post.php`, data)
+}
+
+function getPosts(BASE_URL, user) {
     if (user == "") {
         logout(this.$swal)
     }
 
-    return getAxiosData(`${BASE_URL}/home/post.php?user_id=${JSON.parse(user).id}`)
+    return getAxiosData(`${BASE_URL}/home/post.php?user_id=${user}&context=profile`)
 }
 </script>
 
@@ -329,12 +321,14 @@ async function getPosts(BASE_URL, user) {
 }
 
 .icon_show {
+    color: white;
     font-size: 2em;
     vertical-align: middle;
     display: none;
 }
 
 .icon_hide {
+    color: white;
     font-size: 2em;
     vertical-align: middle;
     display: none;
@@ -374,15 +368,5 @@ span {
         min-width: 300px;
         min-height: 200px;
     }
-}
-
-.cncl_button {
-    display: none;
-}
-
-.lblchr {
-    float: left;
-    margin-top: 1vh;
-    width: fit-content;
 }
 </style>

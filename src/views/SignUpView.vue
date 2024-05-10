@@ -1,5 +1,5 @@
 <script setup>
-import LoginForm from '../components/LoginForm.vue'
+import SignUpForm from '../components/SignUpForm.vue'
 import $ from "jquery"
 import calculateSize from '@/additional_scripts/calculate-width'
 
@@ -10,7 +10,7 @@ $(() => {
 
 <template>
     <main>
-        <LoginForm />
+        <SignUpForm />
     </main>
 </template>
 
