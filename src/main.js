@@ -29,4 +29,4 @@ let uuid = uuidv4()
 let user = getCookie("user")
 uuid = `${uuid}-${JSON.parse(user).id}`
 
-app.config.globalProperties.socket = new WebSocket(`ws://localhost:3000/${uuid}`);
+app.config.globalProperties.socket = new WebSocket(`ws://192.168.4.200:3000/${uuid}`);
